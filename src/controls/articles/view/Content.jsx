@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router";
 
-class ArticleView extends Component {
+class ArticleContent extends Component {
   render() {
   	return (
 		  <div>
@@ -13,5 +13,5 @@ class ArticleView extends Component {
 }
 
 // export default withRouter(UserPost);
-export default ArticleView;
+export default ArticleContent;
 

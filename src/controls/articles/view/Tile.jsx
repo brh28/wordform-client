@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { StyledLink } from "baseui/link";
 import PropTypes from 'prop-types';
-import Rating from './Rating.jsx'
+import Rating from '../../common/Rating.jsx'
 import {
   Card,
   StyledBody,
@@ -41,8 +41,9 @@ const PostTile = (props) => {
       title={props.title}
     >
       <StyledBody>
+        <p>@{props.author}</p>
         <Rating stats={props.ratings} />
-        <Price amount={props.price} />
+        <Price {...props.price} />
       </StyledBody>
       <StyledAction>
         <Button onClick={handleView} overrides={{BaseButton: {style: {width: '100%'}}}}>
@@ -56,7 +57,7 @@ const PostTile = (props) => {
 class Price extends Component {
 	render() {
 		return (
-			this.props.amount === 0 ? <p>FREE</p> : <p>{this.props.amount} Sats</p>
+			this.props.amount === 0 ? <p>FREE</p> : <p>{this.props.amount} {this.props.currency}</p>
 		)
 	}
 }

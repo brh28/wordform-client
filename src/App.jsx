@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { hot } from 'react-hot-loader';
 import { Router, Route, Switch } from "react-router";
 import './css/App.css';
-import Browse from './components/Browse.jsx'
-import Paywall from './components/Paywall.jsx'
-import NewArticleForm from './components/NewArticleForm.jsx'
-import PublishArticle from './components/PublishArticle'
-import UserLogin from './components/UserLogin'
-import UserLogout from './components/UserLogout'
-import CreateUser from './components/CreateUser'
+import Browse from './controls/articles/Browse'
+import Paywall from './controls/articles/view/Paywall'
+import ArticleCreate from './controls/articles/Create'
+import PublishArticle from './controls/articles/Publish'
+import UserLogin from './controls/users/Login'
+import UserLogout from './controls/users/Logout'
+import CreateUser from './controls/users/Create'
 import { createBrowserHistory } from "history";
 
 import {BaseProvider, LightTheme} from 'baseui';
 import { Provider as StyletronProvider } from "styletron-react";
 import { Client as Styletron } from "styletron-engine-atomic";
-import NavigationBar from "./components/NavigationBar"
+import NavigationBar from "./controls/NavigationBar"
 // import { CookiesProvider } from 'react-cookie';
 
 // import * as Cookies from "js-cookie";
@@ -57,7 +57,7 @@ const onLogin = (userId, history) => {
 }
 
 const App = (props) => {
-  const userId = localStorage.getItem('userId')
+  const userId = localStorage.getItem('userId') // redux state store might be better location for this as it would force
   console.log('App userId = ' + userId)
   if (userId) checkUserSession()
   return (
@@ -73,7 +73,7 @@ const App = (props) => {
                 <Paywall />
               </Route>
               <Route exact path="/publish/article">
-                <NewArticleForm />
+                <ArticleCreate />
               </Route>
               <Route exact path="/publish/article/:id/invoice">
                 <PublishArticle />

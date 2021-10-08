@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LnUrlDisplay from './LnUrlDisplay'
+import WalletPort from './WalletPort'
 import SyncLoader from "react-spinners/SyncLoader";
 
 // import { withCookies, Cookies } from 'react-cookie';
@@ -34,8 +34,10 @@ class LnAuth extends Component {
 
 
 		// Display signed keys from this.props.signedKeys
+		// console.log(this.props.linkingKeys)
 		return (<div>
-			<LnUrlDisplay lnurl={this.props.lnurl} />
+			<WalletPort connection={this.props.lnurl} />
+			{this.props.linkingKeys.length > 0 ? <label>{this.props.linkingKeys.length} Linked Keys:</label> : null}
 			<ul>{this.props.linkingKeys.map(k => <li key={k}>{k}</li>)}</ul>
 		</div>)
 	}

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import { Button } from "baseui/button";
-import Spinner from './Spinner';
+import Spinner from '../common/Spinner';
 
 class UserLogout extends Component {
 	constructor(props) {

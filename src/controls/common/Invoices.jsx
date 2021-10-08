@@ -1,27 +1,46 @@
 import React from 'react';
-import LnUrlDisplay from './LnUrlDisplay'
+import WalletPort from './WalletPort'
+import { StyledLink } from "baseui/link";
 
+
+const Refresh = () => {
+
+  return (<label>
+      After payment, <StyledLink href="#" onClick={() => {
+        console.log('reloading')
+        window.location.reload()
+      }}>
+        Refresh the page
+      </StyledLink>
+      
+      </label>
+    )
+}
 export const ReadArticle = ({ title, author, price, paymentRequest }) => {
   return (<div style={{width: '25%'}}>
     <h2>This article requires a payment to the author</h2>
       <div style={{border: '1px solid', padding: '10px'}}>
         <h3>Read Article: {title}</h3>
         <p>Author: {author}</p>
-        <p>Price: {price} Sats</p>
+        <p>Price: {price.amount} {price.currency}</p>
       </div>
-    <LnUrlDisplay lnurl={paymentRequest} />
+    <WalletPort connection={paymentRequest} />
 {/*    <Button onClick={this.checkPayment} color="primary">Check</Button>
-*/}  </div>)
+*/}  
+    <Refresh />
+  </div>)
 }
 
 export const PublishInvoice = ({ title, author, price, paymentRequest }) => {
   return (<div style={{width: '25%'}}>
     <div style={{border: '1px solid', padding: '10px'}}>
       <h3>Publish Article: {title}</h3>
-      <p>Price: {price} Sats</p>
+      <p>Price: {price.amount} {price.currency}</p>
     </div>
-    <LnUrlDisplay lnurl={paymentRequest} />
+    <WalletPort connection={paymentRequest} />
 {/*    <Button onClick={this.checkPayment} color="primary">Check</Button>
-*/}  </div>)
+*/}  
+    <Refresh />
+</div>)
 }
 

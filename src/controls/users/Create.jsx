@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import { Button } from "baseui/button";
-import LnUrlDisplay from './LnUrlDisplay'
 import { withRouter } from "react-router";
 import { Textarea } from "baseui/textarea";
 import { FormControl } from "baseui/form-control";
 import { Select } from "baseui/select";
 import { Input } from "baseui/input";
-import { PublishArticle as Invoice } from "./Invoices";
-import LnAuth from './LnAuth'
-import Spinner from './Spinner';
+import { PublishArticle as Invoice } from "../common/Invoices";
+import LnAuth from '../common/LnAuth'
+import Spinner from '../common/Spinner';
 
 class CreateUser extends Component {
   constructor(props) {
@@ -18,7 +17,7 @@ class CreateUser extends Component {
       lnurl: undefined,
       form: {
       	userId: '',
-        linkingKeys: new Set(),
+        linkingKeys: [],
         minKeys: 1,
         email: '',
         autoPay: false,
@@ -44,7 +43,8 @@ class CreateUser extends Component {
     })
 
     this.eventSource.addEventListener("keySign", e => {
-      this.props.onKeySign(e.data)
+      //this.props.onKeySign(e.data)
+      this.addLinkingKey(e.data)
     })
 
     this.eventSource.addEventListener("loggedIn", e => {
@@ -84,8 +84,8 @@ class CreateUser extends Component {
   }
 
   addLinkingKey(key) {
-    const keys = {...this.state.form.linkingKeys}
-    keys.add(key)
+    const keys = [...this.state.form.linkingKeys]
+    if (!keys.includes(key)) keys.push(key)
     this.setState({ 
       form: {
         ...this.state.form,
@@ -105,10 +105,14 @@ class CreateUser extends Component {
       })
       .then(res => {
         if (res.status === 200) {
-          this.props.onLogin(result.json().userId)
-        } else {
-          this.setState({ isLoading: false })
-        }     
+          res.json().then(r => {
+            localStorage.setItem( 'userId', r.userId );
+            const returnUrl = this.props.history.location.state && this.props.history.location.state.returnUrl
+            this.props.history.push(returnUrl || '/browse')
+          })
+          
+        }
+        this.setState({ isLoading: false, error: "There was an error" })
       });
   }
 
@@ -130,10 +134,12 @@ class CreateUser extends Component {
           />
         </FormControl>
   			<br />
-        <LnAuth lnurl={this.state.lnurl} linkingKeys={Array.from(this.state.form.linkingKeys)} onKeyRemove={this.removeKey} />
-        <label>Minimum number of keys to sign in: <input type="number" name="minKeys" value={this.state.form.minKeys} onChange={()=>{}} /></label>
+        <FormControl label="Authentication">
+          <LnAuth lnurl={this.state.lnurl} linkingKeys={this.state.form.linkingKeys} onKeyRemove={this.removeKey} />
+        </FormControl>
+        {this.state.form.linkingKeys.length > 1 ? <label>Number of keys required to log in: <input type="number" name="minKeys" value={this.state.form.minKeys} onChange={()=>{}} /></label> : null}
         <br />
-        <FormControl
+{/*        <FormControl
           label="Email"
           caption="Contact method with independent authentication"
         >
@@ -143,8 +149,9 @@ class CreateUser extends Component {
             placeholder="Optional"
             clearOnEscape
           />
-        </FormControl>
+        </FormControl>*/}
         <Button style={{marginTop: '10px'}} onClick={this.submitForm} color="primary">Create User</Button>
+        {this.state.error ? <p>{this.state.error}</p> : null}
   		</div>
   	)
   }

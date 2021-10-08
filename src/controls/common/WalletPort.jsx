@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import { Button } from "baseui/button";
+import { Textarea } from "baseui/textarea";
 import QRCode from 'qrcode.react'
 import {Grid, Cell} from 'baseui/layout-grid';
 import {FlexGrid, FlexGridItem} from 'baseui/flex-grid';
+import { FormControl } from "baseui/form-control";
+import Check from 'baseui/icon/check'
 
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
@@ -40,16 +43,22 @@ const itemProps = {
   justifyContent: 'center',
 };
 
-class LnUrlDisplay extends Component {
+const wideItemProps = {
+  ...itemProps,
+  overrides: {
+    Block: {
+      style: ({$theme}) => ({
+        width: `calc((200% - ${$theme.sizing.scale800}) / 3)`,
+      }),
+    },
+  },
+};
+
+// A port hosts the connection to external devices
+class WalletPort extends Component {
 
   constructor(props) { 
     super(props);
-    // if (this.props.urlType === 'INVOICE') {
-    //   const copyMessage = 'Copy Invoice' 
-    //   const checkMessage = 'Check Payment'
-    // } else {
-
-    // }
     this.state = { copied: false };
     this.copyTextToClipboard = this.copyTextToClipboard.bind(this)
   }
@@ -68,28 +77,30 @@ class LnUrlDisplay extends Component {
   }
 
   render () {
-    if (!this.props.lnurl) return null
+    if (!this.props.connection) return null
   	return (
     	<div style={{marginTop: '10px'}}>
         <FlexGrid
           flexGridColumnCount={2}
-          flexGridColumnGap="scale800"
-          flexGridRowGap="scale800"
         >
+          <FlexGridItem {...wideItemProps}>
+            <FormControl caption="Connect">
+              <Textarea disabled value={this.props.connection} />
+            </FormControl>
+          </FlexGridItem>
+          <FlexGridItem {...itemProps} display="none" />
           <FlexGridItem {...itemProps}>
-      		  <Button color='primary' style={{margin: '10px'}} onClick={() => this.copyTextToClipboard(this.props.lnurl)}>Copy LNURL</Button>
-        	</FlexGridItem>
+            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy"}</Button>
+          </FlexGridItem>
           <FlexGridItem {...itemProps}>
-            <QRCode value={this.props.lnurl} />
+            <QRCode title="Scan" value={this.props.connection} />
           </FlexGridItem>
         </FlexGrid>
       	<br />
-      	<span style={{fontSize: '10px'}}>{this.props.lnurl}</span>
-        { this.state.copied ? CopiedToClipboardMessage() : null }
     	</div>
       )
   }
 }
 
-export default LnUrlDisplay
+export default WalletPort
 

@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import LnAuth from './LnAuth'
+import LnAuth from '../common/LnAuth'
 import { withRouter } from "react-router";
+import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Button } from "baseui/button";
-import Spinner from './Spinner';
+import Spinner from '../common/Spinner';
 
 class UserLogin extends Component {
 
@@ -15,7 +16,7 @@ class UserLogin extends Component {
 	    	error: undefined,
 	    	form: {
 	    		userId: '',
-	    		keys: new Set() // may get this from localStorage/sessions API in future
+	    		keys: []
 	    	}
 	    };
 	   	this.eventSource = new EventSource("/api/users/authentication");
@@ -55,8 +56,8 @@ class UserLogin extends Component {
 	  }
 
 	addKey(key) {
-		const keys = {...this.state.form.keys}
-	    keys.add(key)
+	    const keys = [...this.state.form.keys]
+	    if (!keys.includes(key)) keys.push(key)
 	    this.setState({ 
 	      form: {
 	        ...this.state.form,
@@ -72,20 +73,19 @@ class UserLogin extends Component {
 	        headers: {
 	          'Content-Type': 'application/json'
 	        }, 
-	        body: JSON.stringify(this.state.form)
+	        body: JSON.stringify({ userId: this.state.form.userId })
 	    })
 	    .then(resp => {
-	    	if (resp.status === 403) {
+	    	if (resp.status === 200) {
+	    		resp.json().then(r => {
+	    			localStorage.setItem( 'userId', r.userId );
+			  		this.props.history.push(this.props.history.location.state.returnUrl)
+	    		})
+	    	} else {
 	    		console.log('updating state')
 	    		this.setState({ isLoading: false, error: 'Login attempt failed' })
-	    	} else {
-	    		return resp.json()
 	    	}
 	    })
-	    .then((result) => {
-			  localStorage.setItem( 'userId', result.userId );
-			  this.props.history.push(this.props.history.location.state.returnUrl)
-  		})
   		.catch(err => console.log(err))
   	}
 
@@ -99,13 +99,18 @@ class UserLogin extends Component {
 
 		return (
 			<div style={{width: '25%', margin: '10px'}}>
-				<Input
-		          value={this.state.form.userId}
-		          onChange={this.handleUserIdChange}
-		          placeholder="Required"
-		          clearOnEscape
-		        />
-				<LnAuth lnurl={this.state.lnurl} linkingKeys={Array.from(this.state.form.keys)} onKeyRemove={this.removeKey} />
+				<FormControl label="User ID">
+					<Input
+			          value={this.state.form.userId}
+			          onChange={this.handleUserIdChange}
+			          placeholder="Required"
+			          clearOnEscape
+			        />
+			    </FormControl>
+
+			    <FormControl label="LNURL">
+					<LnAuth lnurl={this.state.lnurl} linkingKeys={this.state.form.keys} onKeyRemove={this.removeKey} />
+				</FormControl>
 				<Button style={{marginTop: '10px'}} onClick={this.login} color="primary">Login</Button>
 				{this.state.error ? <p>{this.state.error}</p> : null}
 			</div>
