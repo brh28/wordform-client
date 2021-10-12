@@ -23,7 +23,7 @@ const NavigationBar = (props) => {
   const navItems = props.userId ? 
     [
       {text: 'Browse', href: '/browse'},
-      {text: 'Publish Article', href: '/publish/article'},
+      {text: 'Publish Article', href: '/articles/new'},
       {text: 'Logout', href: '/logout'}
     ] :
     [

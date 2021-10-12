@@ -76,7 +76,7 @@ class CreateArticle extends Component {
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => {
-            this.props.history.push(`/publish/article/${r.articleId}/invoice`)
+            this.props.history.push(`/invoices/${r.articleId}`)
           })
         } else {
           this.setState({ isLoading: false, error: 'Generic error'})

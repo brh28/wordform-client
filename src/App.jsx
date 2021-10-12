@@ -3,7 +3,8 @@ import { hot } from 'react-hot-loader';
 import { Router, Route, Switch } from "react-router";
 import './css/App.css';
 import Browse from './controls/articles/Browse'
-import Paywall from './controls/articles/view/Paywall'
+// import Paywall from './controls/articles/view/Paywall'
+import ArticleController from './controls/ArticleController'
 import ArticleCreate from './controls/articles/Create'
 import PublishArticle from './controls/articles/Publish'
 import UserLogin from './controls/users/Login'
@@ -69,14 +70,11 @@ const App = (props) => {
               <Route exact path="/browse">
                 <Browse />
               </Route>
-              <Route exact path="/articles/:id">
-                <Paywall />
-              </Route>
-              <Route exact path="/publish/article">
+              <Route exact path="/articles/new">
                 <ArticleCreate />
               </Route>
-              <Route exact path="/publish/article/:id/invoice">
-                <PublishArticle />
+              <Route exact path="/articles/:id">
+                <ArticleController />
               </Route>
               <Route exact path="/users/new">
                 <CreateUser onLogin={onLogin} />

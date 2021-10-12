@@ -45,7 +45,6 @@ class Paywall extends Component {
   }
 
   render() {
-    console.log('UserId = ' + get('userId'))
     const { isLoading, article, paywall, error } = this.state
 
     if (isLoading) return <Spinner />

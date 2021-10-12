@@ -5,6 +5,7 @@ import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Button } from "baseui/button";
 import Spinner from '../common/Spinner';
+import { users } from '../../data/api';
 
 class UserLogin extends Component {
 
@@ -68,25 +69,19 @@ class UserLogin extends Component {
 
   	login() {
   		this.setState({ isLoading: true })
-  		fetch(`/api/users/login`, {
-  			method: "POST",
-	        headers: {
-	          'Content-Type': 'application/json'
-	        }, 
-	        body: JSON.stringify({ userId: this.state.form.userId })
-	    })
-	    .then(resp => {
-	    	if (resp.status === 200) {
-	    		resp.json().then(r => {
-	    			localStorage.setItem( 'userId', r.userId );
-			  		this.props.history.push(this.props.history.location.state.returnUrl)
-	    		})
-	    	} else {
-	    		console.log('updating state')
-	    		this.setState({ isLoading: false, error: 'Login attempt failed' })
-	    	}
-	    })
-  		.catch(err => console.log(err))
+	    users.login(this.state.form.userId)
+		    .then(resp => {
+		    	if (resp.status === 200) {
+		    		resp.json().then(r => {
+		    			localStorage.setItem( 'userId', r.userId );
+				  		this.props.history.push(this.props.history.location.state.returnUrl)
+		    		})
+		    	} else {
+		    		console.log('updating state')
+		    		this.setState({ isLoading: false, error: 'Login attempt failed' })
+		    	}
+		    })
+	  		.catch(err => console.log(err))
   	}
 
   	removeKey(idx) {

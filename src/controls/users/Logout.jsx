@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import { Button } from "baseui/button";
 import Spinner from '../common/Spinner';
+import { users } from '../../data/api';
 
 class UserLogout extends Component {
 	constructor(props) {
@@ -14,18 +15,13 @@ class UserLogout extends Component {
 
 	logout() {
   		this.setState({ isLoading: true })
-  		fetch(`/api/users/logout`, {
-  			method: "POST",
-	        headers: {
-	          'Content-Type': 'application/json'
-	        }, 
-	    })
-	    .then((result) => {
-	    	console.log('logging out')
-  			localStorage.clear();
-  			this.props.history.push('/login')
-  			window.location.reload(false)
-  		})
+  		users.logout()
+		    .then((result) => {
+		    	console.log('logging out')
+	  			localStorage.clear();
+	  			this.props.history.push('/login')
+	  			window.location.reload(false)
+	  		})
   	}
 
   	render() {

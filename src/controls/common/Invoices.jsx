@@ -16,7 +16,7 @@ const Refresh = () => {
       </label>
     )
 }
-export const ReadArticle = ({ title, author, price, paymentRequest }) => {
+export const ReadInvoice = ({ title, author, price, paymentRequest }) => {
   return (<div style={{width: '25%'}}>
     <h2>This article requires a payment to the author</h2>
       <div style={{border: '1px solid', padding: '10px'}}>
@@ -25,8 +25,6 @@ export const ReadArticle = ({ title, author, price, paymentRequest }) => {
         <p>Price: {price.amount} {price.currency}</p>
       </div>
     <WalletPort connection={paymentRequest} />
-{/*    <Button onClick={this.checkPayment} color="primary">Check</Button>
-*/}  
     <Refresh />
   </div>)
 }
@@ -38,8 +36,6 @@ export const PublishInvoice = ({ title, author, price, paymentRequest }) => {
       <p>Price: {price.amount} {price.currency}</p>
     </div>
     <WalletPort connection={paymentRequest} />
-{/*    <Button onClick={this.checkPayment} color="primary">Check</Button>
-*/}  
     <Refresh />
 </div>)
 }

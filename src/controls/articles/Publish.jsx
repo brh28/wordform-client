@@ -14,20 +14,20 @@ class PublishArticle extends Component {
 		  error: null,
 		  paywall: null
 		};
-		this.eventSource = new EventSource(`/api/articles/${this.props.match.params.id}/invoice`);
+		// this.eventSource = new EventSource(`/api/articles/${this.props.match.params.id}/invoice`);
 		this.getInvoice = this.getInvoice.bind(this);
 	}
 
 	componentDidMount() {
-		this.eventSource.onerror(e => {
-			console.log(e)
-		})
+		// this.eventSource.onerror(e => {
+		// 	console.log(e)
+		// })
 		this.getInvoice()
 	}
 
 	getInvoice() {
 		this.setState({ isLoading: true })
-		articles.getInvoice(this.props.match.params.id)
+		articles.getInvoice(this.props.match.params.articleId)
 			.then(res => {
 				if (res.status === 401) {
 					this.setState({ isLoading: false, error: "The author must be logged in."})
