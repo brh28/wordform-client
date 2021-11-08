@@ -10,12 +10,15 @@ import PublishArticle from './controls/articles/Publish'
 import UserLogin from './controls/users/Login'
 import UserLogout from './controls/users/Logout'
 import CreateUser from './controls/users/Create'
+import UserProfile from './controls/users/UserProfile'
 import { createBrowserHistory } from "history";
 
 import {BaseProvider, LightTheme} from 'baseui';
 import { Provider as StyletronProvider } from "styletron-react";
 import { Client as Styletron } from "styletron-engine-atomic";
 import NavigationBar from "./controls/NavigationBar"
+import SecondaryNavigationBar from "./controls/SecondaryNavigationBar"
+import Footer from "./controls/Footer"
 // import { CookiesProvider } from 'react-cookie';
 
 // import * as Cookies from "js-cookie";
@@ -66,9 +69,10 @@ const App = (props) => {
         <StyletronProvider value={engine}>
           <BaseProvider theme={LightTheme}>
             <NavigationBar userId={userId} />
-            <Switch>
+{/*            <SecondaryNavigationBar />
+*/}            <Switch>
               <Route exact path="/browse">
-                <Browse />
+                <Browse user={userId} />
               </Route>
               <Route exact path="/articles/new">
                 <ArticleCreate />
@@ -79,6 +83,9 @@ const App = (props) => {
               <Route exact path="/users/new">
                 <CreateUser onLogin={onLogin} />
               </Route>
+              <Route path="/users/:id">
+                <UserProfile userId={userId} />
+              </Route>
               <Route exact path="/login">
                 <UserLogin onLogin={onLogin} />
               </Route>
@@ -86,6 +93,7 @@ const App = (props) => {
                 <UserLogout />
               </Route>
             </Switch>
+            <Footer />
           </BaseProvider>
         </StyletronProvider>
       </Router>

@@ -5,7 +5,7 @@ import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { Button } from "baseui/button";
 import Spinner from '../common/Spinner';
-import { users } from '../../data/api';
+import Api from '../../data/api';
 
 class UserLogin extends Component {
 
@@ -20,7 +20,7 @@ class UserLogin extends Component {
 	    		keys: []
 	    	}
 	    };
-	   	this.eventSource = new EventSource("/api/users/authentication");
+	   	this.eventSource = new EventSource("/api/users/lnurl-auth");
 	    this.handleUserIdChange = this.handleUserIdChange.bind(this)
 	   	this.addKey = this.addKey.bind(this);
 	    this.login = this.login.bind(this);
@@ -69,7 +69,7 @@ class UserLogin extends Component {
 
   	login() {
   		this.setState({ isLoading: true })
-	    users.login(this.state.form.userId)
+	    Api.login(this.state.form.userId)
 		    .then(resp => {
 		    	if (resp.status === 200) {
 		    		resp.json().then(r => {

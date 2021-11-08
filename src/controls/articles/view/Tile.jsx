@@ -42,11 +42,11 @@ const PostTile = (props) => {
     >
       <StyledBody>
         <p>@{props.author}</p>
-        <Rating stats={props.ratings} />
         <Price {...props.price} />
+        <Rating stats={props.ratings} />
       </StyledBody>
       <StyledAction>
-        <Button onClick={handleView} overrides={{BaseButton: {style: {width: '100%'}}}}>
+        <Button disabled={!props.accessable} onClick={handleView} overrides={{BaseButton: {style: {width: '100%'}}}}>
           View
         </Button>
       </StyledAction>
@@ -57,7 +57,7 @@ const PostTile = (props) => {
 class Price extends Component {
 	render() {
 		return (
-			this.props.amount === 0 ? <p>FREE</p> : <p>{this.props.amount} {this.props.currency}</p>
+			this.props.amount === 0 ? <p>FREE</p> : <p>{this.props.amount} Sats 💧</p>
 		)
 	}
 }

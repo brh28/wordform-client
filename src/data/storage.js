@@ -1,3 +1,3 @@
 
 
-export const get = (field) => localStorage.getItem('userId')
+export const getUserId = () => localStorage.getItem('userId')

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import { Button } from "baseui/button";
 import Spinner from '../common/Spinner';
-import { users } from '../../data/api';
+import Api from '../../data/api';
 
 class UserLogout extends Component {
 	constructor(props) {
@@ -15,7 +15,7 @@ class UserLogout extends Component {
 
 	logout() {
   		this.setState({ isLoading: true })
-  		users.logout()
+  		Api.logout()
 		    .then((result) => {
 		    	console.log('logging out')
 	  			localStorage.clear();

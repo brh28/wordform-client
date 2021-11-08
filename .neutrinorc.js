@@ -11,13 +11,13 @@ module.exports = {
     // airbnb(),
     react({
       html: {
-        title: 'Logos'
+        title: 'Dirt'
       }
     }),
     jest(),
     devServer({
       port: 3001,
-      proxy: { "/api/**": { target: 'http://localhost:3000', secure: false }  }
+      proxy: { "/api/**": { target: 'https://localhost:3000', secure: false }  }
     })
   ],
 };

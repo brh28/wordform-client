@@ -8,7 +8,7 @@ import { Input } from "baseui/input";
 import { PublishArticle as Invoice } from "../common/Invoices";
 import LnAuth from '../common/LnAuth'
 import Spinner from '../common/Spinner';
-import { users } from '../../data/api';
+import Api from '../../data/api';
 
 class CreateUser extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class CreateUser extends Component {
       // userId
       // userIdCaption
     };
-    this.eventSource = new EventSource("/api/users/authentication");
+    this.eventSource = new EventSource("/api/users/lnurl-auth");
     this.handleUserIdChange = this.handleUserIdChange.bind(this);
     this.addLinkingKey = this.addLinkingKey.bind(this);
     this.submitForm = this.submitForm.bind(this);
@@ -97,7 +97,7 @@ class CreateUser extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    users.post(this.state.form)
+    Api.postUser(this.state.form)
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => {

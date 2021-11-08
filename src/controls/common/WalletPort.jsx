@@ -74,6 +74,7 @@ class WalletPort extends Component {
       console.error('Async: Could not copy text: ', err);
     });
     this.setState({copied: true})
+    setTimeout(() => this.setState({copied: false}) , 2000)
   }
 
   render () {
@@ -83,18 +84,18 @@ class WalletPort extends Component {
         <FlexGrid
           flexGridColumnCount={2}
         >
-          <FlexGridItem {...wideItemProps}>
-            <FormControl caption="Connect">
-              <Textarea disabled value={this.props.connection} />
-            </FormControl>
-          </FlexGridItem>
-          <FlexGridItem {...itemProps} display="none" />
           <FlexGridItem {...itemProps}>
-            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy"}</Button>
+            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy Invoice"}</Button>
           </FlexGridItem>
           <FlexGridItem {...itemProps}>
             <QRCode title="Scan" value={this.props.connection} />
           </FlexGridItem>
+          <FlexGridItem {...wideItemProps}>
+{/*            <FormControl caption="Connect">
+*/}              <Textarea disabled value={this.props.connection} />
+            {/*</FormControl>*/}
+          </FlexGridItem>
+          <FlexGridItem {...itemProps} display="none" />
         </FlexGrid>
       	<br />
     	</div>

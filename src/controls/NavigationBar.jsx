@@ -24,6 +24,7 @@ const NavigationBar = (props) => {
     [
       {text: 'Browse', href: '/browse'},
       {text: 'Publish Article', href: '/articles/new'},
+      {text: 'User Profile', href: `/users/${props.userId}`},
       {text: 'Logout', href: '/logout'}
     ] :
     [
@@ -51,7 +52,7 @@ const NavigationBar = (props) => {
       </StyledNavigationList>
       <StyledNavigationList $align={ALIGN.center} />
       <StyledNavigationList $align={ALIGN.right}>
-        <StyledNavigationItem>Ideaya</StyledNavigationItem>
+        <StyledNavigationItem>🌱</StyledNavigationItem>
       </StyledNavigationList>
     </HeaderNavigation>
   );

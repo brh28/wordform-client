@@ -4,7 +4,7 @@ import WalletPort from '../common/WalletPort'
 import Spinner from "../common/Spinner";
 import { Error } from "../common/Notifications";
 import { PublishInvoice as Invoice } from '../common/Invoices'
-import { articles } from "../../data/api"
+import Api from "../../data/api"
 
 class PublishArticle extends Component {
 	constructor(props) {
@@ -27,7 +27,7 @@ class PublishArticle extends Component {
 
 	getInvoice() {
 		this.setState({ isLoading: true })
-		articles.getInvoice(this.props.match.params.articleId)
+		Api.getInvoice(this.props.match.params.articleId)
 			.then(res => {
 				if (res.status === 401) {
 					this.setState({ isLoading: false, error: "The author must be logged in."})
