@@ -8,7 +8,7 @@ import { Input } from "baseui/input";
 import { PublishArticle as Invoice } from "../common/Invoices";
 import LnAuth from '../common/LnAuth'
 import Spinner from '../common/Spinner';
-import Api from '../../data/api';
+import { server } from '../../api';
 
 class CreateUser extends Component {
   constructor(props) {
@@ -97,7 +97,7 @@ class CreateUser extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    Api.postUser(this.state.form)
+    server.postUser(this.state.form)
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => {

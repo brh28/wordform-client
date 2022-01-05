@@ -8,6 +8,7 @@ import {
 } from "baseui/header-navigation";
 import { StyledLink } from "baseui/link";
 import { Button } from "baseui/button";
+import { localStorage } from "../api"
 
 
 // const NavigationItem = ({ text, href }) => {
@@ -19,12 +20,16 @@ import { Button } from "baseui/button";
 // }
 
 const NavigationBar = (props) => {
+  const userId = localStorage.getUserId()
   const currentPath = props.history.location.pathname
-  const navItems = props.userId ? 
+  // const userId = localStorage.getUserId()
+
+  console.log('Navigation bar user = ' + userId)
+  const navItems = userId ? 
     [
       {text: 'Browse', href: '/browse'},
       {text: 'Publish Article', href: '/articles/new'},
-      {text: 'User Profile', href: `/users/${props.userId}`},
+      {text: 'User Profile', href: `/users/${userId}`},
       {text: 'Logout', href: '/logout'}
     ] :
     [
@@ -37,7 +42,6 @@ const NavigationBar = (props) => {
     <HeaderNavigation>
       <StyledNavigationList $align={ALIGN.left}>
         {
-
           navItems.map((i, idx) => {
             const styling = (i.href === currentPath) ? {backgroundColor: '#A9A9A9'} : null
             return (

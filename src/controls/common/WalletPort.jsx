@@ -85,7 +85,7 @@ class WalletPort extends Component {
           flexGridColumnCount={2}
         >
           <FlexGridItem {...itemProps}>
-            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy Invoice"}</Button>
+            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy"}</Button>
           </FlexGridItem>
           <FlexGridItem {...itemProps}>
             <QRCode title="Scan" value={this.props.connection} />

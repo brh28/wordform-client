@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import ArticleContent from './articles/view/Content'
 import Spinner from "./common/Spinner";
 import { ReadInvoice, PublishInvoice } from './common/Invoices'
-import Api from "../data/api"
+import { server } from "../api"
 
 class ArticleController extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class ArticleController extends Component {
   load() {
     this.setState({ isLoading: true })
 
-    Api.get(this.props.match.params.id)
+    server.get(this.props.match.params.id)
       .then(res => {
         this.setState({ isLoading: false, ...res})
         // if (res.status === 200) {

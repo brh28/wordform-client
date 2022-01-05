@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Spinner from '../common/Spinner';
 import ArticleTile from './view/Tile.jsx'
-import Api from '../../data/api';
+import { localStorage, server } from '../../api';
 import { Error } from '../common/Notifications'
 
 class BrowseArticles extends Component {
@@ -15,7 +15,7 @@ class BrowseArticles extends Component {
 	}
 
 	componentDidMount() {
-		Api.browse()
+		server.browse()
 			.then(
 		        (result) => {
 		          this.setState({
@@ -33,11 +33,12 @@ class BrowseArticles extends Component {
   	}
 
 	render() {
+	  const user = localStorage.getUserId()
 	  return (
 	    <div>
-	    	{ this.props.user ? null : <Error message='Must log in to access paid content' />}
+	    	{ user ? null : <Error message='Must log in to access paid content' />}
 			{ 
-				this.state.isLoaded ? this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable={this.props.user || (elem.price && elem.price.amount === 0)} {...elem} />) : <Spinner />
+				this.state.isLoaded ? this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable={user || (elem.price && elem.price.amount === 0)} {...elem} />) : <Spinner />
 			} 
 		</div>
 	  )

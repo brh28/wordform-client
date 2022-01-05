@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import RateContent from "./RateContent"
-import { getUserId } from '../../../data/storage'
+import { localStorage } from '../../../api'
 
 class ArticleContent extends Component {
   render() {
-  	const isAuthor = getUserId() === this.props.author
+  	const isAuthor = localStorage.getUserId() === this.props.author
   	return (
 		  <div>
 		    <h1>{this.props.title}</h1>

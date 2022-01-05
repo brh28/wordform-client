@@ -3,7 +3,7 @@ import {useStyletron} from 'baseui';
 import ArrowUp from "baseui/icon/arrow-up"
 import ArrowDown from "baseui/icon/arrow-down"
 import Spinner from "../../common/Spinner";
-import Api from "../../../data/api"
+import { server } from "../../../api"
 
 class RateContent extends Component {
 	constructor(props) {
@@ -22,7 +22,7 @@ class RateContent extends Component {
 
 	fetchRating() {
 		this.setState({ isLoading: true })
-		Api.getUserRating(this.props.articleId)
+		server.getUserRating(this.props.articleId)
 			.then(r => {
 				this.setState({
 					isLoading: false,
@@ -34,7 +34,7 @@ class RateContent extends Component {
 	saveRating(clicked) {
 		const newRating = clicked === this.state.rating ? 0 : clicked
 		this.setState({ isLoading: true })
-		Api.postUserRating(this.props.articleId, newRating)
+		server.postUserRating(this.props.articleId, newRating)
 			.then(r => {
 				this.setState({
 					isLoading: false,

@@ -5,7 +5,7 @@ import { Textarea } from "baseui/textarea";
 import { Select } from "baseui/select";
 import { Input } from "baseui/input";
 import Spinner from '../common/Spinner';
-import Api from "../../data/api"
+import { server } from "../../api"
 
 class CreateArticle extends Component {
   constructor(props) {
@@ -72,7 +72,7 @@ class CreateArticle extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    Api.postArticle(this.state.form)
+    server.postArticle(this.state.form)
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => {

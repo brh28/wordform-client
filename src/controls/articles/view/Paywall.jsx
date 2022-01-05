@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import ArticleContent from './Content'
 import Spinner from "../../common/Spinner";
 import { ReadArticle as Invoice } from '../../common/Invoices'
-import Api from "../../../data/api"
+import { server } from "../../../api"
 
 class Paywall extends Component {
   constructor(props) {
@@ -26,7 +26,7 @@ class Paywall extends Component {
   load() {
     this.setState({ isLoading: true })
 
-    Api.get(this.props.match.params.id)
+    server.get(this.props.match.params.id)
       .then(res => {
         if (res.status === 200) {
           res.json().then(res => this.setState({

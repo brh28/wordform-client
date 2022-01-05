@@ -19,6 +19,8 @@ import { Client as Styletron } from "styletron-engine-atomic";
 import NavigationBar from "./controls/NavigationBar"
 import SecondaryNavigationBar from "./controls/SecondaryNavigationBar"
 import Footer from "./controls/Footer"
+
+import { localStorage, server, useLocalStorage } from "./api"
 // import { CookiesProvider } from 'react-cookie';
 
 // import * as Cookies from "js-cookie";
@@ -38,41 +40,34 @@ const history = createBrowserHistory();
 //   // }
 // };
 
-const checkUserSession = () => {
-  const headers = new Headers();
-  headers.append('pragma', 'no-cache');
-  headers.append('cache-control', 'no-cache')
-  fetch('/api/sessions/user', {
-    headers: headers
-  })
-  .then(resp => {
-    console.log(resp)
-    if (resp.status === 403) {
-      localStorage.removeItem('userId')
-      window.location.reload(false)
-    }
-  })
-}
-
 const onLogin = (userId, history) => {
   // console.log('onLogin')
   // localStorage.setItem( 'userId', userId );
   //history.push('/browse')
 }
 
+const verifyUserSession = () => {
+    const localUserId = localStorage.getUserId()
+    const session = server.getUserSession().then(r => {
+      if (r.userId !== localUserId) localStorage.removeUserId()
+
+    })
+  }
+
 const App = (props) => {
-  const userId = localStorage.getItem('userId') // redux state store might be better location for this as it would force
-  console.log('App userId = ' + userId)
-  if (userId) checkUserSession()
+  const [userId, toLocalStorage] = useLocalStorage()
+  server.getUserSession()
+    .then(r => toLocalStorage(r.userId)) // refresh user session. could also do this on page load
+
   return (
       <Router history={history}>
         <StyletronProvider value={engine}>
           <BaseProvider theme={LightTheme}>
-            <NavigationBar userId={userId} />
+            <NavigationBar />
 {/*            <SecondaryNavigationBar />
 */}            <Switch>
               <Route exact path="/browse">
-                <Browse user={userId} />
+                <Browse />
               </Route>
               <Route exact path="/articles/new">
                 <ArticleCreate />
@@ -84,7 +79,7 @@ const App = (props) => {
                 <CreateUser onLogin={onLogin} />
               </Route>
               <Route path="/users/:id">
-                <UserProfile userId={userId} />
+                <UserProfile />
               </Route>
               <Route exact path="/login">
                 <UserLogin onLogin={onLogin} />

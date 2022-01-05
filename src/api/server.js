@@ -46,6 +46,12 @@ export default {
         }, 
         body: JSON.stringify(user)
       }),
+	drainWallet: userId => fetch(`/api/users/${userId}/wallet/drain`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        } 
+      }),
 	login: userId => fetch(`/api/users/login`, {
   			method: "POST",
 	        headers: {
@@ -58,5 +64,20 @@ export default {
 	        headers: {
 	          'Content-Type': 'application/json'
 	        }, 
-	    })
+	    }),
+	getUserSession: () => {
+	  const headers = new Headers();
+	  headers.append('pragma', 'no-cache');
+	  headers.append('cache-control', 'no-cache')
+	  return fetch('/api/sessions/user', {
+	    headers: headers
+	  })
+	  // .then(resp => {
+	  //   console.log(resp)
+	    // if (resp.status === 403) {
+	    //   localStorage.removeItem('userId')
+	    //   window.location.reload(false)
+	    // }
+	  // })
+	}
 }

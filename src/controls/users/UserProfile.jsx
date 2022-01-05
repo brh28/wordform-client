@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Api from '../../data/api';
+import {withRouter} from 'react-router';
+import { localStorage, server } from '../../api';
 import Spinner from '../common/Spinner';
 import UserWallet from '../UserWallet'
 
@@ -19,11 +20,13 @@ class UserProfile extends Component {
 
 	fetchUser() {
 		this.setState( { isLoading: true } )
-		Api.getUserProfile(this.props.userId)
+		server.getUserProfile(this.props.match.params.id)
 			.then(res => this.setState( { isLoading: false, user: res } ))
 	}
 
 	render() {
+		const userId = this.props.match.params.id
+
 		if (this.state.isLoading) return <Spinner />
 		return (<div>
 			<h1>Public</h1>
@@ -38,10 +41,11 @@ class UserProfile extends Component {
 			<p>Keys required for authentication: {this.state.user.min_keys}</p>
 			<p>Email: {this.state.user.email || 'None'} </p>
 			<h2>Wallet</h2>
-			<UserWallet userId={this.props.userId} />
+			<UserWallet userId={userId} />
 			<p>{this.state.user.auto_pay ? `Payment Node: ${this.state.user.destination_pub_key}` : 'Auto-pay: Off'}</p>
 		</div>)
 	}
 }
 
-export default UserProfile
+
+export default withRouter(UserProfile)
