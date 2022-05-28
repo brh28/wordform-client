@@ -32,16 +32,16 @@ import { server, useLocalStorage } from '../../api';
 
 const UserLogout = (props) => {
 	const [isLoading, setIsLoading] = useState(false)
-	const [userId, setUserId] = useLocalStorage()
+	// const [userId, setUserId] = useLocalStorage()
 
 	const logout = () => {
   		setIsLoading(true)
   		server.logout()
 		    .then((result) => {
 		    	console.log('logging out')
-	  			setUserId(null)
+	  			// setUserId(null)
 	  			props.history.push('/login')
-	  			//window.location.reload(false)
+	  			window.location.reload(false)
 	  		})
   	}
 

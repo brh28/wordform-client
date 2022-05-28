@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { StyledLink } from "baseui/link";
 import PropTypes from 'prop-types';
 import Rating from '../../common/Rating.jsx'
+import AuthorTag from '../../common/AuthorTag.jsx'
 import {
   Card,
   StyledBody,
@@ -41,12 +42,12 @@ const PostTile = (props) => {
       title={props.title}
     >
       <StyledBody>
-        <p>@{props.author}</p>
+        <AuthorTag authorId={props.author} />
         <Price {...props.price} />
         <Rating stats={props.ratings} />
       </StyledBody>
       <StyledAction>
-        <Button disabled={!props.accessable} onClick={handleView} overrides={{BaseButton: {style: {width: '100%'}}}}>
+        <Button disabled={!props.accessable} onClick={handleView} overrides={{BaseButton: {style: {width: '50%'}}}}>
           View
         </Button>
       </StyledAction>

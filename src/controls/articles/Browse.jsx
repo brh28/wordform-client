@@ -15,7 +15,7 @@ class BrowseArticles extends Component {
 	}
 
 	componentDidMount() {
-		server.browse()
+		server.browse(this.props.searchBy)
 			.then(
 		        (result) => {
 		          this.setState({
@@ -33,12 +33,14 @@ class BrowseArticles extends Component {
   	}
 
 	render() {
-	  const user = localStorage.getUserId()
+	  //const user = this.props.userId
+
+	  // tile accessable = {user || (elem.price && elem.price.amount === 0)}
 	  return (
 	    <div>
-	    	{ user ? null : <Error message='Must log in to access paid content' />}
-			{ 
-				this.state.isLoaded ? this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable={user || (elem.price && elem.price.amount === 0)} {...elem} />) : <Spinner />
+{/*	    	{ user ? null : <Error message='Must log in to access paid content' />}
+*/}			{ 
+				this.state.isLoaded ? this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable {...elem} />) : <Spinner />
 			} 
 		</div>
 	  )

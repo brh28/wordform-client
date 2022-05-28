@@ -1,11 +1,15 @@
 
 
 export default {
-	browse: () => {
+	// TODO - look into different http lib
+	browse: (searchParams) => {
 		const headers = new Headers();
 	    // headers.append('withCredentials', true)
 	    headers.append('Accepts', 'application/json')
-		return fetch(`/api/articles`, { headers:headers })
+	  const url = !searchParams || searchParams === {} 
+	  	? `/api/articles` 
+	  	: `/api/articles?${Object.keys(searchParams).map(key => `${key}=${searchParams[key]}`).join('&')}`
+		return fetch(url, { headers:headers })
 		      .then(res => res.json()) 
 	},
 	get: (articleId) => {
@@ -16,6 +20,18 @@ export default {
 
 				// }
 	},
+	deleteArticle: (articleId) => {
+		return fetch(`/api/articles/${articleId}`, {
+			method: "DELETE"
+		})
+	},
+	postArticle: article => fetch("/api/article", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify(article)
+    }),
 	getUserRating: (articleId) => {
 		return fetch(`/api/user/ratings/${articleId}`, {}).then(resp => resp.json())
 	},
@@ -29,14 +45,6 @@ export default {
       }).then(resp => resp.json())
 	},
 	// getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
-	postArticle: article => fetch("/api/article", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        }, 
-        body: JSON.stringify(article)
-      }),
-
 	getUserProfile: userId => fetch(`/api/users/${userId}/profile`, {}).then(resp => resp.json()),
 	getUserWallet: userId => fetch(`/api/users/${userId}/wallet`, {}).then(resp => resp.json()),
 	postUser: user => fetch("/api/user", {
@@ -46,7 +54,7 @@ export default {
         }, 
         body: JSON.stringify(user)
       }),
-	drainWallet: userId => fetch(`/api/users/${userId}/wallet/drain`, {
+	withdrawFunds: (userId, amount) => fetch(`/api/users/${userId}/wallet/withdraw`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -71,7 +79,7 @@ export default {
 	  headers.append('cache-control', 'no-cache')
 	  return fetch('/api/sessions/user', {
 	    headers: headers
-	  })
+	  }).then(resp => resp.json())
 	  // .then(resp => {
 	  //   console.log(resp)
 	    // if (resp.status === 403) {

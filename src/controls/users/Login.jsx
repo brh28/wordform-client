@@ -7,7 +7,7 @@ import { Button } from "baseui/button";
 import Spinner from '../common/Spinner';
 import { localStorage, server, useLocalStorage } from '../../api';
 
-class UserLoginClass extends Component {
+class UserLogin extends Component {
 
 	constructor(props) {
 	    super(props);
@@ -74,7 +74,11 @@ class UserLoginClass extends Component {
 	    server.login(this.state.form.userId)
 		    .then(resp => {
 		    	if (resp.status === 200) {
-		    		resp.json().then(r => this.props.onLogin(r.userId))
+		    		// resp.json().then(r => this.props.onLogin(r.userId))
+		    		resp.json().then(r => {
+		    			// this.props.history.push(props.history.location.state.returnUrl)
+		    			window.location.reload(false)
+		    		})
 		    	} else {
 		    		console.log('updating state')
 		    		this.setState({ isLoading: false, error: 'Login attempt failed' })
@@ -112,15 +116,15 @@ class UserLoginClass extends Component {
 	}
 }
 
-function UserLogin(props) {
-	const [userId, setUserId] = useLocalStorage();
+// function UserLogin(props) {
+// 	const [userId, setUserId] = useLocalStorage();
 
-	const onLogin = (newUserId) => {
-		setUserId(newUserId)	
-  		props.history.push(props.history.location.state.returnUrl)
-	}
+// 	const onLogin = (newUserId) => {
+// 		setUserId(newUserId)	
+//   		props.history.push(props.history.location.state.returnUrl)
+// 	}
 
-	return <UserLoginClass {...props} userId={userId} onLogin={onLogin} />;
-}
+// 	return <UserLoginClass {...props} userId={userId} onLogin={onLogin} />;
+// }
 
 export default withRouter(UserLogin);

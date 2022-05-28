@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { hot } from 'react-hot-loader';
 import { Router, Route, Switch } from "react-router";
 import './css/App.css';
@@ -10,12 +10,12 @@ import PublishArticle from './controls/articles/Publish'
 import UserLogin from './controls/users/Login'
 import UserLogout from './controls/users/Logout'
 import CreateUser from './controls/users/Create'
-import UserProfile from './controls/users/UserProfile'
-import { createBrowserHistory } from "history";
+import UserController from './controls/users/index.jsx'
+// import { createBrowserHistory } from "history";
 
-import {BaseProvider, LightTheme} from 'baseui';
-import { Provider as StyletronProvider } from "styletron-react";
-import { Client as Styletron } from "styletron-engine-atomic";
+// import {BaseProvider, LightTheme} from 'baseui';
+// import { Provider as StyletronProvider } from "styletron-react";
+// import { Client as Styletron } from "styletron-engine-atomic";
 import NavigationBar from "./controls/NavigationBar"
 import SecondaryNavigationBar from "./controls/SecondaryNavigationBar"
 import Footer from "./controls/Footer"
@@ -26,8 +26,8 @@ import { localStorage, server, useLocalStorage } from "./api"
 // import * as Cookies from "js-cookie";
 
 
-const engine = new Styletron();
-const history = createBrowserHistory();
+// const engine = new Styletron();
+// const history = createBrowserHistory();
 
 // export const getSessionCookie = () => {
 //   // const sessionCookie = Cookies.get();
@@ -46,40 +46,41 @@ const onLogin = (userId, history) => {
   //history.push('/browse')
 }
 
-const verifyUserSession = () => {
-    const localUserId = localStorage.getUserId()
-    const session = server.getUserSession().then(r => {
-      if (r.userId !== localUserId) localStorage.removeUserId()
+// const verifyUserSession = () => {
+//     const localUserId = localStorage.getUserId()
+//     const session = server.getUserSession().then(r => {
+//       if (r.userId !== localUserId) localStorage.removeUserId()
 
-    })
-  }
+//     })
+//   }
 
 const App = (props) => {
-  const [userId, toLocalStorage] = useLocalStorage()
+  const [userId, setUserId] = useState(null)
   server.getUserSession()
-    .then(r => toLocalStorage(r.userId)) // refresh user session. could also do this on page load
+    .then(r => {
+      console.log(r);
+      setUserId(r.id)
+    }) // refresh user session. could also do this on page load
 
   return (
-      <Router history={history}>
-        <StyletronProvider value={engine}>
-          <BaseProvider theme={LightTheme}>
-            <NavigationBar />
+      <div>
+            <NavigationBar userId={userId} />
 {/*            <SecondaryNavigationBar />
 */}            <Switch>
               <Route exact path="/browse">
-                <Browse />
+                <Browse userId={userId} />
               </Route>
               <Route exact path="/articles/new">
                 <ArticleCreate />
               </Route>
               <Route exact path="/articles/:id">
-                <ArticleController />
+                <ArticleController viewerId={userId} />
               </Route>
               <Route exact path="/users/new">
                 <CreateUser onLogin={onLogin} />
               </Route>
               <Route path="/users/:id">
-                <UserProfile />
+                <UserController viewerId={userId} />
               </Route>
               <Route exact path="/login">
                 <UserLogin onLogin={onLogin} />
@@ -89,9 +90,7 @@ const App = (props) => {
               </Route>
             </Switch>
             <Footer />
-          </BaseProvider>
-        </StyletronProvider>
-      </Router>
+      </div>
   );
 }
 

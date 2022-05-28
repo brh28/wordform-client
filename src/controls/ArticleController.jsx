@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
-import ArticleContent from './articles/view/Content'
+import ArticleView from './articles/view/Content'
 import Spinner from "./common/Spinner";
 import { ReadInvoice, PublishInvoice } from './common/Invoices'
 import { server } from "../api"
@@ -17,6 +17,7 @@ class ArticleController extends Component {
       error: null
     };
     this.load = this.load.bind(this);
+    this.deleteArticle = this.deleteArticle.bind(this)
   }
 
   componentDidMount() {
@@ -45,11 +46,20 @@ class ArticleController extends Component {
       })
   }
 
+  deleteArticle(id) {
+    this.setState({ isLoading: true })
+    server.deleteArticle(id)
+      .then(() => {
+        const returnUrl = this.props.returnUrl || '/browse'
+        this.props.history.push(returnUrl)
+      })
+  }
+
   render() {
     const { isLoading, article, readPaywall, publishPaywall, error } = this.state
-
+    
     if (isLoading) return <Spinner />
-  	else if (article) return <ArticleContent {...article} />
+  	else if (article) return <ArticleView viewerId={this.props.viewerId} {...article} onDelete={this.deleteArticle} />
   	else if (readPaywall) return <ReadInvoice {...readPaywall} />
     else if (publishPaywall) return <PublishInvoice {...publishPaywall} />
     else return <Error message={this.state.error || 'Unknown Error'} />

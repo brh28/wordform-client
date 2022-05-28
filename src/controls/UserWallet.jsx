@@ -9,7 +9,7 @@ class UserWallet extends Component {
 	    super(props);
 	    this.state = { copied: false };
 	    this.fetchWallet = this.fetchWallet.bind(this)
-	    this.drainWallet = this.drainWallet.bind(this)
+	    this.withdraw = this.withdraw.bind(this)
 	}
 
 	componentDidMount() {
@@ -20,15 +20,16 @@ class UserWallet extends Component {
 		server.getUserWallet(this.props.userId).then(res => this.setState( { isLoading: false, ...res }))
 	}
 
-	drainWallet() {
-		server.drainWallet(this.props.userId)
+	withdraw() {
+		const amt = this.state.amt
+		server.withdrawFunds(this.props.userId, amt).then(() => window.location.reload(false))
 	}
 
 	render () {
 		if (this.state.isLoading) return <Spinner />
 		else return <div>
 			Balance: {this.state.lnd_balance} SAT
-			<Button onClick={this.drainWallet}>Drain</Button>
+			<Button onClick={this.withdraw}>Withdraw</Button>
 			{/*<WalletPort connection={this.state.withdraw_url} />*/}
 		</div>
 	}

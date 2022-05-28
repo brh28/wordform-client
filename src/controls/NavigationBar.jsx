@@ -20,7 +20,8 @@ import { localStorage } from "../api"
 // }
 
 const NavigationBar = (props) => {
-  const userId = localStorage.getUserId()
+  // const userId = localStorage.getUserId()
+  const userId = props.userId
   const currentPath = props.history.location.pathname
   // const userId = localStorage.getUserId()
 
