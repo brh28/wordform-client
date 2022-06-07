@@ -47,7 +47,14 @@ export default {
 	// getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
 	getUserProfile: userId => fetch(`/api/users/${userId}/profile`, {}).then(resp => resp.json()),
 	getUserWallet: userId => fetch(`/api/users/${userId}/wallet`, {}).then(resp => resp.json()),
-	postUser: user => fetch("/api/user", {
+	updateWallet: wallet => fetch("/api/wallet", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(wallet)
+      }),
+	postUser: user => fetch("/api/user", { // should be /profile?
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

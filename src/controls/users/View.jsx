@@ -24,12 +24,12 @@ class ViewUser extends Component {
 			.then(res => this.setState( { isLoading: false, user: res } ))
 	}
 
-	fetchArticles
+	// fetchArticles
 
 	render() {
 		if (this.state.isLoading) return <Spinner />
 		return (<div>
-			<p>ID: {this.state.user._id} </p>
+			<p>ID: {this.props.id} </p>
 			<p>Desciption: {this.state.user.description || 'None'} </p>
 			<BrowseArticles searchBy={{ author: this.props.id }} />
 		</div>)

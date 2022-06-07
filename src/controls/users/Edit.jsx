@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import { localStorage, server } from '../../api';
+
 import Spinner from '../common/Spinner';
 import UserWallet from '../UserWallet'
 import BrowseArticles from '../articles/Browse.jsx'
@@ -27,7 +28,8 @@ class EditUser extends Component {
 
 	render() {
 		if (this.state.isLoading) return <Spinner />
-		return (<div>
+		return (
+		<div>
 			<h1>Public</h1>
 			<p>ID: {this.state.user._id} </p>
 			<p>Desciption: {this.state.user.description || 'None'} </p>
@@ -41,11 +43,10 @@ class EditUser extends Component {
 			<p>Email: {this.state.user.email || 'None'} </p>
 			<h2>Wallet</h2>
 			<UserWallet userId={this.props.id} />
-			<p>{this.state.user.auto_pay ? `Payment Node: ${this.state.user.destination_pub_key}` : 'Auto-pay: Off'}</p>
 			<BrowseArticles searchBy={{ author: this.state.user._id }} />
-		</div>)
+		</div>
+		)
 	}
 }
-
 
 export default EditUser
