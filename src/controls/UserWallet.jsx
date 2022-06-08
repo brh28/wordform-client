@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Spinner from "./common/Spinner";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
-// import WalletPort from "./common/WalletPort"
 import { Button } from "baseui/button";
 import Toggle from './common/Toggle';
 
@@ -59,8 +58,6 @@ class UserWallet extends Component {
 	}
 
 	render () {
-		console.log(this.state.wallet)
-		// const auto_pay = this.state.wallet.auto_pay || false
 		if (this.state.isLoading) return <Spinner />
 		else return <div>
 			Balance: {this.state.wallet.lnd_balance} SAT
@@ -75,7 +72,6 @@ class UserWallet extends Component {
 		    <Toggle label="Automatic forwarding" checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
 			<Button onClick={this.saveForm}>Save</Button>
 			<Button onClick={this.withdraw}>Withdraw</Button>
-			{/*<WalletPort connection={this.state.withdraw_url} />*/}
 		</div>
 	}
 }
