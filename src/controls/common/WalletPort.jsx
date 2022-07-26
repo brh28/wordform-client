@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Button } from "baseui/button";
 import { Textarea } from "baseui/textarea";
+import { SIZE } from "baseui/input";
 import QRCode from 'qrcode.react'
 import {Grid, Cell} from 'baseui/layout-grid';
 import {FlexGrid, FlexGridItem} from 'baseui/flex-grid';
@@ -23,9 +24,8 @@ const fallbackCopyTextToClipboard = (text) => {
   try {
     var successful = document.execCommand('copy');
     var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Fallback: Copying text command was ' + msg);
   } catch (err) {
-    console.error('Fallback: Oops, unable to copy', err);
+    console.error('Unable to copy', err);
   }
 
   document.body.removeChild(textArea);
@@ -78,22 +78,24 @@ class WalletPort extends Component {
   }
 
   render () {
+    const label = () => {
+      if (this.state.copied) return 'Copied'
+      else if (this.props.type == 'invoice') return 'Copy invoice'
+      else return 'Copy'
+    }
+
     if (!this.props.connection) return null
   	return (
     	<div style={{marginTop: '10px'}}>
-        <FlexGrid
-          flexGridColumnCount={2}
-        >
-          <FlexGridItem {...itemProps}>
-            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{this.state.copied ? "Copied" : "Copy"}</Button>
+        <FlexGrid>
+        <FlexGridItem {...itemProps}>
+            <QRCode style={{  marginTop: '10px' }} title="Scan" value={this.props.connection} />
           </FlexGridItem>
           <FlexGridItem {...itemProps}>
-            <QRCode title="Scan" value={this.props.connection} />
+            <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{label()}</Button>
           </FlexGridItem>
           <FlexGridItem {...wideItemProps}>
-{/*            <FormControl caption="Connect">
-*/}              <Textarea disabled value={this.props.connection} />
-            {/*</FormControl>*/}
+              <Textarea disabled size={SIZE.mini} value={this.props.connection} />
           </FlexGridItem>
           <FlexGridItem {...itemProps} display="none" />
         </FlexGrid>

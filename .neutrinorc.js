@@ -11,7 +11,7 @@ module.exports = {
     // airbnb(),
     react({
       html: {
-        title: 'Dirt'
+        title: 'Logos'
       }
     }),
     jest(),

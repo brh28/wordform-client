@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { withRouter } from "react-router";
 import Button from '@material-ui/core/Button';
-import ArticleView from './articles/view/Content'
+import { Error } from './common/Notifications'
+import ArticleView from './articles/ArticleView'
 import Spinner from "./common/Spinner";
 import { ReadInvoice, PublishInvoice } from './common/Invoices'
 import { server } from "../api"
@@ -13,7 +14,6 @@ class ArticleController extends Component {
       isLoading: false,
       article: null,
       readPaywall: null,
-      publishPaywall: null,
       error: null
     };
     this.load = this.load.bind(this);
@@ -28,22 +28,8 @@ class ArticleController extends Component {
     this.setState({ isLoading: true })
 
     server.get(this.props.match.params.id)
-      .then(res => {
-        this.setState({ isLoading: false, ...res})
-        // if (res.status === 200) {
-        //   res.json().then(res => this.setState({
-        //     isLoading: false,
-        //     ...res 
-        //   }))
-        // } else if (res.status === 402) {
-        //   res.json().then(r => {
-        //     if (r.paywall) this.setState({ isLoading: false, ...r })
-        //     else this.setState( { isLoading: false, error: 'This article is behind a paywall. User must log in to receive invoice.' })
-        //   })
-        // } else {
-        //   this.setState( { isLoading: false, error: 'General Error' })
-        // }
-      })
+      .then(res => { this.setState({ isLoading: false, ...res}) })
+      .catch(err => { this.setState({ isLoading: false, error: 'Failed to load'}) } )
   }
 
   deleteArticle(id) {
@@ -58,14 +44,11 @@ class ArticleController extends Component {
   render() {
     const { isLoading, article, readPaywall, publishPaywall, error } = this.state
     
-    if (isLoading) return <Spinner />
+    if (isLoading) return <Spinner isActive={isLoading} />
   	else if (article) return <ArticleView viewerId={this.props.viewerId} {...article} onDelete={this.deleteArticle} />
   	else if (readPaywall) return <ReadInvoice {...readPaywall} />
-    else if (publishPaywall) return <PublishInvoice {...publishPaywall} />
     else return <Error message={this.state.error || 'Unknown Error'} />
   }
 }
-
-const Error = ({ code, message }) => <p>{message}</p>
 
 export default withRouter(ArticleController);

@@ -2,30 +2,44 @@ import React, {Component} from 'react';
 import Spinner from '../common/Spinner';
 import ArticleTile from './view/Tile.jsx'
 import { localStorage, server } from '../../api';
-import { Error } from '../common/Notifications'
+import { Info, Error } from '../common/Notifications'
+import InfiniteScroll from 'react-infinite-scroll-component';
+
+const BATCH_SIZE = 5
 
 class BrowseArticles extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 		  error: null,
-		  isLoaded: false,
-		  articles: []
+		  isLoading: true,
+		  articles: [],
+		  hasMore: true
 		};
+
+		this.fetchData = this.fetchData.bind(this);
 	}
 
 	componentDidMount() {
-		server.browse(this.props.searchBy)
+		this.fetchData(null) 
+  	}
+
+  	fetchData() {
+  		const lastEl = this.state.articles.at(-1)
+  		const searchParams = this.props.searchBy || {}
+  		if (lastEl) { searchParams.before = lastEl.purchase_date }
+  		server.browse(searchParams)
 			.then(
 		        (result) => {
 		          this.setState({
-		            isLoaded: true,
-		            articles: result
+		            isLoading: false,
+		            articles: this.state.articles.concat(result),
+		            hasMore: result.length > 0 && result.length % BATCH_SIZE === 0
 		          });
 		        },
 		        (error) => {
 		          this.setState({
-		            isLoaded: true,
+		            isLoading: false,
 		            error
 		          });
 		        }
@@ -33,17 +47,19 @@ class BrowseArticles extends Component {
   	}
 
 	render() {
-	  //const user = this.props.userId
-
-	  // tile accessable = {user || (elem.price && elem.price.amount === 0)}
-	  return (
-	    <div>
-{/*	    	{ user ? null : <Error message='Must log in to access paid content' />}
-*/}			{ 
-				this.state.isLoaded ? this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable {...elem} />) : <Spinner />
-			} 
-		</div>
-	  )
+		const { articles, isLoading, hasMore } = this.state
+		console.log(articles.length !== 0 && articles.length % BATCH_SIZE === 0)
+		if (!isLoading && articles.length === 0) return <Info message='No articles' />
+		return (
+			<InfiniteScroll
+			  dataLength={articles.length} 
+			  next={this.fetchData}
+			  hasMore={hasMore}
+			  loader={<Spinner isActive={true} />}
+			>
+			  {this.state.articles.map((elem, idx) => <ArticleTile key={idx} accessable {...elem} />)}
+			</InfiniteScroll>
+		)
 	}
 }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyledLink } from "baseui/link";
 
-const AuthorTag = (props) => {
-	const { authorId } = props
+
+// Todo - refactor to UserTag with prop 'id'
+const AuthorTag = ({ authorId, style }) => {
 	return <StyledLink href={`/users/${authorId}`}>@{authorId}</StyledLink>
 }
 

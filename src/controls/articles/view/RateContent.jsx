@@ -2,8 +2,32 @@ import React, {Component} from 'react';
 import {useStyletron} from 'baseui';
 import ArrowUp from "baseui/icon/arrow-up"
 import ArrowDown from "baseui/icon/arrow-down"
-import Spinner from "../../common/Spinner";
+import Spinner, { SIZE } from "../../common/Spinner";
 import { server } from "../../../api"
+
+// const ArrowUp = ({highlighted, onClick}) => {
+// 	return <span style={{cursor: 'pointer'}} onClick={onClick}>&#10507;</span>
+// }
+// // const ArrowDown = ({onClick}) => <span style={{color: 'yellow', transform: `scale(.5, 2)`}}>&#8681;</span>
+// const ArrowDown = ({highlighted, onClick}) => <span>&#8681;</span>
+
+
+
+const UpDown = ({ rating, onClick }) => {
+	const [css, theme] = useStyletron();
+	const upCss = rating === 1 ? 'orange' : 'black'
+	const downCss = rating === -1 ? 'orange' : 'black'
+	return <div >
+		    <ArrowUp size={64} 
+		    	color={upCss} 
+		    	style={{cursor: 'pointer'}} 
+		    	onClick={() => onClick(1)}  />
+		    <ArrowDown  size={64}
+		    	color={downCss} 
+		    	style={{cursor: 'pointer'}} 
+		    	onClick={() => onClick(-1)} />
+		  </div>;
+}
 
 class RateContent extends Component {
 	constructor(props) {
@@ -44,10 +68,11 @@ class RateContent extends Component {
 	}
 
 	render() {
-		return <div>
-			<label>Was this article worth your time and money?</label> 
-			{this.state.isLoading ? <Spinner /> : <UpDown rating={this.state.rating} onClick={this.saveRating} />}
-		</div>
+		return (
+			<Spinner isActive={this.state.isLoading} size={SIZE.small}> 
+				<UpDown rating={this.state.rating} onClick={this.saveRating} />
+			</Spinner>
+		)
 	}
 }
 
@@ -56,12 +81,3 @@ export default RateContent
 
 
 
-const UpDown = ({ rating, onClick }) => {
-	const [css, theme] = useStyletron();
-	const upCss = rating === 1 ? css({color: theme.colors.warning}) : null
-	const downCss = rating === -1 ? css({color: theme.colors.warning}) : null
-	return <div >
-		    <span className={upCss}><ArrowUp onClick={() => onClick(1)} size={32} /></span>
-		    <span className={downCss}><ArrowDown onClick={() => onClick(-1)} size={32} /></span>
-		  </div>;
-}

@@ -1,12 +1,11 @@
 
-
+// TODO - look into different http lib. Why?
 export default {
-	// TODO - look into different http lib
 	browse: (searchParams) => {
 		const headers = new Headers();
 	    // headers.append('withCredentials', true)
 	    headers.append('Accepts', 'application/json')
-	  const url = !searchParams || searchParams === {} 
+	  const url = !searchParams || Object.keys(searchParams).length === 0
 	  	? `/api/articles` 
 	  	: `/api/articles?${Object.keys(searchParams).map(key => `${key}=${searchParams[key]}`).join('&')}`
 		return fetch(url, { headers:headers })
@@ -44,7 +43,7 @@ export default {
         body: JSON.stringify({ rating })
       }).then(resp => resp.json())
 	},
-	// getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
+	getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
 	getUserProfile: userId => fetch(`/api/users/${userId}/profile`, {}).then(resp => resp.json()),
 	getUserWallet: userId => fetch(`/api/users/${userId}/wallet`, {}).then(resp => resp.json()),
 	updateWallet: wallet => fetch("/api/wallet", {
@@ -60,6 +59,13 @@ export default {
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify(user)
+      }),
+	updateAuth: (userId, updates) => fetch(`/api/user/${userId}/auth`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(updates)
       }),
 	withdrawFunds: (userId, amount) => fetch(`/api/users/${userId}/wallet/withdraw`, {
         method: "POST",

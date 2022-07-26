@@ -5,7 +5,8 @@ import { StyledLink } from "baseui/link";
 
 const Refresh = () => {
 
-  return (<label>
+  return (
+    <label>
       After payment, <StyledLink href="#" onClick={() => {
         console.log('reloading')
         window.location.reload()
@@ -16,27 +17,28 @@ const Refresh = () => {
       </label>
     )
 }
+
+const detailsStyle = {border: '1px solid', margin: '10px', padding: '10px'}
+
 export const ReadInvoice = ({ title, author, price, paymentRequest }) => {
-  return (<div style={{width: '25%'}}>
-    <h2>🌧 Article is behind a paywall 🌧</h2>
-      <div style={{border: '1px solid', padding: '10px'}}>
-        <h3>Read Article: {title}</h3>
-        <p>Author: {author}</p>
-        <p>Price: {price.amount} {price.currency}</p>
-      </div>
-    <WalletPort connection={paymentRequest} />
+  return (<div style={{width: '50%'}}>
+    <div style={detailsStyle}>
+      <h3>{title}</h3>
+      <p>Author: {author}</p>
+      <p>Price: {price.amount} {price.currency}</p>
+    </div>
+    <WalletPort type='invoice' connection={paymentRequest} />
     <Refresh />
   </div>)
 }
 
 export const PublishInvoice = ({ title, author, price, paymentRequest }) => {
-  return (<div style={{width: '25%'}}>
-    <h2>🌧 Pay to post 🌧</h2>
-    <div style={{border: '1px solid', padding: '10px'}}>
-      <h3>Publish Article: {title}</h3>
+  return (<div style={{width: '50%'}}>
+    <div style={detailsStyle}>
+      <h3>Publish Article</h3>
       <p>Price: {price.amount} {price.currency}</p>
     </div>
-    <WalletPort connection={paymentRequest} />
+    <WalletPort type='invoice' connection={paymentRequest} />
     <Refresh />
 </div>)
 }

@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import { StyledLink } from "baseui/link";
 import PropTypes from 'prop-types';
-import Rating from '../../common/Rating.jsx'
+import Ratings from '../Ratings'
 import AuthorTag from '../../common/AuthorTag.jsx'
 import {
   Card,
   StyledBody,
-  StyledAction
+  StyledAction,
+  StyledTitle
 } from "baseui/card";
 import { Button } from "baseui/button";
 import { useHistory } from "react-router-dom";
+import { Tag } from "baseui/tag";
 
 // class PostTile extends Component {
 // 	render() {
@@ -29,25 +31,36 @@ import { useHistory } from "react-router-dom";
 // 	}
 // }
 
-const PostTile = (props) => {
-	const history = useHistory();
+  
 
-  function handleView() {
+const PostTile = (props) => {
+  const history = useHistory();
+  function goTo() {
     history.push(`/articles/${props._id}`);
   }
+
+  if (props.isPublished)
+    return <Published {...props} onClick={goTo} />
+  else
+    return <Unpublished {...props} onClick={goTo} />
+}
+
+const Published = (props) => {
 
   return (
     <Card
       overrides={{Root: {style: {width: '428px', margin: '10px'}}}}
-      title={props.title}
     >
+      <StyledTitle>
+        {props.title}
+      </StyledTitle>
       <StyledBody>
+        <Ratings style={{ float: 'right' }} {...props.ratings} />
         <AuthorTag authorId={props.author} />
         <Price {...props.price} />
-        <Rating stats={props.ratings} />
       </StyledBody>
       <StyledAction>
-        <Button disabled={!props.accessable} onClick={handleView} overrides={{BaseButton: {style: {width: '50%'}}}}>
+        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '50%'}}}}>
           View
         </Button>
       </StyledAction>
@@ -55,10 +68,34 @@ const PostTile = (props) => {
   );
 }
 
+const Unpublished = (props) => {
+  const history = useHistory();
+
+  return (
+    <Card
+      overrides={{Root: {style: {width: '428px', margin: '10px'}}}}
+    >
+      <StyledTitle>
+        <Tag overrides={{ Root: { style: { float: 'right' }}}} closeable={false}>Not published</Tag>
+        {props.title}
+      </StyledTitle>
+      <StyledBody>
+        <AuthorTag authorId={props.author} />
+        <Price {...props.price} />
+      </StyledBody>
+      <StyledAction>
+        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '50%'}}}}>
+          View
+        </Button>
+      </StyledAction>
+    </Card>
+  )
+}
+
 class Price extends Component {
 	render() {
 		return (
-			this.props.amount === 0 ? <p>FREE</p> : <p>{this.props.amount} Sats 💧</p>
+			this.props.amount === 0 ? <p>FREE</p> : <p>Price: {this.props.amount} Sats</p>
 		)
 	}
 }

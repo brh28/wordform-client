@@ -4,12 +4,11 @@ const KEYS = {
 }
 
 export default {
-	getUserId: () => localStorage.getItem(KEYS.userId),
+	getUserId: () => {
+		const strValue = localStorage.getItem(KEYS.userId)
+		if (strValue === 'null') return null
+		else return strValue
+	},
 	setUserId: id => localStorage.setItem(KEYS.userId, id),
 	removeUserId: () => localStorage.removeItem(KEYS.userId)	
 } 
-// export const getUserId = () => localStorage.getItem(KEYS.userId) 		    			
-// export const setUserId = id => localStorage.setItem(KEYS.userId, id)
-// export const removeUserId = () => localStorage.removeItem(KEYS.userId)
-
-// export const withUserId = ComposedComponent => <ComposedComponent {...this.props} userId={getUserId} />;

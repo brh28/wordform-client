@@ -12,7 +12,9 @@ class PublishArticle extends Component {
 		this.state = {
 		  isLoading: true,
 		  error: null,
-		  paywall: null
+		  paywallDetails: null,
+		  articleDetails: null,
+		  isPurchased: undefined
 		};
 		// this.eventSource = new EventSource(`/api/articles/${this.props.match.params.id}/invoice`);
 		this.getInvoice = this.getInvoice.bind(this);
@@ -26,13 +28,22 @@ class PublishArticle extends Component {
 	}
 
 	getInvoice() {
+		const articleId = this.props.match.params.id
 		this.setState({ isLoading: true })
-		server.getInvoice(this.props.match.params.articleId)
+		server.getInvoice(articleId)
 			.then(res => {
-				if (res.status === 401) {
+				if (res.status === 403) {
 					this.setState({ isLoading: false, error: "The author must be logged in."})
+				} else if (res.status === 404) {
+					this.setState({ isLoading: false, error: "404 - Could not find article"})
 				} else {
-					res.json().then(r => this.setState({ isLoading: false, ...r }))
+					res.json().then(r => {
+						if (r.articleDetails.isPurchased) {
+							this.props.history.push(`/users/${r.articleDetails.author}`)
+						} else {
+							this.setState({ isLoading: false, ...r })
+						}
+					})
 				}
 			})
 	}
@@ -40,7 +51,7 @@ class PublishArticle extends Component {
   render() {
   	if (this.state.isLoading) return <Spinner />
   	else if (this.state.error) return <Error message={this.state.error} />
-  	else return <Invoice {...this.state.paywall} />
+  	else return <Invoice {...this.state.paywallDetails} />
   }
 }
 

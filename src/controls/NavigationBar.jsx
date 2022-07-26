@@ -8,59 +8,65 @@ import {
 } from "baseui/header-navigation";
 import { StyledLink } from "baseui/link";
 import { Button } from "baseui/button";
-import { localStorage } from "../api"
+// import { localStorage } from "../api"
+
+import { User } from '../api'
 
 
-// const NavigationItem = ({ text, href }) => {
-//   return (<StyledNavigationItem key=>
-//           <StyledLink href={href}>
-//             {text}
-//           </StyledLink>
-//         </StyledNavigationItem>)
-// }
+import { Tabs, Tab, StyledTab } from "baseui/tabs";
+
+
+const tabContentStyle = ({$theme}) => ({
+  borderLeftWidth: '2px',
+  borderRightWidth: '2px',
+  borderBottomWidth: '2px',
+  borderTopWidth: '0',
+  borderLeftStyle: 'dashed',
+  borderRightStyle: 'dashed',
+  borderTopStyle: 'dashed',
+  borderBottomStyle: 'dashed',
+  borderLeftColor: $theme.colors.mono600,
+  borderRightColor: $theme.colors.mono600,
+  borderTopColor: $theme.colors.mono600,
+  borderBottomColor: $theme.colors.mono600,
+});
+
+const tabStyle = ({$active, $disabled, $theme}) => ({
+  // color: $active ? $theme.colors.mono100 : $theme.colors.mono300
+})
 
 const NavigationBar = (props) => {
-  // const userId = localStorage.getUserId()
-  const userId = props.userId
-  const currentPath = props.history.location.pathname
-  // const userId = localStorage.getUserId()
-
-  console.log('Navigation bar user = ' + userId)
+  const [userId, setUserId] = React.useContext(User);
   const navItems = userId ? 
     [
-      {text: 'Browse', href: '/browse'},
-      {text: 'Publish Article', href: '/articles/new'},
-      {text: 'User Profile', href: `/users/${userId}`},
-      {text: 'Logout', href: '/logout'}
+      {key: '0', text: 'Browse', href: '/browse'},
+      {key: '1', text: 'Create Article', href: '/articles/new'},
+      {key: '2', text: 'My Profile', href: `/users/${userId}`},
     ] :
     [
-      {text: 'Browse', href: '/browse'},
-      {text: 'Create User', href: '/users/new'},
-      {text: 'Login', href: '/login', historyState: {returnUrl: currentPath}}
+      {key: '0', text: 'Browse', href: '/browse'},
+      {key: '1', text: 'New User', href: '/users/new'},
+      {key: '2', text: 'Login', href: '/login', state: {returnUrl: props.history.location.pathname}}
     ]
 
+  const currentItem = navItems.find(el => el.href === props.history.location.pathname)
+  const activeKey = currentItem && currentItem.key
+
+
+  const navigate = (key) => {
+    const dest = navItems[key]
+    props.history.push(dest.href, {...props.history.location.state, ...dest.state})
+  }
+
   return (
-    <HeaderNavigation>
-      <StyledNavigationList $align={ALIGN.left}>
-        {
-          navItems.map((i, idx) => {
-            const styling = (i.href === currentPath) ? {backgroundColor: '#A9A9A9'} : null
-            return (
-              <StyledNavigationItem key={idx} style={styling}>
-                <StyledLink onClick={() => props.history.push(i.href, i.historyState)}>
-                  {i.text}
-                </StyledLink>
-              </StyledNavigationItem>
-            )
-          })
-        }
-      </StyledNavigationList>
-      <StyledNavigationList $align={ALIGN.center} />
-      <StyledNavigationList $align={ALIGN.right}>
-        <StyledNavigationItem>🌱</StyledNavigationItem>
-      </StyledNavigationList>
-    </HeaderNavigation>
-  );
+      <Tabs
+        activeKey={activeKey}
+        onChange={({ activeKey }) => navigate(activeKey)}
+
+      >
+        { navItems.map((i, idx) => <Tab key={idx} title={ i.text } />) }
+      </Tabs>
+  )
 }
 
 export default withRouter(NavigationBar)
