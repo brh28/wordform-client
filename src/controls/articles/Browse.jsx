@@ -5,8 +5,6 @@ import { localStorage, server } from '../../api';
 import { Info, Error } from '../common/Notifications'
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-const BATCH_SIZE = 5
-
 class BrowseArticles extends Component {
 	constructor(props) {
 		super(props);
@@ -30,11 +28,11 @@ class BrowseArticles extends Component {
   		if (lastEl) { searchParams.before = lastEl.purchase_date }
   		server.browse(searchParams)
 			.then(
-		        (result) => {
+		        (resp) => {
 		          this.setState({
 		            isLoading: false,
-		            articles: this.state.articles.concat(result),
-		            hasMore: result.length > 0 && result.length % BATCH_SIZE === 0
+		            articles: this.state.articles.concat(resp.results),
+		            hasMore: resp.hasMore
 		          });
 		        },
 		        (error) => {
@@ -48,7 +46,6 @@ class BrowseArticles extends Component {
 
 	render() {
 		const { articles, isLoading, hasMore } = this.state
-		console.log(articles.length !== 0 && articles.length % BATCH_SIZE === 0)
 		if (!isLoading && articles.length === 0) return <Info message='No articles' />
 		return (
 			<InfiniteScroll

@@ -8,7 +8,7 @@ import {
 } from "baseui/header-navigation";
 import { StyledLink } from "baseui/link";
 import { Button } from "baseui/button";
-// import { localStorage } from "../api"
+import Routes from '../routes'
 
 import { User } from '../api'
 
@@ -39,14 +39,14 @@ const NavigationBar = (props) => {
   const [userId, setUserId] = React.useContext(User);
   const navItems = userId ? 
     [
-      {key: '0', text: 'Browse', href: '/browse'},
-      {key: '1', text: 'Create Article', href: '/articles/new'},
-      {key: '2', text: 'My Profile', href: `/users/${userId}`},
+      {key: '0', text: 'Browse', href: Routes.root},
+      {key: '1', text: 'Create Article', href: Routes.articles.create},
+      {key: '2', text: 'My Profile', href: Routes.users.controller.go(userId)},
     ] :
     [
-      {key: '0', text: 'Browse', href: '/browse'},
-      {key: '1', text: 'New User', href: '/users/new'},
-      {key: '2', text: 'Login', href: '/login', state: {returnUrl: props.history.location.pathname}}
+      {key: '0', text: 'Browse', href: Routes.root},
+      {key: '1', text: 'New User', href: Routes.users.create},
+      {key: '2', text: 'Login', href: Routes.users.login, state: {returnUrl: props.history.location.pathname}}
     ]
 
   const currentItem = navItems.find(el => el.href === props.history.location.pathname)

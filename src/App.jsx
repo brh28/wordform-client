@@ -13,6 +13,7 @@ import NavigationBar from "./controls/NavigationBar"
 import { withRouter } from "react-router";
 import { Login } from './controls/users/authentication'
 import { server, useLocalStorage, localStorage, User } from "./api"
+import Routes from './routes'
 
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
@@ -21,25 +22,25 @@ const App = (props) => {
       <User.Provider value={ [userId, setUserId] }>
             <NavigationBar userId={userId} />
             <Switch>
-              <Route exact path="/browse">
+              <Route exact path={Routes.root}>
                 <Browse userId={userId} />
               </Route>
-              <Route exact path="/articles/new">
+              <Route exact path={Routes.articles.create}>
                 <ArticleCreate />
               </Route>
-              <Route exact path="/articles/:id">
+              <Route exact path={Routes.articles.controller.match}>
                 <ArticleController viewerId={userId} />
               </Route>
-              <Route exact path="/articles/:id/publish">
+              <Route exact path={Routes.articles.publish.match}>
                 <PublishArticle />
               </Route>
-              <Route exact path="/users/new">
+              <Route exact path={Routes.users.create}>
                 <CreateUser />
               </Route>
-              <Route path="/users/:id">
+              <Route path={Routes.users.controller.match}>
                 <UserController viewerId={userId} />
               </Route>
-              <Route path="/login">
+              <Route path={Routes.users.login}>
                 <Login />
               </Route>
             </Switch>

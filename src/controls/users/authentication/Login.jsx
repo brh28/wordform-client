@@ -8,6 +8,7 @@ import { Button } from "baseui/button";
 import Spinner from '../../common/Spinner';
 import { Error } from '../../common/Notifications'
 import { localStorage, server, User } from '../../../api';
+import Routes from '../../../routes'
 
 class Login extends Component {
 
@@ -49,12 +50,11 @@ class Login extends Component {
   		this.setState({ isLoading: true })
 	    server.login(this.state.form.userId)
 		    .then(resp => {
-		    	console.log(resp)
 		    	if (resp.status === 200) {
 		    		resp.json().then(r => {
 		    			const [_, setUserId] = this.context
 		    			setUserId(r.userId)
-    					this.props.history.push('/browse')
+    					this.props.history.push(Routes.root)
 		    		})
 		    	} else {
 		    		this.setState({ isLoading: false, error: 'Login attempt failed' })
