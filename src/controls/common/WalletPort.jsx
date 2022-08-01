@@ -66,16 +66,16 @@ class WalletPort extends Component {
   copyTextToClipboard(text) {
     if (!navigator.clipboard) {
       fallbackCopyTextToClipboard(text);
-      console.log('fallback copy')
-      return;
+      this.setState({copied: true})
+      setTimeout(() => this.setState({copied: false}) , 2000)
+    } else {
+      navigator.clipboard.writeText(text).then(function() {
+        this.setState({copied: true})
+        setTimeout(() => this.setState({copied: false}) , 2000)
+      }, function(err) {
+        console.error('Async: Could not copy text: ', err);
+      });
     }
-    navigator.clipboard.writeText(text).then(function() {
-      console.log('Async: Copying to clipboard was successful!');
-    }, function(err) {
-      console.error('Async: Could not copy text: ', err);
-    });
-    this.setState({copied: true})
-    setTimeout(() => this.setState({copied: false}) , 2000)
   }
 
   render () {
