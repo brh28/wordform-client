@@ -49,7 +49,7 @@ class PublishArticle extends Component {
 	}
 
   render() {
-  	if (this.state.isLoading) return <Spinner />
+  	if (this.state.isLoading) return <Spinner isActive={this.state.isLoading} />
   	else if (this.state.error) return <Error message={this.state.error} />
   	else return <Invoice {...this.state.paywallDetails} />
   }

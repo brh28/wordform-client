@@ -66,6 +66,7 @@ class WalletPort extends Component {
   copyTextToClipboard(text) {
     if (!navigator.clipboard) {
       fallbackCopyTextToClipboard(text);
+      console.log('fallback copy')
       return;
     }
     navigator.clipboard.writeText(text).then(function() {

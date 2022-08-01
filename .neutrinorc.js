@@ -5,19 +5,22 @@ const devServer = require('@neutrinojs/dev-server');
 
 module.exports = {
   options: {
-    root: __dirname,
+    root: __dirname
   },
   use: [
     // airbnb(),
     react({
       html: {
-        title: 'Logos'
+        title: 'Word Form',
+        icon: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200X200.png"
       }
     }),
-    jest(),
-    devServer({
-      port: 3001,
-      proxy: { "/api/**": { target: 'https://localhost:3000', secure: false }  }
-    })
+    jest()
+    // devServer({
+    //   port: 3001,
+    //   proxy: { "/api/**": { target: 'http://localhost:3000', secure: false }  },
+    //   compress: true,
+    //   public: 'localhost:3001' // That solved it
+    // })
   ],
 };
