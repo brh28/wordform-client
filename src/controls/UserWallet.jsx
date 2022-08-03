@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Spinner from "./common/Spinner";
 import { FormControl } from "baseui/form-control";
-import { Success, Info } from './common/Notifications'
+import { Success, Error, Info } from './common/Notifications'
 import { Input } from "baseui/input";
 import { Button } from "baseui/button";
 import Toggle from './common/Toggle';
@@ -19,6 +19,7 @@ class UserWallet extends Component {
 	    		destination_pub_key: undefined, 
 	    	},
 	    	successMessage: undefined,
+	    	errorMessage: undefined,
 	    	expanded: 'p1' 
 	    };
 
@@ -68,82 +69,73 @@ class UserWallet extends Component {
 	withdraw() {
 		const amt = this.state.amt
 		this.setState({ isLoading: true })
-		server.withdrawFunds(this.props.userId, amt).then(() => window.location.reload(false))
+		server.withdrawFunds(this.props.userId, amt)
+			.then((resp) => {
+				if (resp.status === 200) {
+					this.setState({
+						isLoading: false,
+						successMessage: 'Withdrawal successful. Payment hash: ' //+ resp.payment_hash
+					})
+				} else {
+					this.setState({
+						isLoading: false,
+						errorMessage: 'Withdrawal failed!'
+					})
+				}
+			})
+			.catch((e) => { 
+				this.setState({
+					isLoading: false, 
+					errorMessage: 'Withdrawal failed'
+				})
+			})
 	}
-
-	// render () {
-	// 	const { lnd_balance } = this.state.wallet
-	// 	return (
-	// 		<Spinner isActive={this.state.isLoading}>
-				// <Success message={this.state.successMessage} />
-				// <FormControl label="Lightning Pub Key">
-				// 	<Input
-			 //          value={this.state.wallet.destination_pub_key || ''}
-			 //          onChange={this.updateDestNode}
-			 //          placeholder="Required for forwarding payments"
-			 //          clearOnEscape
-			 //        /> 
-			 //    </FormControl>
-				// <FormControl label="Automatic forwarding">
-			 //    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
-			 //    </FormControl>
-			 //    <Button onClick={this.saveForm}>Save</Button>
-	// 			<hr />
-				// <FormControl label="Balance">
-				// 	<div>
-				// 		{lnd_balance} SAT
-				// 		{ lnd_balance && lnd_balance > 0 ? 
-				// 			<Button style={{margin: '10px'}} onClick={this.withdraw}>
-				// 				Withdraw
-				// 			</Button> : null }
-				// 	</div>
-				// </FormControl>
-	// 		</Spinner>
-	// 	)
-	// }
 
 	render() {
 		const { lnd_balance } = this.state.wallet
 		return (
-			<StatelessAccordion
-				expanded={this.state.expanded}
-		      	onChange={({key, expanded}) => {
-			        console.log(key);
-			        this.setState({ expanded: expanded })
-			      }}
-		    >
-		      <Panel key='p1'title="Auto-pay">
-		      		<Success message={this.state.successMessage} />
-		      		<FormControl label="Forwarding">
-				    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
-				    </FormControl>
-					<FormControl label="Lightning Pub Key">
-						<Input
-				          value={this.state.wallet.destination_pub_key || ''}
-				          onChange={this.updateDestNode}
-				          placeholder="Required for forwarding payments"
-				          clearOnEscape
-				        /> 
-				    </FormControl>
-				    <Button onClick={this.saveForm}>Save</Button>
-		      </Panel>
-		      <Panel key='p2' title="One-time manual">
-		      		{ lnd_balance && lnd_balance > 0 ? <div>
-						{lnd_balance} sats to 
-						<Input
-				          value={this.state.wallet.destination_pub_key || ''}
-				          onChange={this.updateDestNode}
-				          placeholder="Pub Key"
-				          clearOnEscape
-				        /> 
-						
-						<Button style={{margin: '10px'}} onClick={this.withdraw}>
-							Withdraw
-						</Button> 
-					</div>
-					: <Info message='Account balance is empty' /> }
-		      </Panel>
-		    </StatelessAccordion>
+			<div>
+				<Success message={this.state.successMessage} />
+		      	<Error message={this.state.errorMessage} />
+				<StatelessAccordion
+					expanded={this.state.expanded}
+			      	onChange={({key, expanded}) => {
+				        console.log(key);
+				        this.setState({ expanded: expanded })
+				      }}
+			    >
+			      <Panel key='p1'title="Auto-pay">
+			      		<FormControl label="Forwarding">
+					    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
+					    </FormControl>
+						<FormControl label="Lightning Pub Key">
+							<Input
+					          value={this.state.wallet.destination_pub_key || ''}
+					          onChange={this.updateDestNode}
+					          placeholder="Required for forwarding payments"
+					          clearOnEscape
+					        /> 
+					    </FormControl>
+					    <Button onClick={this.saveForm}>Save</Button>
+			      </Panel>
+			      <Panel key='p2' title="One-time manual">
+			      		{ lnd_balance && lnd_balance > 0 ? <div>
+							{lnd_balance} sats to 
+							<Input
+					          value={this.state.wallet.destination_pub_key || ''}
+					          onChange={this.updateDestNode}
+					          placeholder="Pub Key"
+					          clearOnEscape
+					        /> 
+							
+							<Button style={{margin: '10px'}} onClick={this.withdraw}>
+								Withdraw
+							</Button> 
+						</div>
+						: <Info message='Account balance is empty' /> }
+			      </Panel>
+			    </StatelessAccordion>
+		    </div>
 		)
 	}
 }

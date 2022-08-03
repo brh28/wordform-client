@@ -69,7 +69,7 @@ class WalletPort extends Component {
       this.setState({copied: true})
       setTimeout(() => this.setState({copied: false}) , 2000)
     } else {
-      navigator.clipboard.writeText(text).then(function() {
+      navigator.clipboard.writeText(text).then(() => { 
         this.setState({copied: true})
         setTimeout(() => this.setState({copied: false}) , 2000)
       }, function(err) {
@@ -77,6 +77,8 @@ class WalletPort extends Component {
       });
     }
   }
+
+
 
   render () {
     const label = () => {
