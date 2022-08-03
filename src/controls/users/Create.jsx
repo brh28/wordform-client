@@ -10,6 +10,10 @@ import LinkingKeys from './authentication/LinkingKeys'
 import Spinner from '../common/Spinner';
 import { Error } from '../common/Notifications'
 import { server, User } from '../../api';
+import Routes from '../../routes'
+
+const regExStr = '^(?=[a-zA-Z])[a-zA-Z0-9]{3,20}$' // todo consolidate in backend
+const userIdRegEx =  new RegExp(regExStr)
 
 class CreateUser extends Component {
   constructor(props) {
@@ -41,13 +45,17 @@ class CreateUser extends Component {
     if (this.timer) clearTimeout(this.timer)
     if (updatedId && updatedId !== '') {
       this.timer = setTimeout(() => {
-        server.getUserProfile(updatedId)
+        if (!userIdRegEx.test(updatedId)) {
+          this.setState({ userId: { isChecked: true, error: 'Not a valid ID (' + regExStr + ')' }})
+        } else {
+          server.getUserProfile(updatedId)
           .then(result => {
             if (this.state.form.userId === updatedId) {
               this.setState({ userId: {isChecked: true, error: result.isAvailable ? false : "ID is not available" }})
             }
           })
-        }, 1000)
+        }
+      }, 1000)
     }
     
   	this.setState({
@@ -97,7 +105,7 @@ class CreateUser extends Component {
             const [_, setUserId] = this.context
             setUserId(r.userId)
             const returnUrl = this.props.history.location.state && this.props.history.location.state.returnUrl
-            this.props.history.push('/browse')
+            this.props.history.push(Routes.root)
           })
         } else {
           this.setState({ isLoading: false, error: "Error creating user" })
