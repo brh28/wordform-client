@@ -70,23 +70,28 @@ class UserWallet extends Component {
 		const amt = this.state.amt
 		this.setState({ isLoading: true })
 		server.withdrawFunds(this.props.userId, amt)
+			.then(resp => resp.json())
 			.then((resp) => {
-				if (resp.status === 200) {
+				if (resp.error) {
 					this.setState({
 						isLoading: false,
-						successMessage: 'Withdrawal successful. Payment hash: ' //+ resp.payment_hash
+						errorMessage: `Withdrawal failed with reason: ${error}`
 					})
 				} else {
 					this.setState({
 						isLoading: false,
-						errorMessage: 'Withdrawal failed!'
+						successMessage: `Withdrawal successful. Payment hash: ${resp.payment_hash}`,
+						wallet: {
+							...this.state.wallet,
+							lnd_balance: resp.lnd_balance
+						}
 					})
 				}
 			})
 			.catch((e) => { 
 				this.setState({
 					isLoading: false, 
-					errorMessage: 'Withdrawal failed'
+					errorMessage: 'Withdrawal failed!'
 				})
 			})
 	}
