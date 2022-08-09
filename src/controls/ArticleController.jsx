@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import { Error } from './common/Notifications'
 import ArticleView from './articles/ArticleView'
 import Spinner from "./common/Spinner";
-import { ReadInvoice, PublishInvoice } from './common/Invoices'
+import { ReadInvoice, PublishInvoice, InvoiceDetails } from './common/Invoices'
 import { server } from "../api"
 
 class ArticleController extends Component {
@@ -44,10 +44,17 @@ class ArticleController extends Component {
   render() {
     const { isLoading, article, readPaywall, publishPaywall, error } = this.state
     
+    console.log(error)
     if (isLoading) return <Spinner isActive={isLoading} />
-  	else if (article) return <ArticleView viewerId={this.props.viewerId} {...article} onDelete={this.deleteArticle} />
+    else if (error) return (
+      <div>
+        <InvoiceDetails {...readPaywall} />
+        <Error message={error} />
+      </div>
+    )
   	else if (readPaywall) return <ReadInvoice {...readPaywall} />
-    else return <Error message={this.state.error || 'Unknown Error'} />
+    else if (article) return <ArticleView viewerId={this.props.viewerId} {...article} onDelete={this.deleteArticle} />
+    else return <Error message='Unknown Error' />
   }
 }
 
