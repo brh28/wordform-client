@@ -6,6 +6,7 @@ import ArticleView from './articles/ArticleView'
 import Spinner from "./common/Spinner";
 import { ReadInvoice, PublishInvoice, InvoiceDetails } from './common/Invoices'
 import { server } from "../api"
+import Routes from '../routes'
 
 class ArticleController extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class ArticleController extends Component {
     this.setState({ isLoading: true })
     server.deleteArticle(id)
       .then(() => {
-        const returnUrl = this.props.returnUrl || '/browse'
+        const returnUrl = this.props.returnUrl || Routes.root
         this.props.history.push(returnUrl)
       })
   }
