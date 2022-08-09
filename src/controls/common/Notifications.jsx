@@ -5,6 +5,8 @@ export const Success = ({ message }) => <Notification message={message} kind={KI
 
 export const Error = ({ message }) => <Notification message={message} kind={KIND.negative} />
 
+export const Warning = ({ message }) => <Notification message={message} kind={KIND.warning} />
+
 export const Info = ({ message }) => <Notification message={message} />
 
 const Notification = ({ message, kind }) => {

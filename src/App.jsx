@@ -14,6 +14,7 @@ import { withRouter } from "react-router";
 import { Login } from './controls/users/authentication'
 import { server, useLocalStorage, localStorage, User } from "./api"
 import Routes from './routes'
+import { Warning } from './controls/common/Notifications'
 
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
@@ -23,7 +24,10 @@ const App = (props) => {
             <NavigationBar userId={userId} />
             <Switch>
               <Route exact path={Routes.root}>
-                <Browse userId={userId} />
+                <div>
+                  <Warning message="Warning! This is an early release of the product. If you notice any bugs or have any issues, please reach out to wordformspace@proton.me." />
+                  <Browse userId={userId} />
+                </div>
               </Route>
               <Route exact path={Routes.articles.create}>
                 <ArticleCreate />
