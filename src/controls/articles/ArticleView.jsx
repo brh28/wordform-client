@@ -47,7 +47,7 @@ const ArticleView = (props) => {
 		  			author={author} 
 		  			publish_date={purchase_date} />
 		  	<hr />
-		    <div className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
+		    <div style={{ maxWidth: '600px' }}className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
 		    {isAuthor && isPublished ? <Ratings {...ratings} /> : null}
 		    <Actions isAuthor={isAuthor} {...props} />
 		  </div>
