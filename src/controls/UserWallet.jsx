@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import Spinner from "./common/Spinner";
 import { FormControl } from "baseui/form-control";
 import { Success, Error, Info } from './common/Notifications'
 import { Input } from "baseui/input";
 import { Button } from "baseui/button";
 import Toggle from './common/Toggle';
 import { StatelessAccordion, Panel } from "baseui/accordion";
+import LnurlWithdraw from './users/wallet/Withdraw'
 import { server } from '../api'; 
 
 class UserWallet extends Component {
@@ -110,6 +110,7 @@ class UserWallet extends Component {
 				      }}
 			    >
 			      <Panel key='p1'title="Auto-pay">
+			      		<Info message='Destination node must support receiving amp payments' />
 			      		<FormControl label="Forwarding">
 					    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
 					    </FormControl>
@@ -123,7 +124,8 @@ class UserWallet extends Component {
 					    </FormControl>
 					    <Button onClick={this.saveForm}>Save</Button>
 			      </Panel>
-			      <Panel key='p2' title="One-time manual">
+			      <Panel key='p2' title="One-time AMP">
+			      		<Info message='Destination node must support receiving amp payments' />
 			      		{ lnd_balance && lnd_balance > 0 ? <div>
 							{lnd_balance} sats to 
 							<Input
@@ -132,12 +134,16 @@ class UserWallet extends Component {
 					          placeholder="Pub Key"
 					          clearOnEscape
 					        /> 
-							
 							<Button style={{margin: '10px'}} onClick={this.withdraw}>
 								Withdraw
-							</Button> 
+							</Button>
 						</div>
 						: <Info message='Account balance is empty' /> }
+			      </Panel>
+			      <Panel key='p3' title="One-time LNURL-withdraw">
+			      		{ lnd_balance && lnd_balance > 0 
+			      			? <LnurlWithdraw userId={this.props.userId} />
+			      			: <Info message='Account balance is empty' /> }
 			      </Panel>
 			    </StatelessAccordion>
 		    </div>

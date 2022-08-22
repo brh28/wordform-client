@@ -46,6 +46,7 @@ export default {
 	getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
 	getUserProfile: userId => fetch(`/api/users/${userId}/profile`, {}).then(resp => resp.json()),
 	getUserWallet: userId => fetch(`/api/users/${userId}/wallet`, {}).then(resp => resp.json()),
+	getLnurl: () => fetch(`/api/lnurl-withdraw`, {}).then(resp => resp.json()),
 	updateWallet: wallet => fetch("/api/wallet", {
         method: "POST",
         headers: {
