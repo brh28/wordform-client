@@ -91,6 +91,7 @@ class CreateArticle extends Component {
             value={this.state.form.content}
             onChange={this.handleContentChange}
             placeholder="Content"
+            rows='15'
             clearOnEscape
           />     
         </FormControl>
