@@ -11,9 +11,9 @@ export const Logout = withRouter((props) => {
   		setIsLoading(true)
   		server.logout()
 		    .then((result) => {
-		    	setUserId(null)
+		    	setUserId(null)	  			
 	  			props.history.push('/login')
-	  			// window.location.reload(false)
+	  			window.location.reload(false)
 	  		})
   	}
 
