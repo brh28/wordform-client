@@ -5,7 +5,7 @@ import Spinner from './Spinner';
 class LnAuth extends Component {
 	constructor(props) {
 	    super(props);
-	    this.eventSource = new EventSource("/api/users/lnurl-auth");
+	    this.eventSource = new EventSource("/api/sessions/lnurl");
 	    this.state = {
 	    	isLoaded: false,
 	    	lnurl: undefined

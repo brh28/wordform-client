@@ -39,7 +39,7 @@ export const ReadInvoice = ({ title, author, price, paymentRequest }) => {
 export const PublishInvoice = ({ title, author, price, paymentRequest }) => {
   return (<div style={{width: '50%'}}>
     <div style={detailsStyle}>
-      <h3>Publish Article</h3>
+      <h3>Publish: {title}</h3>
       <p>Price: {price.amount} {price.currency}</p>
     </div>
     <WalletPort type='invoice' connection={paymentRequest} />

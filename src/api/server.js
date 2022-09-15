@@ -24,7 +24,14 @@ export default {
 			method: "DELETE"
 		})
 	},
-	postArticle: article => fetch("/api/article", {
+	newArticle: article => fetch("/api/articles", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify(article)
+    }),
+    updateArticle: (id, article) => fetch(`/api/articles/${id}`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -32,10 +39,10 @@ export default {
       body: JSON.stringify(article)
     }),
 	getUserRating: (articleId) => {
-		return fetch(`/api/user/ratings/${articleId}`, {}).then(resp => resp.json())
+		return fetch(`/api/articles/${articleId}/user/ratings`, {}).then(resp => resp.json())
 	},
 	postUserRating: (articleId, rating) => {
-		return fetch(`/api/user/ratings/${articleId}`, {
+		return fetch(`/api/articles/${articleId}/user/ratings`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -44,24 +51,24 @@ export default {
       }).then(resp => resp.json())
 	},
 	getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
-	getUserProfile: userId => fetch(`/api/users/${userId}/profile`, {}).then(resp => resp.json()),
+	getUserProfile: userId => fetch(`/api/users/${userId}`, {}).then(resp => resp.json()),
 	getUserWallet: userId => fetch(`/api/users/${userId}/wallet`, {}).then(resp => resp.json()),
-	getLnurl: () => fetch(`/api/lnurl-withdraw`, {}).then(resp => resp.json()),
-	updateWallet: wallet => fetch("/api/wallet", {
+	getLnurl: () => fetch(`/api/users/wallet/lnurl-withdraw`, {}).then(resp => resp.json()),
+	updateWallet: wallet => fetch("/api/users/wallet", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify(wallet)
       }),
-	postUser: user => fetch("/api/user", { // should be /profile?
+	postUser: user => fetch("/api/users", { // should be /profile?
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         }, 
         body: JSON.stringify(user)
       }),
-	updateAuth: (userId, updates) => fetch(`/api/user/${userId}/auth`, {
+	updateAuth: (userId, updates) => fetch(`/api/users/${userId}/auth`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -74,14 +81,14 @@ export default {
           'Content-Type': 'application/json'
         } 
       }),
-	login: userId => fetch(`/api/users/login`, {
+	login: userId => fetch(`/api/sessions/login`, {
   			method: "POST",
 	        headers: {
 	          'Content-Type': 'application/json'
 	        }, 
 	        body: JSON.stringify({ userId: userId })
 	  	}),
-	logout: () => fetch(`/api/users/logout`, {
+	logout: () => fetch(`/api/sessions/logout`, {
   			method: "POST",
 	        headers: {
 	          'Content-Type': 'application/json'
@@ -91,7 +98,7 @@ export default {
 	  const headers = new Headers();
 	  headers.append('pragma', 'no-cache');
 	  headers.append('cache-control', 'no-cache')
-	  return fetch('/api/sessions/user', {
+	  return fetch('/api/sessions/userId', {
 	    headers: headers
 	  }).then(resp => resp.json())
 	  // .then(resp => {

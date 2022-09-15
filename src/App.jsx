@@ -5,7 +5,7 @@ import './css/App.css';
 import Browse from './controls/articles/Browse'
 import ArticleController from './controls/ArticleController'
 import ArticleCreate from './controls/articles/Create'
-import PublishArticle from './controls/articles/Publish'
+import EditArticle from './controls/articles/EditArticle'
 import CreateUser from './controls/users/Create'
 import PublishInvoice from './controls/articles/Publish'
 import UserController from './controls/users/index.jsx'
@@ -24,19 +24,13 @@ const App = (props) => {
             <NavigationBar userId={userId} />
             <Switch>
               <Route exact path={Routes.root}>
-                <div>
-                  <Warning message="Warning! This is an early release of the product. If you notice any bugs or have any issues, please reach out to wordformspace@proton.me." />
-                  <Browse userId={userId} />
-                </div>
+                <Browse userId={userId} />
               </Route>
-              <Route exact path={Routes.articles.create}>
+              <Route exact path='/articles/new'>
                 <ArticleCreate />
               </Route>
-              <Route exact path={Routes.articles.controller.match}>
-                <ArticleController viewerId={userId} />
-              </Route>
-              <Route exact path={Routes.articles.publish.match}>
-                <PublishArticle />
+              <Route path='/articles/:id'>
+                <ArticleController user={userId} />
               </Route>
               <Route exact path={Routes.users.create}>
                 <CreateUser />

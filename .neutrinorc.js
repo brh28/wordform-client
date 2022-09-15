@@ -18,10 +18,10 @@ module.exports = {
     jest(),
     devServer({
       port: 5000,
-      // proxy: { "/api/**": { target: 'https://localhost:3000', secure: false }  },
-      https: true
-      // compress: true,
-      // public: 'localhost:3001' // That solved it
+      proxy: { "/api/**": { target: 'http://localhost:3000', secure: false }  },
+      https: false,
+      compress: false, // required for server-side events
+      public: 'localhost:5000'
     })
   ],
 };

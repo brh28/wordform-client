@@ -28,7 +28,7 @@ class PublishArticle extends Component {
 	}
 
 	getInvoice() {
-		const articleId = this.props.match.params.id
+		const articleId = this.props.id
 		this.setState({ isLoading: true })
 		server.getInvoice(articleId)
 			.then(res => {

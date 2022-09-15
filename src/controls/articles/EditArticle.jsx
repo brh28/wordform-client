@@ -9,24 +9,40 @@ import Spinner from '../common/Spinner';
 import { Error } from "../common/Notifications";
 import { server } from "../../api"
 
-class CreateArticle extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLoading: false,
-      error: null,
-      form: {
-      	title: '',
-        content: '',
-        price: {
-          amount: 0,
+class EditArticle extends Component {
+	constructor(props) {
+	    super(props);
+	    this.state = {
+	      isLoading: false,
+	      error: null,
+	      form: {
+          title: '',
+          content: '',
+          price: {
+            amount: 0,
+          }
         }
-      }
-    };
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleContentChange = this.handleContentChange.bind(this);
-    this.handlePriceChange = this.handlePriceChange.bind(this);
-    this.submitForm = this.submitForm.bind(this);
+	    };
+	    this.handleTitleChange = this.handleTitleChange.bind(this);
+	    this.handleContentChange = this.handleContentChange.bind(this);
+	    this.handlePriceChange = this.handlePriceChange.bind(this);
+	    this.submitForm = this.submitForm.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: true })
+    server.get(this.props.id)
+      .then(({ article }) => { this.setState({ isLoading: false, form: {
+        title: article.title,
+          content: article.content,
+          price: {
+            amount: article.price.amount
+          }
+      }}) })
+      .catch(err => {
+        console.log(err)
+        this.setState({ isLoading: false, error: 'Failed to load'}) 
+      })
   }
 
   handleTitleChange(event) {
@@ -64,10 +80,10 @@ class CreateArticle extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    server.newArticle(this.state.form)
+    server.updateArticle(this.props.id, this.state.form)
       .then(res => {
         if (res.status === 200) {
-          res.json().then(r => this.props.history.push(`/articles/${r.articleId}`))
+          res.json().then(r => this.props.history.push(`/articles/${this.props.id}`))
         } else {
           this.setState({ isLoading: false, error: 'Generic error'})
         }
@@ -106,4 +122,4 @@ class CreateArticle extends Component {
   }
 }
 
-export default withRouter(CreateArticle)
+export default withRouter(EditArticle)
