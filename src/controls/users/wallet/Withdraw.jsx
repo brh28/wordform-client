@@ -4,6 +4,9 @@ import WalletPort from "../../common/WalletPort";
 import { Button } from "baseui/button";
 import { server } from '../../../api'; 
 
+//redudant - also in Invoices component
+const detailsStyle = {border: '1px solid', margin: '10px', padding: '10px'}
+
 class LnurlWithdraw extends Component {
 	constructor(props) { 
 	    super(props);
@@ -29,6 +32,9 @@ class LnurlWithdraw extends Component {
 	render() {
 		return (
 			<Spinner isActive={!this.state.isLoaded}>
+				<div style={detailsStyle}>
+			      <p>Amount: {this.props.amount} sats</p>
+			    </div>
 				<WalletPort connection={this.state.lnurl} />
 			</Spinner>
 		)

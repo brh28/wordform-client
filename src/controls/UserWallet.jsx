@@ -102,6 +102,7 @@ class UserWallet extends Component {
 			<div>
 				<Success message={this.state.successMessage} />
 		      	<Error message={this.state.errorMessage} />
+		      	<Info message={lnd_balance && lnd_balance > 0 ? `Account balance: ${lnd_balance}` : 'Account balance is empty'} />
 				<StatelessAccordion
 					expanded={this.state.expanded}
 			      	onChange={({key, expanded}) => {
@@ -110,7 +111,7 @@ class UserWallet extends Component {
 			    >
 			    	<Panel key='p1' title="LNURL-withdraw">
 			      		{ lnd_balance && lnd_balance > 0 
-			      			? <LnurlWithdraw userId={this.props.userId} />
+			      			? <LnurlWithdraw userId={this.props.userId} amount={lnd_balance} />
 			      			: <Info message='Account balance is empty' /> }
 			      	</Panel>			    
 			      <Panel key='p2' title="One-time AMP">
@@ -129,7 +130,7 @@ class UserWallet extends Component {
 						</div>
 						: <Info message='Account balance is empty' /> }
 			      </Panel>		
-			      <Panel key='p3'title="Auto-pay with AMP">
+			      <Panel key='p3'title="Auto-forward with AMP">
 			      		<Info message='Destination node must support receiving amp payments' />
 			      		<FormControl label="Forwarding">
 					    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
