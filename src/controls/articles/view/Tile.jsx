@@ -76,7 +76,7 @@ const Unpublished = (props) => {
       overrides={{Root: {style: {width: '428px', margin: '10px'}}}}
     >
       <StyledTitle>
-        <Tag overrides={{ Root: { style: { float: 'right' }}}} closeable={false}>Not published</Tag>
+        <Tag overrides={{ Root: { style: { float: 'right' }}}} closeable={false}>Draft</Tag>
         {props.title}
       </StyledTitle>
       <StyledBody>

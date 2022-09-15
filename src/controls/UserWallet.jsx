@@ -105,25 +105,14 @@ class UserWallet extends Component {
 				<StatelessAccordion
 					expanded={this.state.expanded}
 			      	onChange={({key, expanded}) => {
-				        console.log(key);
 				        this.setState({ expanded: expanded })
 				      }}
 			    >
-			      <Panel key='p1'title="Auto-pay">
-			      		<Info message='Destination node must support receiving amp payments' />
-			      		<FormControl label="Forwarding">
-					    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
-					    </FormControl>
-						<FormControl label="Lightning Pub Key">
-							<Input
-					          value={this.state.wallet.destination_pub_key || ''}
-					          onChange={this.updateDestNode}
-					          placeholder="Required for forwarding payments"
-					          clearOnEscape
-					        /> 
-					    </FormControl>
-					    <Button onClick={this.saveForm}>Save</Button>
-			      </Panel>
+			    	<Panel key='p1' title="LNURL-withdraw">
+			      		{ lnd_balance && lnd_balance > 0 
+			      			? <LnurlWithdraw userId={this.props.userId} />
+			      			: <Info message='Account balance is empty' /> }
+			      	</Panel>			    
 			      <Panel key='p2' title="One-time AMP">
 			      		<Info message='Destination node must support receiving amp payments' />
 			      		{ lnd_balance && lnd_balance > 0 ? <div>
@@ -139,12 +128,22 @@ class UserWallet extends Component {
 							</Button>
 						</div>
 						: <Info message='Account balance is empty' /> }
-			      </Panel>
-			      <Panel key='p3' title="One-time LNURL-withdraw">
-			      		{ lnd_balance && lnd_balance > 0 
-			      			? <LnurlWithdraw userId={this.props.userId} />
-			      			: <Info message='Account balance is empty' /> }
-			      </Panel>
+			      </Panel>		
+			      <Panel key='p3'title="Auto-pay with AMP">
+			      		<Info message='Destination node must support receiving amp payments' />
+			      		<FormControl label="Forwarding">
+					    	<Toggle checked={this.state.wallet.auto_pay || false} onSwitch={this.handleSwitchChange} />
+					    </FormControl>
+						<FormControl label="Lightning Pub Key">
+							<Input
+					          value={this.state.wallet.destination_pub_key || ''}
+					          onChange={this.updateDestNode}
+					          placeholder="Required for forwarding payments"
+					          clearOnEscape
+					        /> 
+					    </FormControl>
+					    <Button onClick={this.saveForm}>Save</Button>
+			      </Panel>	  
 			    </StatelessAccordion>
 		    </div>
 		)
