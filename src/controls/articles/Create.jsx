@@ -8,6 +8,8 @@ import { FormControl } from "baseui/form-control"
 import Spinner from '../common/Spinner';
 import { Error } from "../common/Notifications";
 import { server } from "../../api"
+import MDEditor from '@uiw/react-md-editor';
+import rehypeSanitize from "rehype-sanitize";
 
 class CreateArticle extends Component {
   constructor(props) {
@@ -38,11 +40,11 @@ class CreateArticle extends Component {
   	});
   }
 
-  handleContentChange(event) {
+  handleContentChange(val) {
   	this.setState({
   		form: {
   			...this.state.form,
-  			content: event.target.value
+  			content: val
   		}
   	});
   }
@@ -87,23 +89,19 @@ class CreateArticle extends Component {
           />
         </FormControl>
   			<FormControl label='Content'>
-          <Textarea
-            value={this.state.form.content}
-            onChange={this.handleContentChange}
-            placeholder="Content"
-            rows='15'
-            clearOnEscape
-          />     
+          <MDEditor value={this.state.form.content} 
+                    onChange={this.handleContentChange}
+                    previewOptions={{
+                      rehypePlugins: [[rehypeSanitize]],
+                    }}/>
         </FormControl>
         <FormControl label='Price (sats)'>
-
   			   <input type="number" name="price" value={this.state.form.price.amount} onChange={this.handlePriceChange} />
-
   			</FormControl>
         <Button style={{marginTop: '10px'}} onClick={this.submitForm} color="primary">Save & Continue</Button>
   		</Spinner>
   	)
   }
-}
+} 
 
 export default withRouter(CreateArticle)

@@ -8,6 +8,8 @@ import { FormControl } from "baseui/form-control"
 import Spinner from '../common/Spinner';
 import { Error } from "../common/Notifications";
 import { server } from "../../api"
+import MDEditor from '@uiw/react-md-editor';
+import rehypeSanitize from "rehype-sanitize";
 
 class EditArticle extends Component {
 	constructor(props) {
@@ -54,11 +56,11 @@ class EditArticle extends Component {
   	});
   }
 
-  handleContentChange(event) {
+  handleContentChange(value) {
   	this.setState({
   		form: {
   			...this.state.form,
-  			content: event.target.value
+  			content: value
   		}
   	});
   }
@@ -103,13 +105,11 @@ class EditArticle extends Component {
           />
         </FormControl>
   			<FormControl label='Content'>
-          <Textarea
-            value={this.state.form.content}
-            onChange={this.handleContentChange}
-            placeholder="Content"
-            rows='15'
-            clearOnEscape
-          />     
+          <MDEditor value={this.state.form.content} 
+                    onChange={this.handleContentChange}
+                    previewOptions={{
+                      rehypePlugins: [[rehypeSanitize]],
+                    }}/>    
         </FormControl>
         <FormControl label='Price (sats)'>
 
