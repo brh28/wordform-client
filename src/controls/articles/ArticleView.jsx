@@ -46,7 +46,7 @@ class ArticleView extends Component {
 		const { article, readPaywall, error, onDelete } = this.state
 
 	  	if (this.state.isLoading) return <Spinner isActive={this.state.isLoading} />
-	  	if (readPaywall) return <ReadInvoice {...readPaywall} />
+	  	if (readPaywall) return (<div><Error message={error} /><ReadInvoice {...readPaywall} /></div>)
 	  	if (article && !article.isPublished) return <StagedArticle article={article} onDelete={this.deleteArticle} />
 	  	if (article && article.isPublished) return <PublishedArticle user={user} article={article} onDelete={this.deleteArticle} /> 
 	  	if (error) return <Error message={error} />
