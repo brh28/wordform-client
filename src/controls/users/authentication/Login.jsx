@@ -35,7 +35,7 @@ class Login extends Component {
 	  			userId: event.target.value
 	  		}
 	  	});
-	  }
+	}
 
 	addKey(key) {
 	   	const { keys } = this.state.form

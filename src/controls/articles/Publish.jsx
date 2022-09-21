@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import WalletPort from '../common/WalletPort'
 import Spinner from "../common/Spinner";
 import { Error } from "../common/Notifications";
-import { PublishInvoice as Invoice } from '../common/Invoices'
+import Invoice from '../common/Invoices'
 import { server } from "../../api"
 
 class PublishArticle extends Component {
@@ -51,7 +51,11 @@ class PublishArticle extends Component {
   render() {
   	if (this.state.isLoading) return <Spinner isActive={this.state.isLoading} />
   	else if (this.state.error) return <Error message={this.state.error} />
-  	else return <Invoice {...this.state.paywallDetails} />
+  	else return (
+  		<Invoice type='publish' 
+  				paymentDetails={this.state.paywallDetails} 
+  				paymentRequest={this.state.paywallDetails.paymentRequest} />
+  	)
   }
 }
 

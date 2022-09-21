@@ -30,7 +30,8 @@
     "react-spinners": "^0.11.0",
     "rehype-sanitize": "^5.0.1",
     "styletron-engine-atomic": "^1.4.8",
-    "styletron-react": "^6.0.1"
+    "styletron-react": "^6.0.1",
+    "webln": "^0.3.0"
   },
   "devDependencies": {
     "@neutrinojs/airbnb": "^9.5.0",

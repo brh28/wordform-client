@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import WalletPort from './WalletPort'
 import Spinner from './Spinner';
+import { server } from '../../api'
+import { requestProvider } from 'webln';
 
 class LnAuth extends Component {
 	constructor(props) {
@@ -12,7 +14,7 @@ class LnAuth extends Component {
 	    };
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.eventSource.addEventListener("newLnurl", e => {
 		      const { lnurl } = JSON.parse(e.data)
 		      this.setState({ lnurl: lnurl, isLoaded: true });
@@ -25,7 +27,6 @@ class LnAuth extends Component {
 
 	componentWillUnmount() {
 		this.eventSource.close();
-		console.log('LnAuth: Closed EventSource')
 	}	
 
 	render() {

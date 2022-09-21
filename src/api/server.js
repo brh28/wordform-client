@@ -88,6 +88,11 @@ export default {
 	        }, 
 	        body: JSON.stringify({ userId: userId })
 	  	}),
+	// lnSignature: signature => {
+	// 	const params = new URLSearchParams()
+	// 	params.set('sig', signature)
+	// 	return fetch('/api/sessions/lnurl/signature')
+	// },
 	logout: () => fetch(`/api/sessions/logout`, {
   			method: "POST",
 	        headers: {

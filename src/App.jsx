@@ -16,9 +16,13 @@ import { server, useLocalStorage, localStorage, User } from "./api"
 import Routes from './routes'
 import { Warning } from './controls/common/Notifications'
 
+
+
+
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
   React.useEffect(() => localStorage.setUserId(userId), [userId]);
+
   return (
       <User.Provider value={ [userId, setUserId] }>
             <NavigationBar userId={userId} />
