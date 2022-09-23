@@ -105,7 +105,13 @@ export default {
 	  headers.append('cache-control', 'no-cache')
 	  return fetch('/api/sessions/userId', {
 	    headers: headers
-	  }).then(resp => resp.json())
+	  }).then(resp => {
+	  	if (resp.status === 403) {
+	  		return null
+	  	} else {
+	  		return resp.json()
+	  	}
+	  })
 	  // .then(resp => {
 	  //   console.log(resp)
 	    // if (resp.status === 403) {

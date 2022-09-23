@@ -21,7 +21,19 @@ import { Warning } from './controls/common/Notifications'
 
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
-  React.useEffect(() => localStorage.setUserId(userId), [userId]);
+  const [userChecked, setUserChecked] = React.useState(false);
+  // React.useEffect(() => localStorage.setUserId(userId), [userId]);
+
+  React.useEffect(() => {
+    if (!userChecked) {
+      server.getUserSession()
+        .then(r => {
+          console.log('r = ' + r)
+          localStorage.setUserId(r)
+          setUserChecked(true)
+        })
+    }
+  });
 
   return (
       <User.Provider value={ [userId, setUserId] }>
