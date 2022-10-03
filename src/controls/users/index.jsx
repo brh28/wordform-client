@@ -1,12 +1,12 @@
 import React from 'react';
 import { withRouter } from "react-router";
-import Self from './Self.jsx'
+import PrivateProfile from './PrivateProfile.jsx'
 import PublicProfile from './PublicProfile.jsx'
 
 const UserController = (props) => {
 	const profileId = props.match.params.id
 	if (profileId === props.viewerId)
-		return <Self id={profileId} />
+		return <PrivateProfile id={profileId} />
 	else
 		return <PublicProfile id={profileId} />
 }

@@ -39,17 +39,19 @@ const NavigationBar = (props) => {
   const [userId, setUserId] = React.useContext(User);
   const navItems = userId ? 
     [
-      {key: '0', text: 'Browse', href: Routes.root},
-      {key: '1', text: 'Create Article', href: Routes.articles.create},
-      {key: '2', text: 'My Profile', href: Routes.users.controller.go(userId)},
+      {key: '0', text: 'Browse', href: Routes.root, exact: true },
+      {key: '1', text: 'Create Article', href: Routes.articles.create, exact: false},
+      {key: '2', text: 'My Profile', href: Routes.users.controller.go(userId), exact: false},
     ] :
     [
-      {key: '0', text: 'Browse', href: Routes.root},
-      {key: '1', text: 'New User', href: Routes.users.create},
-      {key: '2', text: 'Login', href: Routes.users.login, state: {returnUrl: props.history.location.pathname}}
+      {key: '0', text: 'Browse', href: Routes.root, exact: true },
+      {key: '1', text: 'New User', href: Routes.users.create, exact: false },
+      {key: '2', text: 'Login', href: Routes.users.login, exact: false, state: {returnUrl: props.history.location.pathname}}
     ]
 
-  const currentItem = navItems.find(el => el.href === props.history.location.pathname)
+  const currentItem = navItems.find(el => {
+    return el.exact ? props.history.location.pathname === el.href : (props.history.location.pathname.indexOf(el.href) !== -1)
+  })
   const activeKey = currentItem && currentItem.key
 
 
