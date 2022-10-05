@@ -75,11 +75,12 @@ export default {
         }, 
         body: JSON.stringify(updates)
       }),
-	withdrawFunds: (userId, amount) => fetch(`/api/users/${userId}/wallet/withdraw`, {
+	withdrawFunds: (userId, params) => fetch(`/api/users/${userId}/wallet/withdraw`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
-        } 
+        },
+        body: JSON.stringify(params) 
       }),
 	login: userId => fetch(`/api/sessions/login`, {
   			method: "POST",

@@ -17,7 +17,7 @@ const WithdrawController = ({ wallet, onUpdate }) => {
 	// TODO show modal with withdrawal info (Node Pub Key + amount)
 	const ampWithdraw = () => {
 		setLoading(true)
-		server.withdrawFunds(_id, lnd_balance)
+		server.withdrawFunds(_id, { amount: lnd_balance, destination: pubKey })
 			.then(resp => resp.json())
 			.then((resp) => {
 				if (resp.error) {

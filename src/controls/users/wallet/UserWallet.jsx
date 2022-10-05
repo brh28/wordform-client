@@ -45,6 +45,7 @@ class UserWallet extends Component {
 		const returnUrl = `${this.props.match.url}/wallet`
 		this.setState({ successMessage: msg })
 		this.props.history.push(returnUrl)
+		this.fetchWallet()
 	}
 
 	// saveForm() {
@@ -95,54 +96,55 @@ class UserWallet extends Component {
 		const detailsStyle = {border: '1px solid', margin: '10px', padding: '10px'}
 
 		return (
-			<Spinner isActive={this.state.isLoading}>
-
-			<Switch>
-				<Route exact path={`${url}/wallet`}>
-					<div>
-						<Success message={this.state.successMessage} />
-				      	<Error message={this.state.errorMessage} />
-					      	<table>
-					      		<tbody>
-						      		<tr>
-						      			<td style={{paddingRight: '10px'}}>
-						      				<div style={detailsStyle}>
-						      					Balance: {lnd_balance} sats
-						      				</div> 
-						      			</td>
-						      			{ lnd_balance && lnd_balance > 0 
-						      		? <td style={{paddingRight: '10px'}}>
-							      		<StyledLink 
-							      			animateUnderline
-				    						style={{cursor: 'pointer'}}
-				    						onClick={() => this.props.history.push(`${pathname}/withdraw`)}>
-					      					Withdraw
-					    				</StyledLink>
-				    				</td> 
-				    				: null }
-				    				<td style={{paddingRight: '10px'}}>
-				    					<StyledLink 
-				    						animateUnderline
-				    						style={{cursor: 'pointer'}}
-				    						onClick={() => this.props.history.push(`${pathname}/settings`)}>
-				      						Settings
-				    					</StyledLink>
-				    				</td>
-				    				</tr>
-			    				</tbody>
-			    			</table>
-				    </div>
-		    	</Route>
-				<Route exact path={`${url}/wallet/withdraw`}>
-					<WithdrawController wallet={this.state.wallet} 
-						onUpdate={this.returnToRoot} />
-				</Route>
-				<Route exact path={`${url}/wallet/settings`}>
-					<Settings wallet={this.state.wallet} 
-						onUpdate={this.returnToRoot} />
-				</Route>
-			</Switch>
-			</Spinner>
+			<div>
+				<Success message={this.state.successMessage} />
+				<Error message={this.state.errorMessage} />
+				<Spinner isActive={this.state.isLoading}>
+					<Switch>
+						<Route exact path={`${url}/wallet`}>
+							<div>
+							      	<table>
+							      		<tbody>
+								      		<tr>
+								      			<td style={{paddingRight: '10px'}}>
+								      				<div style={detailsStyle}>
+								      					Balance: {lnd_balance} sats
+								      				</div> 
+								      			</td>
+								      			{ lnd_balance && lnd_balance > 0 
+								      		? <td style={{paddingRight: '10px'}}>
+									      		<StyledLink 
+									      			animateUnderline
+						    						style={{cursor: 'pointer'}}
+						    						onClick={() => this.props.history.push(`${pathname}/withdraw`)}>
+							      					Withdraw
+							    				</StyledLink>
+						    				</td> 
+						    				: null }
+						    				<td style={{paddingRight: '10px'}}>
+						    					<StyledLink 
+						    						animateUnderline
+						    						style={{cursor: 'pointer'}}
+						    						onClick={() => this.props.history.push(`${pathname}/settings`)}>
+						      						Settings
+						    					</StyledLink>
+						    				</td>
+						    				</tr>
+					    				</tbody>
+					    			</table>
+						    </div>
+				    	</Route>
+						<Route exact path={`${url}/wallet/withdraw`}>
+							<WithdrawController wallet={this.state.wallet} 
+								onUpdate={this.returnToRoot} />
+						</Route>
+						<Route exact path={`${url}/wallet/settings`}>
+							<Settings wallet={this.state.wallet} 
+								onUpdate={this.returnToRoot} />
+						</Route>
+					</Switch>
+				</Spinner>
+			</div>
 		)
 	}
 }
