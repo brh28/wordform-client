@@ -95,7 +95,7 @@ const Unpublished = (props) => {
 class Price extends Component {
 	render() {
 		return (
-			this.props.amount === 0 ? <p>FREE</p> : <p>Price: {this.props.amount} Sats</p>
+			this.props.amount === 0 ? <p>FREE</p> : <p>Price: {this.props.amount} sats</p>
 		)
 	}
 }

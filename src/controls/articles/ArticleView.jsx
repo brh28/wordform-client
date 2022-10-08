@@ -23,7 +23,7 @@ class ArticleView extends Component {
 
 	componentDidMount() {
 		this.setState({ isLoading: true })
-	    
+	    this.load()
 	    this.checkPaymentRequest = setInterval(() => {
 	    	if (this.reload){
 	    		this.load()
