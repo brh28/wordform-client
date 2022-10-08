@@ -3,6 +3,7 @@ import { Button } from "baseui/button";
 import { withRouter } from "react-router";
 import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
+import { StyledLink } from "baseui/link";
 import { MinKeys } from './authentication'
 import { PublishArticle as Invoice } from "../common/Invoices";
 import LnAuth from '../common/LnAuth'
@@ -117,22 +118,38 @@ class CreateUser extends Component {
   	return (
       <Spinner isActive={this.state.isLoading}>
         <Error message={this.state.error} />
-  			<FormControl
-          label="User ID"
-          caption="Must be unique"
-          positive={this.state.userId.isChecked && !this.state.userId.error ? "ID is available" : false}
-          error={this.state.userId.isChecked && this.state.userId.error}
-        >
-          <Input
-            value={this.state.form.userId}
-            onChange={this.handleUserIdChange}
-            placeholder="Required"
-            clearOnEscape
-          />
-        </FormControl>
-        <FormControl label="Sign the LNURL">
-          <LnAuth onSignature={this.addKey} />
-        </FormControl>
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <FormControl
+                  label="User ID"
+                  caption="Must be unique"
+                  positive={this.state.userId.isChecked && !this.state.userId.error ? "ID is available" : false}
+                  error={this.state.userId.isChecked && this.state.userId.error}
+                >
+                  <Input
+                    value={this.state.form.userId}
+                    onChange={this.handleUserIdChange}
+                    placeholder="Required"
+                    clearOnEscape
+                  />
+                </FormControl>
+              </td>
+              <td>
+                <p>Or, <StyledLink style={{cursor: 'pointer'}} onClick={() => this.props.history.push('/login')}>sign in </StyledLink>to an existing user</p>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <FormControl label="Sign the LNURL">
+                  <LnAuth onSignature={this.addKey} />
+                </FormControl>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
         { this.state.form.linkingKeys.length ? 
           <FormControl label="Linked Keys:">
             <LinkingKeys keys={this.state.form.linkingKeys} onUpdate={this.updateKeys} />

@@ -23,14 +23,15 @@ const ReadDetails = ({ title, author, price }) => {
   return <div style={detailsStyle}>
       <h3>{title}</h3>
       <p>Author: {author}</p>
-      <p>Price: {price.amount} {price.currency}</p>
+      <p>Price: {price.amount} sats</p>
     </div>
 }
 
 const PublishDetails = ({ title, price }) => {
   return <div style={detailsStyle}>
-      <h3>Publish: {title}</h3>
-      <p>Price: {price.amount} {price.currency}</p>
+      <h3>Publish</h3>
+      <p>Article: {title}</p>
+      <p>Upload price: {price.amount} sats</p>
     </div>
 }
 

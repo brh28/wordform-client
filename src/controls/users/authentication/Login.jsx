@@ -10,6 +10,9 @@ import { Error } from '../../common/Notifications'
 import { localStorage, server, User } from '../../../api';
 import Routes from '../../../routes'
 
+import { StyledLink } from "baseui/link";
+
+
 class Login extends Component {
 
 	constructor(props) {
@@ -67,17 +70,35 @@ class Login extends Component {
 		return (
 			<Spinner isActive={this.state.isLoading}>
 				<Error message={this.state.error} />
-				<FormControl label="User ID">
-					<Input
-			          value={this.state.form.userId}
-			          onChange={this.handleUserIdChange}
-			          placeholder="Required"
-			          clearOnEscape
-			        />
-			    </FormControl>
-			    <FormControl label="Sign the LNURL">
-					<LnAuth onSignature={this.addKey} />
-				</FormControl>
+
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<FormControl label="Existing User ID">
+									<Input
+							          value={this.state.form.userId}
+							          onChange={this.handleUserIdChange}
+							          placeholder="Required"
+							          clearOnEscape
+							        />
+							    </FormControl>
+							</td>
+							<td>
+								<p>Or, create a <StyledLink style={{cursor: 'pointer'}} onClick={() => this.props.history.push('/users/new')}>new user</StyledLink></p>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<FormControl label="Sign the LNURL">
+									<LnAuth onSignature={this.addKey} />
+								</FormControl>
+							</td>
+							<td>&nbsp;</td>
+						</tr>
+					</tbody>
+				</table>
+			    
 				{ this.state.form.keys.length ? 
 					<FormControl label="Current Signatures:">
 						<LinkingKeys keys={this.state.form.keys} />
