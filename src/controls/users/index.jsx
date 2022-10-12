@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router";
-import PrivateProfile from './PrivateProfile.jsx'
-import PublicProfile from './PublicProfile.jsx'
+import PrivateProfile from './profile/PrivateProfile.jsx'
+import PublicProfile from './profile/PublicProfile.jsx'
 
 const UserController = (props) => {
 	const profileId = props.match.params.id

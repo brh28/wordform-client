@@ -41,7 +41,7 @@ const NavigationBar = (props) => {
     [
       {key: '0', text: 'Browse', href: Routes.root, exact: true },
       {key: '1', text: 'Create Article', href: Routes.articles.create, exact: false},
-      {key: '2', text: 'My Profile', href: Routes.users.controller.go(userId), exact: false},
+      {key: '2', text: userId, href: Routes.users.controller.go(userId), exact: false},
     ] :
     [
       {key: '0', text: 'Browse', href: Routes.root, exact: true },

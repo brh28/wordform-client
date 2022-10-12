@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Tabs, Tab } from "baseui/tabs";
-import { server } from '../../api';
+import { server } from '../../../api';
 
-import Spinner from '../common/Spinner';
-import BrowseArticles from '../articles/Browse.jsx'
-import { Logout, UpdateAuthentication } from './authentication'
-import AuthorTag from '../common/AuthorTag.jsx'
-import UserWallet from './wallet/UserWallet'
+import Spinner from '../../common/Spinner';
+import BrowseArticles from '../../articles/Browse.jsx'
+import { Logout, UpdateAuthentication } from '../authentication'
+import AuthorTag from '../../common/AuthorTag.jsx'
+import UserWallet from '../wallet/UserWallet'
 import PublicProfile from './PublicProfile'
 
 import { withRouter, Switch, Route } from "react-router";
@@ -18,7 +18,7 @@ class PrivateProfile extends Component {
     const { url } = props.match;
     const path = pathname.replace(url, '')
     this.state = {
-      activeKey: ['/articles', '/wallet', '/authentication', '/logout'].find(el => path.includes(el)) || '/articles'
+      activeKey: ['/profile', '/wallet', '/authentication', '/logout'].find(el => path.includes(el)) || '/profile'
     };
     this.setActiveKey = this.setActiveKey.bind(this);
   }
@@ -36,8 +36,8 @@ class PrivateProfile extends Component {
           this.setActiveKey(activeKey);
         }}
       >
-        <Tab key="/articles" title="Articles">
-          <PublicProfile id={this.props.id} />
+        <Tab key="/profile" title="Profile">
+          <PublicProfile id={this.props.id} editable />
         </Tab>
         <Tab key="/wallet" title="Wallet">      
           <UserWallet userId={this.props.id} />
