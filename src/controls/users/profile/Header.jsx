@@ -76,7 +76,11 @@ const Description = ({ description, editable, onSave }) => {
 	const [editting, setEditting] = useState(false)
 	const [newDescription, updateDescription] = useState(description)
 
-	if (!editable) return <p>{description}</p>
+	if (!editable) return (
+		<div style={{marginTop: '8px', display: 'inline-flex', whiteSpace: 'pre-wrap'}} onClick={() => setEditting(true)}>
+			{`${description}`}
+		</div>
+	)
 	else if (editting) return (
 		<div>
 			<div style={{marginTop: '5px', marginBottom: '5px'}}>
@@ -91,7 +95,7 @@ const Description = ({ description, editable, onSave }) => {
 		</div>
 	)
 	else if (description) return (
-		<div style={{display: 'inline-flex', cursor: 'pointer', whiteSpace: 'pre-wrap'}} onClick={() => setEditting(true)}>
+		<div style={{marginTop: '8px', display: 'inline-flex', cursor: 'pointer', whiteSpace: 'pre-wrap'}} onClick={() => setEditting(true)}>
 			{`${description}`}
 		</div>
 	)
