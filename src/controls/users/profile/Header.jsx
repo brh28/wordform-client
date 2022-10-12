@@ -78,7 +78,7 @@ const Description = ({ description, editable, onSave }) => {
 
 	if (!editable) return (
 		<div style={{marginTop: '8px', display: 'inline-flex', whiteSpace: 'pre-wrap'}} onClick={() => setEditting(true)}>
-			{`${description}`}
+			{description}
 		</div>
 	)
 	else if (editting) return (
@@ -96,7 +96,7 @@ const Description = ({ description, editable, onSave }) => {
 	)
 	else if (description) return (
 		<div style={{marginTop: '8px', display: 'inline-flex', cursor: 'pointer', whiteSpace: 'pre-wrap'}} onClick={() => setEditting(true)}>
-			{`${description}`}
+			{description}
 		</div>
 	)
 	else return (<div style={{marginTop: '5px'}}>
