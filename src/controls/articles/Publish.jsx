@@ -17,28 +17,27 @@ class PublishArticle extends Component {
 		  isPurchased: undefined
 		};
 		// this.eventSource = new EventSource(`/api/articles/${this.props.match.params.id}/invoice`);
-		this.getInvoice = this.getInvoice.bind(this);
+		this.publishArticle = this.publishArticle.bind(this);
 	}
 
 	componentDidMount() {
-		// this.eventSource.onerror(e => {
-		// 	console.log(e)
-		// })
-		this.getInvoice()
+		this.publishArticle()
 	}
 
-	getInvoice() {
+	publishArticle() {
 		const articleId = this.props.id
 		this.setState({ isLoading: true })
-		server.getInvoice(articleId)
+		server.publishArticle(articleId)
 			.then(res => {
 				if (res.status === 403) {
 					this.setState({ isLoading: false, error: "The author must be logged in."})
 				} else if (res.status === 404) {
 					this.setState({ isLoading: false, error: "404 - Could not find article"})
+				} else if (res.status === 500) {
+					this.setState({ isLoading: false, error: "Something went wrong"})
 				} else {
 					res.json().then(r => {
-						if (r.articleDetails.isPurchased) {
+						if (r.articleDetails.isPublished) {
 							this.props.history.push(`/users/${r.articleDetails.author}`)
 						} else {
 							this.setState({ isLoading: false, ...r })

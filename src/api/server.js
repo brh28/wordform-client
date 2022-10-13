@@ -50,7 +50,10 @@ export default {
         body: JSON.stringify({ rating })
       }).then(resp => resp.json())
 	},
-	getInvoice: (articleId) => fetch(`/api/articles/${articleId}/invoice`),
+	publishArticle: (articleId) => fetch(`/api/articles/${articleId}/publish`, {
+        method: "POST",
+        headers: {} 
+      }),
 	getUserProfile: userId => fetch(`/api/users/${userId}`, {}).then(resp => resp.json()),
 	updateUserDescription: (userId, desc) => fetch(`/api/users/${userId}/description`, {
         method: "POST",
