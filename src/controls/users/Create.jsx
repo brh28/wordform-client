@@ -123,7 +123,7 @@ class CreateUser extends Component {
             <tr>
               <td>
                 <FormControl
-                  label="User ID"
+                  label="Create a User ID"
                   caption="Must be unique"
                   positive={this.state.userId.isChecked && !this.state.userId.error ? "ID is available" : false}
                   error={this.state.userId.isChecked && this.state.userId.error}
