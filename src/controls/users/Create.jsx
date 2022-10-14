@@ -142,7 +142,7 @@ class CreateUser extends Component {
             </tr>
             <tr>
               <td colspan="2">
-                <FormControl label="Sign the LNURL">
+                <FormControl label={<p>Sign the Lnurl. Learn more <StyledLink href={'https://wordform.space/articles/6349d5c338bc7e719edb9162'} target="_blank">here</StyledLink></p>}>
                   <LnAuth onSignature={this.addKey} />
                 </FormControl>
               </td>
