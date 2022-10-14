@@ -35,7 +35,7 @@ const PublishedArticle = ({ user, article, onDelete }) => {
 			<div>
 				<TitleBar title={title} 
 						author={author} 
-						publish_date={purchase_date} />
+						publish_date={publish_date} />
 				<hr />
 				<div style={{ maxWidth: '600px' }} className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
 				{ user ? <RateContent articleId={_id} /> : null }
