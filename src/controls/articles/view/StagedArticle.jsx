@@ -5,12 +5,12 @@ import { Button } from "baseui/button";
 import { ButtonGroup } from "baseui/button-group";
 
 const StagedArticle = ({ article, history, onDelete }) => {
-	const { _id, title, author, purchase_date, sanitizedHtml } = article
+	const { _id, title, author, publish_date, sanitizedHtml } = article
 	return (
 		<div>
 			<TitleBar title={title} 
 					author={author} 
-					publish_date={purchase_date} />
+					publish_date={publish_date} />
 			<hr />
 			<div style={{ maxWidth: '600px' }} className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
 			<ButtonGroup>
