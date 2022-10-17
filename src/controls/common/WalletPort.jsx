@@ -92,7 +92,7 @@ class WalletPort extends Component {
     	<div style={{marginTop: '10px'}}>
         <FlexGrid>
         <FlexGridItem {...itemProps}>
-            <QRCode style={{  marginTop: '10px' }} title="Scan" value={this.props.connection} />
+            <QRCode style={{  marginTop: '10px', cursor: 'pointer' }} title="Scan" value={this.props.connection} onClick={() => window.location.href=`lightning:${this.props.connection}`} />
           </FlexGridItem>
           <FlexGridItem {...itemProps}>
             <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{label()}</Button>
