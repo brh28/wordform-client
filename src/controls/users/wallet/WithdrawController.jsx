@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { withRouter } from "react-router";
 import { Error, Warning, Info } from '../../common/Notifications'
 import { StatelessAccordion, Panel } from "baseui/accordion";
 import { Input } from "baseui/input";
@@ -7,7 +8,7 @@ import LnurlWithdraw from './LnurlWithdraw'
 import { server } from '../../../api';
 import Spinner from '../../common/Spinner';
 
-const WithdrawController = ({ wallet, onUpdate }) => {
+const WithdrawController = ({ wallet, onUpdate, history }) => {
 	const { _id, lnd_balance, destination_pub_key } = wallet
 	const [ expanded, setExpanded ] = useState('p1')
 	const [ pubKey, updateDestNode] = useState(destination_pub_key)
@@ -34,7 +35,7 @@ const WithdrawController = ({ wallet, onUpdate }) => {
 			})
 	}
 	if (!lnd_balance || lnd_balance <= 0) {
-		return (<Info message={'Account balance is 0'} />)
+		history.push(`/users/${_id}/wallet`)
 	}
 	return (
 		<Spinner isActive={isLoading}>
@@ -65,4 +66,4 @@ const WithdrawController = ({ wallet, onUpdate }) => {
 	)
 }
 
-export default WithdrawController
+export default withRouter(WithdrawController)

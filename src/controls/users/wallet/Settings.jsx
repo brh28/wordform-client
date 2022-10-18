@@ -10,14 +10,10 @@ import { server } from '../../../api';
 
 
 const Settings = ({ wallet, onUpdate }) => {
-	// if (wallet) {
-		const [autoPay, setAutoPay] = useState(wallet.auto_pay)
-		const [pubKey, setPubKey] = useState(wallet.destination_pub_key)
-		const [isLoading, setLoadingState] = useState(false)
-		const [errMsg, setError] = useState(null)
-	// } else {
-
-	// }
+	const [autoPay, setAutoPay] = useState(wallet.auto_pay)
+	const [pubKey, setPubKey] = useState(wallet.destination_pub_key)
+	const [isLoading, setLoadingState] = useState(false)
+	const [errMsg, setError] = useState(null)
 		
 	const handleSwitchChange = (arg) => setAutoPay(arg)
 	const updatePubKey = (event) => setPubKey(event.target.value)

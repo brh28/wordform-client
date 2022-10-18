@@ -8,12 +8,13 @@ import { StyledLink } from "baseui/link";
 import { server } from '../../../api';
 import Settings from './Settings' 
 import WithdrawController from './WithdrawController'
+import TransactionHistory from './TransactionHistory'
 
 class UserWallet extends Component {
 	constructor(props) { 
 	    super(props);
 	    this.state = { 
-	    	isLoading: false, 
+	    	isLoading: true, 
 	    	wallet: { 
 	    		lnd_balance: undefined,
 	    		auto_pay: undefined,
@@ -38,7 +39,9 @@ class UserWallet extends Component {
 	fetchWallet() {
 		this.setState({ isLoading: true })
 		server.getUserWallet(this.props.userId)
-			.then(res => this.setState( { isLoading: false, wallet: res }))
+			.then(res => {
+				this.setState( { isLoading: false, wallet: res })
+			})
 	}
 
 	returnToRoot(msg) {
@@ -92,9 +95,7 @@ class UserWallet extends Component {
 		const { url, params, path } = this.props.match;
 		const { pathname } = this.props.history.location
 		const { lnd_balance } = this.state.wallet
-
 		const detailsStyle = {border: '1px solid', margin: '10px', padding: '10px'}
-
 		return (
 			<div>
 				<Success message={this.state.successMessage} />
@@ -132,6 +133,7 @@ class UserWallet extends Component {
 						    				</tr>
 					    				</tbody>
 					    			</table>
+					    			<TransactionHistory withdrawals={this.state.wallet.withdrawals} />
 						    </div>
 				    	</Route>
 						<Route exact path={`${url}/wallet/withdraw`}>
