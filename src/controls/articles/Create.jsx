@@ -10,6 +10,8 @@ import { Error } from "../common/Notifications";
 import { server } from "../../api"
 import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
+import { StatefulTooltip } from "baseui/tooltip";
+
 
 class CreateArticle extends Component {
   constructor(props) {
@@ -77,7 +79,8 @@ class CreateArticle extends Component {
   }
 
   render() {
-  	return (
+  	const service_fee = Math.ceil(this.state.form.price.amount *.021) || 0
+    return (
   		<Spinner isActive={this.state.isLoading}>
         <Error message={this.state.error} />
         <FormControl label='Title'>
@@ -95,9 +98,45 @@ class CreateArticle extends Component {
                       rehypePlugins: [[rehypeSanitize]],
                     }}/>
         </FormControl>
-        <FormControl label='Price (sats)'>
-  			   <input type="number" name="price" value={this.state.form.price.amount} onChange={this.handlePriceChange} />
-  			</FormControl>
+
+        <table style={{marginBottom: '5px'}}>
+          <thead style={{ textAlign: 'left'}}>
+            <tr>
+              <th>Price to read (sats)</th>
+              <th><StatefulTooltip
+                  content={() => '2.1% of price (rounded up)'}
+                  returnFocus
+                  autoFocus
+                  showArrow
+                >
+                  Service fee
+                </StatefulTooltip>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr>
+          <td>
+             <input style={{ marginRight: '5px', width: '140px'}} 
+                    type="number" 
+                    name="price" 
+                    value={this.state.form.price.amount} 
+                    onChange={this.handlePriceChange} />
+          </td>
+          <td style={{ }}>
+          <StatefulTooltip
+            content={() => `ceiling(.021 * ${this.state.form.price.amount || 0})`}
+            returnFocus
+            autoFocus
+            showArrow
+          >
+            {service_fee}
+          </StatefulTooltip>
+              
+          </td>
+          </tr>
+          </tbody>
+        </table>
         <Button style={{marginTop: '10px'}} onClick={this.submitForm} color="primary">Save & Continue</Button>
   		</Spinner>
   	)

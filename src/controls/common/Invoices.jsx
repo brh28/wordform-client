@@ -70,7 +70,7 @@ const Invoice = ({ type, paymentDetails, paymentRequest }) => {
     default:
       details = null;
   }
-  return (<div style={{width: '50%'}}>
+  return (<div style={{maxWidth: '400px'}}>
     { details }
     <WalletPort type='invoice' connection={paymentRequest} />
     <Refresh />
