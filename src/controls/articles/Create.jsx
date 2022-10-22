@@ -109,7 +109,7 @@ class CreateArticle extends Component {
                   autoFocus
                   showArrow
                 >
-                  Service fee
+                  Service fee (sats)
                 </StatefulTooltip>
               </th>
             </tr>

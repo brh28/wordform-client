@@ -116,7 +116,8 @@ export default {
 	  headers.append('cache-control', 'no-cache')
 	  return fetch('/api/sessions/userId', {
 	    headers: headers
-	  }).then(resp => {
+	  })
+	  .then(resp => {
 	  	if (resp.status === 403) {
 	  		return null
 	  	} else {

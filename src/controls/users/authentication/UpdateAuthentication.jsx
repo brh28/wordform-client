@@ -95,7 +95,9 @@ class UpdateAuthentication extends Component {
 						<LinkingKeys keys={this.state.user.linking_keys} onUpdate={this.updateKeys} />
 					</FormControl> : null }
 				<FormControl label="Sign the LNURL to add keys">
-					<LnAuth onSignature={this.addKey} />
+					<LnAuth onSignature={(signerStr) => {
+	                    this.addKey(JSON.parse(signerStr).signedBy)
+	                  }} />
 		        </FormControl>
 				{ this.state.user.linking_keys.length ?
 				<FormControl label='Keys required for login'>

@@ -5,7 +5,6 @@ import { FormControl } from "baseui/form-control";
 import { Input } from "baseui/input";
 import { StyledLink } from "baseui/link";
 import { MinKeys } from './authentication'
-import { PublishArticle as Invoice } from "../common/Invoices";
 import LnAuth from '../common/LnAuth'
 import LinkingKeys from './authentication/LinkingKeys'
 import Spinner from '../common/Spinner';
@@ -123,7 +122,7 @@ class CreateUser extends Component {
             <tr>
               <td>
                 <FormControl
-                  label="Create a User ID"
+                  label="Create an ID"
                   caption="Must be unique"
                   positive={this.state.userId.isChecked && !this.state.userId.error ? "ID is available" : false}
                   error={this.state.userId.isChecked && this.state.userId.error}
@@ -143,7 +142,9 @@ class CreateUser extends Component {
             <tr>
               <td colspan="2">
                 <FormControl label={<p>Sign the Lnurl. Learn more <StyledLink href={'https://wordform.space/articles/6349d5c338bc7e719edb9162'} target="_blank">here</StyledLink></p>}>
-                  <LnAuth onSignature={this.addKey} />
+                  <LnAuth onSignature={(signerStr) => {
+                    this.addKey(JSON.parse(signerStr).signedBy)
+                  }} />
                 </FormControl>
               </td>
               <td>&nbsp;</td>
