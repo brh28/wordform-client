@@ -47,6 +47,7 @@ class UpdateAuthentication extends Component {
 	    	this.setState({ 
 		      user: {
 		        ...this.state.user,
+		        min_keys: this.state.user.min_keys || 1,
 		        linking_keys: updatedKeySet
 		      } 
 		    })
@@ -54,7 +55,7 @@ class UpdateAuthentication extends Component {
 	}
 
   	updateKeys(updatedKeySet) {
-  		const { min_keys } = this.state.user
+  		const {min_keys} = this.state.user
   		const updatedMinKeys = min_keys > updatedKeySet.length ? updatedKeySet.length : min_keys
 	    this.setState({ 
 	        user: {
@@ -90,21 +91,21 @@ class UpdateAuthentication extends Component {
 			<Spinner isActive={this.state.isLoading}>
 				<Success message={this.state.success} />
 				<Error message={this.state.error} />
-				{ this.state.user.linking_keys.length ? 
-					<FormControl label="Linked Keys:">
-						<LinkingKeys keys={this.state.user.linking_keys} onUpdate={this.updateKeys} />
-					</FormControl> : null }
 				<FormControl label="Sign the LNURL to add keys">
 					<LnAuth onSignature={(signerStr) => {
 	                    this.addKey(JSON.parse(signerStr).signedBy)
 	                  }} />
 		        </FormControl>
 				{ this.state.user.linking_keys.length ?
-				<FormControl label='Keys required for login'>
-					<MinKeys selected={this.state.user.min_keys}
-		                   max={this.state.user.linking_keys.length} 
-		                   onChange={(val) => this.updateMinKeys(val)}/>
-		        </FormControl> : null }
+					<div>
+					<FormControl label="Linked Keys:">
+						<LinkingKeys keys={this.state.user.linking_keys} onUpdate={this.updateKeys} />
+					</FormControl>
+					<FormControl label='Keys required for login'>
+						<MinKeys selected={this.state.user.min_keys}
+			                   max={this.state.user.linking_keys.length} 
+			                   onChange={(val) => this.updateMinKeys(val)}/>
+			        </FormControl></div> : null }
 		        <Button color={"primary"} onClick={this.saveForm}>
 					Save
 				</Button>
