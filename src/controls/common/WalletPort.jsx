@@ -88,11 +88,14 @@ class WalletPort extends Component {
     }
 
     if (!this.props.connection) return null
+    const qrLink = `lightning:${this.props.connection}`
   	return (
     	<div style={{marginTop: '4px'}}>
         <FlexGrid>
         <FlexGridItem {...itemProps}>
-            <QRCode style={{  marginTop: '10px', cursor: 'pointer' }} title="Scan" value={this.props.connection} onClick={() => window.location.href=`lightning:${this.props.connection}`} />
+          <a style={{  marginTop: '10px', cursor: 'pointer' }} href={qrLink}>
+            <QRCode title="Scan" value={qrLink} />
+          </a>
           </FlexGridItem>
           <FlexGridItem {...itemProps}>
             <Button color='primary' style={{margin: '10px'}} endEnhancer={() => this.state.copied ? <Check size={28} /> : null} onClick={() => this.copyTextToClipboard(this.props.connection)}>{label()}</Button>
