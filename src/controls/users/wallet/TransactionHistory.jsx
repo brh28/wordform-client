@@ -13,6 +13,8 @@ const TransactionHistory = ({ withdrawals }) => {
 			w.payment_hash || ''
 		]
 	})
+
+	if (!withdrawals || withdrawals.length === 0) return null
 	return (
 		<FormControl label="Withdrawal History">
 			<Table columns={["Date", "Type", "Amount (sats)", "Destination", "Payment Hash"]}

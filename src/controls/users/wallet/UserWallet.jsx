@@ -45,57 +45,17 @@ class UserWallet extends Component {
 	}
 
 	returnToRoot(msg) {
-		const returnUrl = `${this.props.match.url}/wallet`
 		this.setState({ successMessage: msg })
+		const returnUrl = `${this.props.match.url}/wallet`
 		this.props.history.push(returnUrl)
 		this.fetchWallet()
 	}
-
-	// saveForm() {
-	// 	this.setState({ isLoading: true })
-	// 	server.updateWallet(this.state.wallet)
-	// 		.then(() => this.setState({ 
-	// 			isLoading: false,
-	// 			successMessage: "Wallet information saved successfully!" 
-	// 		}))
-	// }
-
-	// // TODO show modal with withdrawal info (Node Pub Key + amount)
-	// withdraw() {
-	// 	const amt = this.state.amt
-	// 	this.setState({ isLoading: true })
-	// 	server.withdrawFunds(this.props.userId, amt)
-	// 		.then(resp => resp.json())
-	// 		.then((resp) => {
-	// 			if (resp.error) {
-	// 				this.setState({
-	// 					isLoading: false,
-	// 					errorMessage: `Withdrawal failed with reason: ${error}`
-	// 				})
-	// 			} else {
-	// 				this.setState({
-	// 					isLoading: false,
-	// 					successMessage: `Withdrawal successful. Payment hash: ${resp.payment_hash}`,
-	// 					wallet: {
-	// 						...this.state.wallet,
-	// 						lnd_balance: resp.lnd_balance
-	// 					}
-	// 				})
-	// 			}
-	// 		})
-	// 		.catch((e) => { 
-	// 			this.setState({
-	// 				isLoading: false, 
-	// 				errorMessage: 'Withdrawal failed!'
-	// 			})
-	// 		})
-	// }
 
 	render() {
 		const { url, params, path } = this.props.match;
 		const { pathname } = this.props.history.location
 		const { lnd_balance } = this.state.wallet
-		const detailsStyle = {border: '1px solid', margin: '10px', padding: '10px'}
+		const detailsStyle = {border: '1px solid', marginTop: '10px', padding: '10px'}
 		return (
 			<div>
 				<Success message={this.state.successMessage} />

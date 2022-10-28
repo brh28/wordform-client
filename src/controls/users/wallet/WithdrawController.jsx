@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { withRouter } from "react-router";
 import { Error, Warning, Info } from '../../common/Notifications'
 import { StatelessAccordion, Panel } from "baseui/accordion";
@@ -40,11 +40,12 @@ const WithdrawController = ({ wallet, onUpdate, history }) => {
 	return (
 		<Spinner isActive={isLoading}>
 			<Error message={errorMsg} />
+			<div style={{maxWidth: '400px'}}>
 			<StatelessAccordion
 						expanded={expanded}
 				      	onChange={({key, expanded}) => setExpanded(expanded) }>
 			    	<Panel key='p1' title="LNURL-withdraw">
-			      			<LnurlWithdraw userId={_id} amount={lnd_balance} />
+			      			<LnurlWithdraw userId={_id} amount={lnd_balance} onCompletion={onUpdate} />
 			      	</Panel>			    
 			      <Panel key='p2' title="AMP">
 			      		<Warning message='Receiver must support amp payments' />
@@ -62,6 +63,7 @@ const WithdrawController = ({ wallet, onUpdate, history }) => {
 						</div>
 			      </Panel>			  
 			</StatelessAccordion>
+			</div>
 		</Spinner>
 	)
 }
