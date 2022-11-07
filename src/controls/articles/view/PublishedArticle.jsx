@@ -6,12 +6,14 @@ import Spinner from "../../common/Spinner";
 import { Error } from '../../common/Notifications.jsx'
 import { Button } from "baseui/button";
 import { ButtonGroup } from "baseui/button-group";
+import FormattedContent from './FormattedContent'
+import ArticleSummary from './ArticleSummary'
 
-const PublishedArticle = ({ user, article, onDelete }) => {
-	const { _id, title, author, publish_date, sanitizedHtml } = article
+const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
+	const { _id, title, author, publish_date, sanitizedHtml, summary } = article
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [errorMsg, setErrorMsg] = React.useState(null);
-
+	
 	if (isLoading) return <Spinner isActive />
 	if (user === author)  { 
 		return (
@@ -21,7 +23,8 @@ const PublishedArticle = ({ user, article, onDelete }) => {
 						author={author} 
 						publish_date={publish_date} />
 				<hr />
-				<div style={{ maxWidth: '600px' }}className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
+				<ArticleSummary articleId={_id} summary={summary} onEdit={onEdit} />
+				<FormattedContent content={sanitizedHtml} />
 				<ButtonGroup>
 					<Button onClick={() => onDelete()} 
 						   overrides={{BaseButton: {style: {width: '50%', backgroundColor: 'red'}}}}>
@@ -37,7 +40,8 @@ const PublishedArticle = ({ user, article, onDelete }) => {
 						author={author} 
 						publish_date={publish_date} />
 				<hr />
-				<div style={{ maxWidth: '600px' }} className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
+				<ArticleSummary articleId={_id} summary={summary} />
+				<FormattedContent content={sanitizedHtml} />
 				{ user ? <RateContent articleId={_id} /> : null }
 			</div>
 		)

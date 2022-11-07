@@ -12,15 +12,22 @@ import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
 import { StatefulTooltip } from "baseui/tooltip";
 
-
+const validateCharacterLength = (str, maxLength) => {
+  let errorMsg
+  if (str.length > maxLength) errorMsg = `-${str.length - maxLength}`
+  return errorMsg
+}
 class CreateArticle extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
       error: null,
+      summaryError: null,
+      titleError: null,
       form: {
       	title: '',
+        summary: '',
         content: '',
         price: {
           amount: 0,
@@ -28,18 +35,31 @@ class CreateArticle extends Component {
       }
     };
     this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleSummaryChange = this.handleSummaryChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handlePriceChange = this.handlePriceChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
   handleTitleChange(event) {
+    const { value } = event.target
   	this.setState({
+      titleError: validateCharacterLength(value, 150),
   		form: {
   			...this.state.form,
-  			title: event.target.value
+  			title: value,
   		}
   	});
+  }
+
+  handleSummaryChange(val) {
+    this.setState({
+      summaryError: validateCharacterLength(val, 1000),
+      form: {
+        ...this.state.form,
+        summary: val,
+      }
+    });
   }
 
   handleContentChange(val) {
@@ -83,13 +103,24 @@ class CreateArticle extends Component {
     return (
   		<Spinner isActive={this.state.isLoading}>
         <Error message={this.state.error} />
-        <FormControl label='Title'>
+        <FormControl 
+          label='Title'           
+          error={this.state.form.titleError}>
           <Input
             value={this.state.form.title}
             onChange={this.handleTitleChange}
             placeholder="Title"
+            error={this.state.form.titleError}
             clearOnEscape
           />
+        </FormControl>
+        <FormControl 
+          label='Summary (optional)'
+          error={this.state.summaryError}>
+          <Textarea 
+            value={this.state.form.summary}
+            error={this.state.summaryError}
+            onChange={e => this.handleSummaryChange(e.target.value)} />
         </FormControl>
   			<FormControl label='Content'>
           <MDEditor value={this.state.form.content} 

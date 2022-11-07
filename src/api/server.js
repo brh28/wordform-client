@@ -38,6 +38,13 @@ export default {
       }, 
       body: JSON.stringify(article)
     }),
+    saveSummary: (articleId, newSummary) => fetch(`/api/articles/${articleId}/summary`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify({ summary: newSummary })
+    }),
 	getUserRating: (articleId) => {
 		return fetch(`/api/articles/${articleId}/user/ratings`, {}).then(resp => resp.json())
 	},

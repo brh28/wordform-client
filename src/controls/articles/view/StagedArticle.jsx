@@ -3,16 +3,19 @@ import { withRouter } from "react-router";
 import TitleBar from './TitleBar'
 import { Button } from "baseui/button";
 import { ButtonGroup } from "baseui/button-group";
+import FormattedContent from './FormattedContent'
+import ArticleSummary from './ArticleSummary'
 
-const StagedArticle = ({ article, history, onDelete }) => {
-	const { _id, title, author, publish_date, sanitizedHtml } = article
+const StagedArticle = ({ article, history, onEdit, onDelete }) => {
+	const { _id, title, author, publish_date, summary, sanitizedHtml } = article
 	return (
 		<div>
 			<TitleBar title={title} 
 					author={author} 
 					publish_date={publish_date} />
 			<hr />
-			<div style={{ maxWidth: '600px' }} className="" dangerouslySetInnerHTML={{__html: sanitizedHtml}}></div>
+			<ArticleSummary articleId={_id} summary={summary} onEdit={onEdit} />
+			<FormattedContent content={sanitizedHtml} />
 			<ButtonGroup>
 				<Button onClick={() => history.push(`/articles/${_id}/publish`)}>
 	          		Publish
