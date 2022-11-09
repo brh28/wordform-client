@@ -7,7 +7,7 @@ const TransactionHistory = ({ withdrawals }) => {
 	const withdrawalsSortedArr = withdrawals && withdrawals.map(w => {
 		return [
 			w.settle_timestamp ? new Date(w.settle_timestamp).toLocaleDateString('en-US', options) : '',
-			w.type || '',
+			// w.type || '',
 			w.value_sat || '',
 			w.destination || '',
 			w.payment_hash || ''
@@ -17,7 +17,12 @@ const TransactionHistory = ({ withdrawals }) => {
 	if (!withdrawals || withdrawals.length === 0) return null
 	return (
 		<FormControl label="Withdrawal History">
-			<Table columns={["Date", "Type", "Amount (sats)", "Destination", "Payment Hash"]}
+			<Table columns={["Date", 
+					// "Type", 
+					"Amount (sats)", 
+					"Destination", 
+					"Payment Hash"
+					]}
 				data={withdrawalsSortedArr}
 				size={SIZE.compact}
 	      		divider={DIVIDER.grid} />

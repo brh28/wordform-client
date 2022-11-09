@@ -16,7 +16,10 @@ const Settings = ({ wallet, onUpdate }) => {
 	const [errMsg, setError] = useState(null)
 		
 	const handleSwitchChange = (arg) => setAutoPay(arg)
-	const updatePubKey = (event) => setPubKey(event.target.value)
+	const onPubKeyChange = (event) => {
+		setPubKey(event.target.value)
+		if (!event.target.value) setAutoPay(false)
+	}
 	const saveForm = () => {
 		setLoadingState(true)
 		server.updateWallet({ 
@@ -32,25 +35,19 @@ const Settings = ({ wallet, onUpdate }) => {
 	}
 	return (
 		<Spinner isActive={isLoading}>
-			<table>
-				<tr>
-					<td>
-      					<FormControl label="Auto-forward with AMP">
-					    	<Toggle checked={autoPay || false} onSwitch={handleSwitchChange} />
-					    </FormControl>
-		    		</td>
-	    			<td>
-	    				<Warning message='Receiver must support amp payments' />
-	    			</td>
-	    		</tr>
-	    	</table>
-			<FormControl label="Lightning Pub Key">
+			<FormControl label="Lightning Address">
 				<Input
 		          value={pubKey || ''}
-		          onChange={updatePubKey}
+		          onChange={onPubKeyChange}
 		          placeholder="Required for forwarding payments"
 		          clearOnEscape
 		        /> 
+		    </FormControl>
+			<FormControl label="">
+		    	<Toggle checked={autoPay || false} 
+		    			onSwitch={handleSwitchChange}
+		    			disabled={!pubKey}
+		    			label={'Auto-forward'} />
 		    </FormControl>
 		    <Button onClick={saveForm}>Save</Button>
 		</Spinner>
