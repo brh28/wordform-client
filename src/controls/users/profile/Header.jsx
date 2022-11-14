@@ -44,20 +44,24 @@ class Header extends Component {
 
 	render() {
 		const { userId, editable } = this.props
-		console.log(this.state)
 		const { description } = this.state
+
+		//vertical-align: middle;
+	    // width: 50px;
+	    // height: 50px;
+	    // border-radius: 50%;
 		return (
 			<Spinner isActive={this.state.isLoading}>
 				<Error message={this.state.error} />
 				<div style={{ display: 'inline-flex', padding: '10px'}}>
 					<img src={'/images/satoshi.jpeg'} 
-					width="100" 
-					height="100"
-					style={{
-						borderRadius: '50%', 
-						padding: '10px'
-						// float: 'left'
-					}} />	  		
+						width="100" 
+						height="100"
+						style={{
+							borderRadius: '50%', 
+							padding: '10px'
+							// float: 'left'
+						}} />	  		
 			  		<div style={{margin: 'auto'}}>
 				  		<AuthorTag authorId={userId} />
 				  		<br />
