@@ -35,6 +35,7 @@ class ArticleView extends Component {
 		clearInterval(this.checkPaymentRequest)
 	}
 
+	// called on pageload and on invoice completion
 	load() {
 	    server.get(this.props.id)
 	      .then(res => { 

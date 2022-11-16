@@ -1,17 +1,24 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import {useStyletron} from 'baseui';
 import ArrowUp from "baseui/icon/arrow-up"
 import ArrowDown from "baseui/icon/arrow-down"
 import Spinner, { SIZE } from "../../common/Spinner";
 import { server } from "../../../api"
 
-// const ArrowUp = ({highlighted, onClick}) => {
-// 	return <span style={{cursor: 'pointer'}} onClick={onClick}>&#10507;</span>
-// }
-// // const ArrowDown = ({onClick}) => <span style={{color: 'yellow', transform: `scale(.5, 2)`}}>&#8681;</span>
-// const ArrowDown = ({highlighted, onClick}) => <span>&#8681;</span>
+// for Reviews
+import FormattedContent from './FormattedContent'
+import { Button, KIND } from "baseui/button";
+import { Textarea } from "baseui/textarea";
+import { FormControl } from "baseui/form-control"
+//import Spinner from '../../common/Spinner';
+//import { server } from "../../../api"
+import { StyledLink } from "baseui/link";
 
-
+const validateCharacterLength = (str, maxLength) => {
+  let errorMsg
+  if (str.length > maxLength) errorMsg = `-${str.length - maxLength}`
+  return errorMsg
+}
 
 const UpDown = ({ rating, onClick }) => {
 	const [css, theme] = useStyletron();
@@ -29,52 +36,95 @@ const UpDown = ({ rating, onClick }) => {
 		  </div>;
 }
 
-class RateContent extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: false,
-			rating: 0
-		}
-		this.fetchRating = this.fetchRating.bind(this);
-		this.saveRating = this.saveRating.bind(this);
-	}
-
-	componentDidMount() {
-		this.fetchRating()
-	}
-
-	fetchRating() {
-		this.setState({ isLoading: true })
-		server.getUserRating(this.props.articleId)
-			.then(r => {
-				this.setState({
-					isLoading: false,
-					rating: r.rating
-				})
-			})
-	}
-
-	saveRating(clicked) {
-		const newRating = clicked === this.state.rating ? 0 : clicked
-		this.setState({ isLoading: true })
-		server.postUserRating(this.props.articleId, newRating)
-			.then(r => {
-				this.setState({
-					isLoading: false,
-					rating: r.rating
-				})
-			})
-	}
-
-	render() {
-		return (
-			<Spinner isActive={this.state.isLoading} size={SIZE.small}> 
-				<UpDown rating={this.state.rating} onClick={this.saveRating} />
-			</Spinner>
+const Review = ({ value, isEditting, error, onChange, onEdit, onSave, onCancel }) => { // onEdit
+	if (isEditting) return (<FormControl 
+          error={isEditting && error}> 
+          	<div>
+				<div style={{marginTop: '5px', marginBottom: '5px'}}>
+					<Textarea 
+			            value={value}
+			            error={error}
+			            onChange={e => onChange(e.target.value)} />
+				</div>
+				<div style={{float: 'right'}}>
+					<Button kind={KIND.primary} onClick={onSave}>Save</Button>
+					<Button kind={KIND.secondary} onClick={onCancel}>Cancel</Button>
+				</div>
+			</div>  
+	</FormControl>)
+	else if (!value) return <StyledLink style={{cursor: 'pointer'}} onClick={onEdit}>Add a review</StyledLink>
+	return ( // value && !isEditting
+			<FormControl>
+	        	<div style={{marginLeft: '5px', cursor: 'pointer'}} onClick={onEdit}>
+					<FormattedContent style={{ fontStyle: 'italic', whiteSpace: 'pre-wrap' }} content={value} />
+				</div>
+			</FormControl>
 		)
-	}
 }
+
+const RateContent = ({ articleId }) => {
+	const [savedReview, setSavedReview] = useState(null)
+	const [rating, setRating] = useState(0);
+	const [review, setReview] = useState(null);
+	const [reviewError, setReviewError] = useState(null);
+	const [isEditting, setEditting] = useState(false);
+	const [isLoading, setLoading] = useState(false);
+
+	const fetchRating = () => {
+		setLoading(true);
+		server.getUserRating(articleId)
+			.then(r => {
+				setLoading(false);
+				setRating(r.rating || 0);
+				setSavedReview(r.review.value);
+			})
+	}
+	useEffect(fetchRating, [])
+	useEffect(() => setReview(savedReview), [savedReview])
+
+	const saveRating = (clicked) => {
+		const newRating = clicked === rating ? 0 : clicked
+		setLoading(true);
+		server.postUserRating(articleId, newRating)
+			.then(r => {
+				setLoading(false);
+				setRating(r.rating);
+			})
+	}
+	const saveReview = (val) => {
+		setLoading(true);
+		server.saveReview(articleId, review)
+			.then((r) => {
+				setLoading(false);
+				if (r.error) setReviewError(r.error)
+				else { 
+					setSavedReview(r.review);
+					setEditting(false);
+				}
+			})
+	}
+	const reset = () => {
+		setReview(savedReview);
+		setEditting(false);
+		setReviewError(null);
+	}
+
+	return (
+		<Spinner isActive={isLoading} size={SIZE.small}> 
+			<UpDown rating={rating} onClick={saveRating} />
+			<Review value={review} 
+				isEditting={isEditting}
+				error={reviewError}
+				onChange={(val) => {
+					setReview(val);
+					setReviewError(validateCharacterLength(val, 1000));
+				}}
+				onEdit={() => setEditting(true)} 
+				onSave={saveReview}
+				onCancel={reset} />
+		</Spinner>
+	)
+} 
 
 export default RateContent
 

@@ -16,9 +16,6 @@ import { server, useLocalStorage, localStorage, User } from "./api"
 import Routes from './routes'
 import { Warning } from './controls/common/Notifications'
 
-
-
-
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
   const [userChecked, setUserChecked] = React.useState(false);

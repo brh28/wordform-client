@@ -7,7 +7,7 @@ import Spinner from '../../common/Spinner';
 import { server } from "../../../api"
 import { StyledLink } from "baseui/link";
 
-// redundant: create.jsx
+// redundant: create.jsx + RateContent.jsx
 const validateCharacterLength = (str, maxLength) => {
   let errorMsg
   if (str.length > maxLength) errorMsg = `-${str.length - maxLength}`
@@ -55,10 +55,10 @@ const ArticleSummary = ({ articleId, summary, onEdit }) => {
 		<Spinner isActive={isLoading}>
 	        { onEdit 
 	        	? <div style={{cursor: 'pointer'}} onClick={()=>setEditting(true)}>
-					<FormattedContent style={{ fontStyle: 'italic' }} content={summary} />
+					<FormattedContent style={{ fontStyle: 'italic', whiteSpace: 'pre-wrap' }} content={summary} />
 				</div>
 				: <div>
-					<FormattedContent style={{ fontStyle: 'italic' }} content={summary} />
+					<FormattedContent style={{ fontStyle: 'italic', whiteSpace: 'pre-wrap' }} content={summary} />
 				</div>
 	         }
         </Spinner>

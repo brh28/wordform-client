@@ -42,6 +42,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 				<hr />
 				<ArticleSummary articleId={_id} summary={summary} />
 				<FormattedContent content={sanitizedHtml} />
+				<hr />
 				{ user ? <RateContent articleId={_id} /> : null }
 			</div>
 		)

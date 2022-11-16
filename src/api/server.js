@@ -46,7 +46,7 @@ export default {
       body: JSON.stringify({ summary: newSummary })
     }),
 	getUserRating: (articleId) => {
-		return fetch(`/api/articles/${articleId}/user/ratings`, {}).then(resp => resp.json())
+		return fetch(`/api/articles/${articleId}/interactions`, {}).then(resp => resp.json())
 	},
 	postUserRating: (articleId, rating) => {
 		return fetch(`/api/articles/${articleId}/user/ratings`, {
@@ -57,6 +57,13 @@ export default {
         body: JSON.stringify({ rating })
       }).then(resp => resp.json())
 	},
+	saveReview: (articleId, newReview) => fetch(`/api/articles/${articleId}/review`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify({ review: newReview })
+    }).then(resp => resp.json()),
 	publishArticle: (articleId) => fetch(`/api/articles/${articleId}/publish`, {
         method: "POST",
         headers: {} 
