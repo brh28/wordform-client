@@ -1,4 +1,4 @@
 export { MinKeys } from './MinKeys'
 export { default as UpdateAuthentication } from './UpdateAuthentication.jsx'
-export { default as Login } from './Login'
+export { default as SignIn } from './SignIn'
 export { Logout } from './Logout'

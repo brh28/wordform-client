@@ -45,8 +45,7 @@ const NavigationBar = (props) => {
     ] :
     [
       {key: '0', text: 'Browse', href: Routes.root, exact: true },
-      {key: '1', text: 'New User', href: Routes.users.create, exact: false },
-      {key: '2', text: 'Login', href: Routes.users.login, exact: false, state: {returnUrl: props.history.location.pathname}}
+      {key: '1', text: 'Sign In', href: Routes.users.login, exact: false, state: {returnUrl: props.history.location.pathname}}
     ]
 
   const currentItem = navItems.find(el => {

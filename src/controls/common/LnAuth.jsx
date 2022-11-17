@@ -48,8 +48,10 @@ class LnAuth extends Component {
 			<Spinner isActive={!this.state.isLoaded}>
 				{ webln ? <Button size={SIZE.compact} 
 								shape={SHAPE.pill}
-								onClick={() => webln.lnurl(lnurl)} kind={KIND.secondary}>
-									{weblnAlias ? `Sign with connected wallet: ${weblnAlias}`: 'Sign with connected wallet'}
+								onClick={() => webln.lnurl(lnurl)} kind={KIND.secondary}
+								overrides={{Root: {style: { width: '100%', marginBottom: '5px' }}}}
+								>
+									{weblnAlias ? `Connected wallet: ${weblnAlias}`: 'Sign with connected wallet'}
 							</Button> : null }
 				<WalletPort connection={this.state.lnurl} />
 			</Spinner>

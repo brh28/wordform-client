@@ -6,12 +6,11 @@ import Browse from './controls/articles/Browse'
 import ArticleController from './controls/ArticleController'
 import ArticleCreate from './controls/articles/Create'
 import EditArticle from './controls/articles/EditArticle'
-import CreateUser from './controls/users/Create'
 import PublishInvoice from './controls/articles/Publish'
 import UserController from './controls/users/index.jsx'
 import NavigationBar from "./controls/NavigationBar"
 import { withRouter } from "react-router";
-import { Login } from './controls/users/authentication'
+import { SignIn } from './controls/users/authentication'
 import { server, useLocalStorage, localStorage, User } from "./api"
 import Routes from './routes'
 import { Warning } from './controls/common/Notifications'
@@ -30,7 +29,6 @@ const App = (props) => {
     }
   });
   React.useEffect(() => localStorage.setUserId(userId), [userId]);
-
   return (
       <User.Provider value={ [userId, setUserId] }>
             <NavigationBar userId={userId} />
@@ -44,14 +42,11 @@ const App = (props) => {
               <Route path='/articles/:id'>
                 <ArticleController user={userId} />
               </Route>
-              <Route exact path={Routes.users.create}>
-                <CreateUser />
-              </Route>
               <Route path={Routes.users.controller.match}>
                 <UserController viewerId={userId} />
               </Route>
               <Route path={Routes.users.login}>
-                <Login />
+                <SignIn onSignIn={u => setUserId(u)} />
               </Route>
             </Switch>
       </User.Provider>
