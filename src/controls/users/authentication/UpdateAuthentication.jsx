@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FormControl } from "baseui/form-control";
-import { Button } from "baseui/button";
+import { Button, KIND } from "baseui/button";
 import Spinner from '../../common/Spinner'
 import LinkingKeys from './LinkingKeys'
 import LnAuth from '../../common/LnAuth'
@@ -79,8 +79,9 @@ class UpdateAuthentication extends Component {
 		this.setState({ isLoading: true })
 		server.updateAuth(this.props.id, this.state.user)
 		  .then(res => {
-		  	if (res.status == 200)
-		  		res.json().then(this.setState( { isLoading: false, success: 'Updated successfully' } ))
+		  	if (res.status < 400) {
+		  		this.setState( { isLoading: false, success: 'Updated successfully' } )
+		  	}
 		  	else
 		  		this.setState( { isLoading: false, error: 'Could not update' } )
 		  })
@@ -88,28 +89,30 @@ class UpdateAuthentication extends Component {
 
 	render() {
 		return (
-			<Spinner isActive={this.state.isLoading}>
-				<Success message={this.state.success} />
-				<Error message={this.state.error} />
-				<FormControl label="Sign the LNURL to add keys">
-					<LnAuth onSignature={(signerStr) => {
-	                    this.addKey(JSON.parse(signerStr).signedBy)
-	                  }} />
-		        </FormControl>
-				{ this.state.user.linking_keys.length ?
-					<div>
-					<FormControl label="Linked Keys:">
-						<LinkingKeys keys={this.state.user.linking_keys} onUpdate={this.updateKeys} />
-					</FormControl>
-					<FormControl label='Keys required for login'>
-						<MinKeys selected={this.state.user.min_keys}
-			                   max={this.state.user.linking_keys.length} 
-			                   onChange={(val) => this.updateMinKeys(val)}/>
-			        </FormControl></div> : null }
-		        <Button color={"primary"} onClick={this.saveForm}>
-					Save
-				</Button>
-			</Spinner>
+			<div style={{ maxWidth:'400px'}}>
+				<Spinner isActive={this.state.isLoading}>
+					<Success message={this.state.success} />
+					<Error message={this.state.error} />
+					<FormControl label="Sign the LNURL to add keys">
+						<LnAuth onSignature={(signerStr) => {
+		                    this.addKey(JSON.parse(signerStr).signedBy)
+		                  }} />
+			        </FormControl>
+					{ this.state.user.linking_keys.length ?
+						<div>
+						<FormControl label="Linked Keys:">
+							<LinkingKeys keys={this.state.user.linking_keys} onUpdate={this.updateKeys} />
+						</FormControl>
+						<FormControl label='Keys required for login'>
+							<MinKeys selected={this.state.user.min_keys}
+				                   max={this.state.user.linking_keys.length} 
+				                   onChange={(val) => this.updateMinKeys(val)}/>
+				        </FormControl></div> : null }
+			        <Button color={"primary"} onClick={this.saveForm}>
+						Save
+					</Button>
+				</Spinner>
+			</div>
 		)
 	}
 }

@@ -4,12 +4,12 @@ import Toggle from '../../common/Toggle';
 import { Success, Error, Warning } from '../../common/Notifications'
 import Spinner from '../../common/Spinner';
 import { Input } from "baseui/input";
-import { Button } from "baseui/button";
+import { Button, KIND } from "baseui/button";
 
 import { server } from '../../../api';
 
 
-const Settings = ({ wallet, onUpdate }) => {
+const Settings = ({ wallet, goBack }) => {
 	const [autoPay, setAutoPay] = useState(wallet.auto_pay)
 	const [pubKey, setPubKey] = useState(wallet.destination_pub_key)
 	const [isLoading, setLoadingState] = useState(false)
@@ -26,13 +26,14 @@ const Settings = ({ wallet, onUpdate }) => {
 			auto_pay: autoPay,
 			destination_pub_key: pubKey
 		}).then(() => { 
-			onUpdate("Wallet settings updated!")
+			goBack("Wallet settings updated!")
 		}).catch(err => {
 			console.log(err)
 			setLoadingState(false)
 			setError('Failed to update.')
 		})
 	}
+
 	return (
 		<Spinner isActive={isLoading}>
 			<FormControl label="Lightning Address">
@@ -50,6 +51,11 @@ const Settings = ({ wallet, onUpdate }) => {
 		    			label={'Auto-forward'} />
 		    </FormControl>
 		    <Button onClick={saveForm}>Save</Button>
+		    <Button kind={KIND.secondary} 
+		    	onClick={() => goBack()}
+		    	overrides={{ Root: { style: {marginLeft: '5px'}}}}>
+		    	Cancel
+		    </Button>
 		</Spinner>
 	)
 }

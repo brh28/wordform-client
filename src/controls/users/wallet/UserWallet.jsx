@@ -102,7 +102,7 @@ class UserWallet extends Component {
 						</Route>
 						<Route exact path={`${url}/wallet/settings`}>
 							<Settings wallet={this.state.wallet} 
-								onUpdate={this.returnToRoot} />
+								goBack={this.returnToRoot} />
 						</Route>
 					</Switch>
 				</Spinner>
