@@ -80,10 +80,9 @@ const SignIn = ({ onSignIn, history }) => {
 		    .then(resp => {
 		    	if (resp.status === 200) {
 		    		resp.json().then(r => {
-		    					      	console.log('from server: ' + r.userId)
-
 		    			onSignIn(r.userId);
-    					history.push(Routes.root) // navigate back to browse
+    					const returnUrl = history.location.state && history.location.state.returnUrl
+		        		history.push(returnUrl || Routes.root)
 		    		})
 		    	} else {
 		    		setLoading(false);
@@ -101,7 +100,7 @@ const SignIn = ({ onSignIn, history }) => {
 		      res.json().then(r => {
 		        onSignIn(r.userId);
 		        const returnUrl = history.location.state && history.location.state.returnUrl
-		        history.push(Routes.root)
+		        history.push(returnUrl || Routes.root)
 		      })
 		    } else {
 		      setLoading(false);

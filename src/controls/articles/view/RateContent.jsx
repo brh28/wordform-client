@@ -76,7 +76,7 @@ const RateContent = ({ articleId }) => {
 			.then(r => {
 				setLoading(false);
 				setRating(r.rating || 0);
-				setSavedReview(r.review.value);
+				setSavedReview(r.review && r.review.value);
 			})
 	}
 	useEffect(fetchRating, [])

@@ -15,7 +15,7 @@ const ReadPaywall = ({ user, title, author, summary, reviews, publish_date, pric
 		<ArticleSummary summary={summary} />
 		{user 
 			? <Invoice paymentRequest={paymentRequest} />
-			: <Error message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login')}>Sign in</StyledLink> to view paywall content</p>)} /> 
+			: <Error message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to view paywall content</p>)} /> 
 		}
 		<ReadReviews reviews={reviews} />
 	</div>
