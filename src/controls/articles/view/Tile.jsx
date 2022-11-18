@@ -49,7 +49,10 @@ const Published = (props) => {
 
   return (
     <Card
-      overrides={{Root: {style: {width: '428px', margin: '10px'}}}}
+      overrides={{Root: {style: {
+        maxWidth: '350px', margin: '10px', cursor: 'pointer'
+      }}}}
+      onClick={() => props.onClick()}
     >
       <StyledTitle>
         {props.title}
@@ -59,11 +62,7 @@ const Published = (props) => {
         <AuthorTag authorId={props.author} />
         <Price {...props.price} />
       </StyledBody>
-      <StyledAction>
-        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '50%'}}}}>
-          View
-        </Button>
-      </StyledAction>
+
     </Card>
   );
 }
@@ -73,7 +72,10 @@ const Unpublished = (props) => {
 
   return (
     <Card
-      overrides={{Root: {style: {width: '428px', margin: '10px'}}}}
+      overrides={{Root: {style: {
+        maxWidth: '350px', margin: '10px', cursor: 'pointer'
+      }}}}
+      onClick={() => props.onClick()}
     >
       <StyledTitle>
         <Tag overrides={{ Root: { style: { float: 'right' }}}} closeable={false}>Draft</Tag>
@@ -84,7 +86,7 @@ const Unpublished = (props) => {
         <Price {...props.price} />
       </StyledBody>
       <StyledAction>
-        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '50%'}}}}>
+        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '100%'}}}}>
           View
         </Button>
       </StyledAction>
@@ -99,18 +101,5 @@ class Price extends Component {
 		)
 	}
 }
-
-// PostTile.propTypes = {
-//   title: PropTypes.string.isRequired,
-//   priceInfo: PropTypes.shape({  
-//     amount: PropTypes.number.isRequired,
-//     currency: PropTypes.string,
-//   }).isRequired,
-// };
-
-// Price.propTypes = {
-//   amount: PropTypes.number.isRequired,
-//   currency: PropTypes.string,
-// };
 
 export default PostTile;
