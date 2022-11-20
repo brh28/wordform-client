@@ -8,7 +8,7 @@ import { Button } from "baseui/button";
 
 const SearchFilters = ({ userId, onUpdate }) => {
 	const [author, setAuthor] = useState(null);
-	const [maxPrice, setMaxPrice] = useState(10000);
+	const [maxPrice, setMaxPrice] = useState(null);
 	return (<div style={{ display: 'inline-flex'}}> 
 			<div>
 				<FormControl caption='Author'>
