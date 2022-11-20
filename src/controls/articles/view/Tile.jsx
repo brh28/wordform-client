@@ -50,7 +50,7 @@ const Published = (props) => {
   return (
     <Card
       overrides={{Root: {style: {
-        maxWidth: '350px', margin: '10px', cursor: 'pointer'
+        maxWidth: '350px', marginTop: '10px', cursor: 'pointer'
       }}}}
       onClick={() => props.onClick()}
     >

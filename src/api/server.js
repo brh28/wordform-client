@@ -1,13 +1,20 @@
 
+const removeUnusedFields = (obj) => Object.keys(obj).forEach(key => {
+	if (!obj[key]) {
+		delete obj[key];
+	}
+});
+
 // TODO - look into different http lib. Why?
 export default {
 	browse: (searchParams) => {
 		const headers = new Headers();
 	    // headers.append('withCredentials', true)
 	    headers.append('Accepts', 'application/json')
-	  const url = !searchParams || Object.keys(searchParams).length === 0
-	  	? `/api/articles` 
-	  	: `/api/articles?${Object.keys(searchParams).map(key => `${key}=${searchParams[key]}`).join('&')}`
+	  	removeUnusedFields(searchParams)
+		const url = !searchParams || searchParams.length === 0
+			? `/api/articles` 
+			: `/api/articles?${Object.keys(searchParams).map(key => `${key}=${searchParams[key]}`).join('&')}`
 		return fetch(url, { headers:headers })
 		      .then(res => res.json()) 
 	},
