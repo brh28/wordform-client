@@ -3,13 +3,28 @@ import React, { useState } from 'react';
 import { TableBuilder, TableBuilderColumn } from 'baseui/table-semantic';
 import { FormControl } from "baseui/form-control"
 import { Input } from "baseui/input";
-import { Button } from "baseui/button";
+import { Button, SHAPE } from "baseui/button";
+import Search from 'baseui/icon/search'
+import Delete from 'baseui/icon/delete'
 // import { Slider } from "baseui/slider";
 
 const SearchFilters = ({ userId, onUpdate }) => {
+	const [expanded, setExpanded] = useState(false);
 	const [author, setAuthor] = useState(null);
 	const [maxPrice, setMaxPrice] = useState(null);
+
+	const reset = () => {
+		setExpanded(false);
+		onUpdate({ author: null, maxPrice: null });
+		setAuthor(null);
+		setMaxPrice(null);
+	}
+
+	if (!expanded) return <Button shape={SHAPE.pill} onClick={() => setExpanded(true)}><Search size={24}/></Button>
 	return (<div style={{ display: 'inline-flex'}}> 
+			<div>
+				<Button shape={SHAPE.pill} onClick={reset}><Delete size={24} /></Button>
+			</div>
 			<div>
 				<FormControl caption='Author'>
 					<Input
@@ -18,7 +33,7 @@ const SearchFilters = ({ userId, onUpdate }) => {
 						onChange={evt => setAuthor(evt.target.value)}
 						clearOnEscape
 						overrides={{
-							Root: { style: {paddingLeft: '4px', maxWidth: '150px'}}, 
+							Root: { style: {marginLeft: '10px', paddingLeft: '4px', maxWidth: '150px'}}, 
 							StartEnhancer: { style: { paddingLeft: '2px', paddingRight: '2px'}},
 							Input: { style: { paddingLeft: '4px'}},
 						}}
