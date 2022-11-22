@@ -31,7 +31,13 @@ import { Tag } from "baseui/tag";
 // 	}
 // }
 
-  
+// const options = { year: 'numeric', month: 'short', day: 'numeric' };   
+const LocalDate = ({ date }) => {
+  if (date) {
+    return <div>{new Date(date).toLocaleDateString('en-US')}</div>
+  }
+  return null
+}
 
 const PostTile = (props) => {
   const history = useHistory();
@@ -46,20 +52,23 @@ const PostTile = (props) => {
 }
 
 const Published = (props) => {
-
   return (
     <Card
-      overrides={{Root: {style: {
-        maxWidth: '350px', marginTop: '10px', cursor: 'pointer'
-      }}}}
-      onClick={() => props.onClick()}
+      overrides={{
+        Root: {style: {
+          maxWidth: '350px', marginTop: '10px'
+        }},
+      }}
     >
-      <StyledTitle>
+      <StyledTitle 
+        onClick={() => props.onClick()}
+        style={{cursor: 'pointer'}}>
         {props.title}
       </StyledTitle>
       <StyledBody>
         <Ratings style={{ float: 'right' }} {...props.ratings} />
         <AuthorTag authorId={props.author} />
+        <LocalDate date={props.publish_date} />
         <Price {...props.price} />
       </StyledBody>
 
@@ -73,23 +82,18 @@ const Unpublished = (props) => {
   return (
     <Card
       overrides={{Root: {style: {
-        maxWidth: '350px', margin: '10px', cursor: 'pointer'
+        maxWidth: '350px', margin: '10px'
       }}}}
-      onClick={() => props.onClick()}
     >
-      <StyledTitle>
-        <Tag overrides={{ Root: { style: { float: 'right' }}}} closeable={false}>Draft</Tag>
+      <StyledTitle onClick={() => props.onClick()} style={{cursor: 'pointer'}}>
+        <Tag overrides={{ Root: { style: { float: 'right', zIndex: 1 }}}} closeable={false}>Draft</Tag>
         {props.title}
       </StyledTitle>
       <StyledBody>
         <AuthorTag authorId={props.author} />
+        <LocalDate date={props.publish_date} />
         <Price {...props.price} />
       </StyledBody>
-      <StyledAction>
-        <Button disabled={!props.accessable} onClick={() => props.onClick()} overrides={{BaseButton: {style: {width: '100%'}}}}>
-          View
-        </Button>
-      </StyledAction>
     </Card>
   )
 }
@@ -97,7 +101,7 @@ const Unpublished = (props) => {
 class Price extends Component {
 	render() {
 		return (
-			this.props.amount === 0 ? <p>FREE</p> : <p>Price: {this.props.amount} sats</p>
+			this.props.amount === 0 ? <div>FREE</div> : <div>{this.props.amount} sats</div>
 		)
 	}
 }
