@@ -14,8 +14,8 @@ const SearchFilters = ({ userId, onUpdate }) => {
 	const [maxPrice, setMaxPrice] = useState(null);
 
 	const reset = () => {
+		onUpdate(null);
 		setExpanded(false);
-		onUpdate({ author: null, maxPrice: null });
 		setAuthor(null);
 		setMaxPrice(null);
 	}
@@ -58,7 +58,7 @@ const SearchFilters = ({ userId, onUpdate }) => {
 	      	</div>
 	      	<div>
 		      	<Button 
-		      		onClick={() => onUpdate({ author, maxPrice })}
+		      		onClick={() => onUpdate({ partialAuthor: author, maxPrice })}
 		      		overrides={{
 						Root: { style: { marginLeft: '10px' }}, 
 					}}>
