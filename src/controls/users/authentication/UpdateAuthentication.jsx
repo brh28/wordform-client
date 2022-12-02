@@ -12,7 +12,6 @@ import { server } from '../../../api';
 
 class UpdateAuthentication extends Component {
 	constructor(props) {
-		console.log(props)
 	    super(props);
 	    this.state = {
       		isLoading: true,

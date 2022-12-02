@@ -1,18 +1,31 @@
 import React, {Component, useState} from 'react';
 import { Textarea } from "baseui/textarea";
 import { ButtonGroup } from "baseui/button-group";
-import { Button, KIND } from "baseui/button";
+import { Button, KIND, SHAPE} from "baseui/button";
 import { StyledLink } from "baseui/link";
 import AuthorTag from '../../common/AuthorTag.jsx'
+import { Avatar } from "baseui/avatar";
+import AvatarUploadModal from './AvatarUploadModal'
 import { server } from '../../../api';
 import Spinner from '../../common/Spinner';
 import {Error, Success} from '../../common/Notifications'
+import Upload from 'baseui/icon/upload'
+
+const overlay = {
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  opacity: '80%',
+  transition: '.3s ease',
+}
 
 class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			isLoading: false, // set to true when fetching
+			avatar: null,
+			avatarModal: false,
 			description: null
 		};
 		this.fetchUser = this.fetchUser.bind(this);
@@ -26,7 +39,7 @@ class Header extends Component {
 	fetchUser() {
 		this.setState( { isLoading: true } )
 		server.getUserProfile(this.props.userId)
-			.then(res => this.setState( { isLoading: false, description: res.description } ))
+			.then(res => this.setState( { isLoading: false, description: res.description, avatar: res.avatar || '/images/satoshi.jpeg' } ))
 	}
 
 	saveDescription(description) {
@@ -44,25 +57,41 @@ class Header extends Component {
 
 	render() {
 		const { userId, editable } = this.props
-		const { description } = this.state
+		const { avatar, description, avatarModal } = this.state
 
-		//vertical-align: middle;
-	    // width: 50px;
-	    // height: 50px;
-	    // border-radius: 50%;
 		return (
 			<Spinner isActive={this.state.isLoading}>
 				<Error message={this.state.error} />
-				<div style={{ display: 'inline-flex', padding: '10px'}}>
-					<img src={'/images/satoshi.jpeg'} 
-						width="100" 
-						height="100"
-						style={{
-							borderRadius: '50%', 
-							padding: '10px'
-							// float: 'left'
-						}} />	  		
-			  		<div style={{margin: 'auto'}}>
+				<div style={{ 
+						display: 'inline-flex', 
+						padding: '10px'
+					}}>
+					<AvatarUploadModal 
+						isOpen={avatarModal}
+						onSave={(a)=> this.setState({ avatar: a, avatarModal: false })}
+						onClose={() => this.setState({avatarModal: false})} /> 
+
+					<div style={{
+						width: '100px',
+						height: '100px',
+					  	position: 'relative',
+					}}>
+						<Avatar
+							name={userId}
+							size='scale2400'
+							src={avatar}
+					    	/>	
+						{ editable 
+							? <Button shape={SHAPE.pill} 
+								onClick={() => this.setState({avatarModal: true})}
+								overrides={{ Root: { style: overlay }}}
+								>
+								<Upload size={16} />
+							</Button>
+							: null }  
+					</div>
+							
+			  		<div style={{margin: 'auto', marginLeft: '5px'}}>
 				  		<AuthorTag authorId={userId} />
 				  		<br />
 				  		<Description
@@ -74,7 +103,7 @@ class Header extends Component {
 			</Spinner>
 		)
 	}
-}
+} 
 
 const Description = ({ description, editable, onSave }) => {
 	const [editting, setEditting] = useState(false)

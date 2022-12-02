@@ -59,7 +59,7 @@ const SignIn = ({ onSignIn, history }) => {
 	    	setIdTimer(
 	    		setTimeout(() => {
 			         	if (!idValidation.error) {
-				          	server.getUserProfile(updatedId)
+				          	server.isUserAvailable(updatedId)
 				          		.then(result => {
 					            	setIdValidation({
 					            		isChecked: true, 
