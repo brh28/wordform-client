@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 import { Router, Route, Switch } from "react-router";
 // import './css/App.css';
 import { NavigationBar, Home, ArticleController } from './controls'
-import ArticleCreate from './controls/articles/Create'
+import ArticleEditor from './controls/articles/ArticleEditor'
 import UserController from './controls/users/index.jsx'
 import { withRouter } from "react-router";
 import { SignIn } from './controls/users/authentication'
@@ -32,7 +32,7 @@ const App = (props) => {
                 <Home userId={userId} />
               </Route>
               <Route exact path='/articles/new'>
-                <ArticleCreate />
+                <ArticleEditor />
               </Route>
               <Route path='/articles/:id'>
                 <ArticleController user={userId} />

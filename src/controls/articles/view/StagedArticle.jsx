@@ -7,20 +7,18 @@ import FormattedContent from './FormattedContent'
 import ArticleSummary from './ArticleSummary'
 
 const StagedArticle = ({ article, history, onEdit, onDelete }) => {
-	const { _id, title, author, publish_date, summary, sanitizedHtml } = article
+	const articleId = article._id
 	return (
 		<div>
-			<TitleBar title={title} 
-					author={author} 
-					publish_date={publish_date} />
+			<TitleBar {...article} />
 			<hr />
-			<ArticleSummary articleId={_id} summary={summary} onEdit={onEdit} />
-			<FormattedContent content={sanitizedHtml} />
+			<ArticleSummary articleId={articleId} summary={article.summary} />
+			<FormattedContent content={article.sanitizedHtml} />
 			<ButtonGroup>
-				<Button onClick={() => history.push(`/articles/${_id}/publish`)}>
+				<Button onClick={() => history.push(`/articles/${articleId}/publish`)}>
 	          		Publish
 	        	</Button>
-	        	<Button onClick={() => history.push(`/articles/${_id}/edit`)}>
+	        	<Button onClick={() => history.push(`/articles/${articleId}/edit`)}>
 	          		Edit
 	        	</Button>
 	        	<Button onClick={() => onDelete()}>

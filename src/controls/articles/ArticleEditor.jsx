@@ -17,7 +17,8 @@ const validateCharacterLength = (str, maxLength) => {
   if (str.length > maxLength) errorMsg = `-${str.length - maxLength}`
   return errorMsg
 }
-class CreateArticle extends Component {
+
+class ArticleEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +40,25 @@ class CreateArticle extends Component {
     this.handleContentChange = this.handleContentChange.bind(this);
     this.handlePriceChange = this.handlePriceChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.articleId) { // edit article
+      this.setState({ isLoading: true })
+        server.get(this.props.articleId)
+          .then(({ article }) => { this.setState({ isLoading: false, form: {
+            title: article.title,
+            summary: article.summary,
+            content: article.content,
+            price: {
+              amount: article.price.amount
+            }
+          }}) })
+          .catch(err => {
+            console.log(err)
+            this.setState({ isLoading: false, error: 'Failed to load'}) 
+          })
+    }
   }
 
   handleTitleChange(event) {
@@ -88,7 +108,7 @@ class CreateArticle extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    server.newArticle(this.state.form)
+    server.saveArticle(this.props.articleId, this.state.form)
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => this.props.history.push(`/articles/${r.articleId}`))
@@ -105,12 +125,12 @@ class CreateArticle extends Component {
         <Error message={this.state.error} />
         <FormControl 
           label='Title'           
-          error={this.state.form.titleError}>
+          error={this.state.titleError}>
           <Input
             value={this.state.form.title}
             onChange={this.handleTitleChange}
             placeholder="Title"
-            error={this.state.form.titleError}
+            error={this.state.titleError}
             clearOnEscape
           />
         </FormControl>
@@ -174,4 +194,4 @@ class CreateArticle extends Component {
   }
 } 
 
-export default withRouter(CreateArticle)
+export default withRouter(ArticleEditor)

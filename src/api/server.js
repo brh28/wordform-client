@@ -31,20 +31,16 @@ export default {
 			method: "DELETE"
 		})
 	},
-	newArticle: article => fetch("/api/articles", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      }, 
-      body: JSON.stringify(article)
-    }),
-    updateArticle: (id, article) => fetch(`/api/articles/${id}`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      }, 
-      body: JSON.stringify(article)
-    }),
+    saveArticle: (id, article) => {
+    	const url = id ? `/api/articles/${id}` : '/api/articles'
+    	return fetch(url, {
+	      method: "POST",
+	      headers: {
+	        'Content-Type': 'application/json'
+	      }, 
+	      body: JSON.stringify(article)
+	    })
+    },
     saveSummary: (articleId, newSummary) => fetch(`/api/articles/${articleId}/summary`, {
       method: "POST",
       headers: {
