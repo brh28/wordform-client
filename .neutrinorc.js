@@ -11,7 +11,7 @@ module.exports = {
     // airbnb(),
     react({
       html: {
-        title: 'Word Form'
+        title: 'Word Form',
         // icon: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/gfg_200X200.png"
       }
     }),

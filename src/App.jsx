@@ -25,26 +25,26 @@ const App = (props) => {
   });
   React.useEffect(() => localStorage.setUserId(userId), [userId]);
   return (
-      <User.Provider value={ [userId, setUserId] }>
-            <NavigationBar userId={userId} />
-            <Switch>
-              <Route exact path={Routes.root}>
-                <Home userId={userId} />
-              </Route>
-              <Route exact path='/articles/new'>
-                <ArticleEditor />
-              </Route>
-              <Route path='/articles/:id'>
-                <ArticleController user={userId} />
-              </Route>
-              <Route path={Routes.users.controller.match}>
-                <UserController viewerId={userId} />
-              </Route>
-              <Route path={Routes.users.login}>
-                <SignIn onSignIn={u => setUserId(u)} />
-              </Route>
-            </Switch>
-      </User.Provider>
+    <User.Provider value={ [userId, setUserId] }>
+          <NavigationBar userId={userId} />
+          <Switch>
+            <Route exact path={Routes.root}>
+              <Home userId={userId} />
+            </Route>
+            <Route exact path='/articles/new'>
+              <ArticleEditor />
+            </Route>
+            <Route path='/articles/:id'>
+              <ArticleController user={userId} />
+            </Route>
+            <Route path={Routes.users.controller.match}>
+              <UserController viewerId={userId} />
+            </Route>
+            <Route path={Routes.users.login}>
+              <SignIn onSignIn={u => setUserId(u)} />
+            </Route>
+          </Switch>
+    </User.Provider>
   );
 }
 

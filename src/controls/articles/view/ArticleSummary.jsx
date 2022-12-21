@@ -38,7 +38,8 @@ const ArticleSummary = ({ articleId, summary, onEdit }) => {
           error={isEditting && error}> 
           	<div>
 				<div style={{marginTop: '5px', marginBottom: '5px'}}>
-					<Textarea 
+					<Textarea
+						autoFocus 
 			            value={newSummary}
 			            error={error}
 			            onChange={e => onChange(e.target.value)} />

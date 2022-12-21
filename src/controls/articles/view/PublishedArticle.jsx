@@ -8,16 +8,17 @@ import { Button } from "baseui/button";
 import { ButtonGroup } from "baseui/button-group";
 import FormattedContent from './FormattedContent'
 import ArticleSummary from './ArticleSummary'
+import Comments from '../Comments'
 
 const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
-	const { _id, title, author, publish_date, sanitizedHtml, summary } = article
+	const { _id, title, author, publish_date, sanitizedHtml, summary, comments } = article
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [errorMsg, setErrorMsg] = React.useState(null);
 	
 	if (isLoading) return <Spinner isActive />
 	if (user === author)  { 
 		return (
-			<div>
+			<div style={{ margin: '4px'}}>
 				<Error message={errorMsg} />
 				<TitleBar title={title} 
 						author={author} 
@@ -31,11 +32,12 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 		          		Delete
 		        	</Button>
 		        </ButtonGroup>
+		        <Comments articleId={_id} data={sampleComments} />
 			</div>
 		)
 	} else {
 		return (
-			<div>
+			<div style={{ margin: '4px'}}>
 				<TitleBar title={title} 
 						author={author} 
 						publish_date={publish_date} />
@@ -44,6 +46,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 				<FormattedContent content={sanitizedHtml} />
 				<hr />
 				{ user ? <RateContent articleId={_id} /> : null }
+				<Comments articleId={_id} data={comments} onEdit={onEdit} />
 			</div>
 		)
 	}

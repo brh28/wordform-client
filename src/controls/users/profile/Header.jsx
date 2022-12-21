@@ -117,7 +117,8 @@ const Description = ({ description, editable, onSave }) => {
 	else if (editting) return (
 		<div>
 			<div style={{marginTop: '5px', marginBottom: '5px'}}>
-				<Textarea 
+				<Textarea
+					autoFocus 
 					value={newDescription}
 					onChange={e => updateDescription(e.target.value)} />
 			</div>

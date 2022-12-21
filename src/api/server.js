@@ -31,23 +31,23 @@ export default {
 			method: "DELETE"
 		})
 	},
-    saveArticle: (id, article) => {
-    	const url = id ? `/api/articles/${id}` : '/api/articles'
-    	return fetch(url, {
-	      method: "POST",
-	      headers: {
-	        'Content-Type': 'application/json'
-	      }, 
-	      body: JSON.stringify(article)
-	    })
-    },
-    saveSummary: (articleId, newSummary) => fetch(`/api/articles/${articleId}/summary`, {
+  saveArticle: (id, article) => {
+  	const url = id ? `/api/articles/${id}` : '/api/articles'
+  	return fetch(url, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       }, 
-      body: JSON.stringify({ summary: newSummary })
-    }),
+      body: JSON.stringify(article)
+    })
+  },
+  saveSummary: (articleId, newSummary) => fetch(`/api/articles/${articleId}/summary`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    }, 
+    body: JSON.stringify({ summary: newSummary })
+  }),
 	getUserRating: (articleId) => {
 		return fetch(`/api/articles/${articleId}/interactions`, {}).then(resp => resp.json())
 	},
@@ -66,6 +66,13 @@ export default {
         'Content-Type': 'application/json'
       }, 
       body: JSON.stringify({ review: newReview })
+    }).then(resp => resp.json()),
+	saveComment: (articleId, comment) => fetch(`/api/articles/${articleId}/comment`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      }, 
+      body: JSON.stringify({ comment: comment })
     }).then(resp => resp.json()),
 	publishArticle: (articleId) => fetch(`/api/articles/${articleId}/publish`, {
         method: "POST",

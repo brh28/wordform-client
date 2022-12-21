@@ -41,7 +41,8 @@ const Review = ({ value, isEditting, error, onChange, onEdit, onSave, onCancel }
           error={isEditting && error}> 
           	<div>
 				<div style={{marginTop: '5px', marginBottom: '5px'}}>
-					<Textarea 
+					<Textarea
+						autoFocus 
 			            value={value}
 			            error={error}
 			            onChange={e => onChange(e.target.value)} />
