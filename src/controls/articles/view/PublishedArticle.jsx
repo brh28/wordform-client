@@ -32,7 +32,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 		          		Delete
 		        	</Button>
 		        </ButtonGroup>
-		        <Comments articleId={_id} data={sampleComments} />
+		        <Comments articleId={_id} data={comments} onEdit={onEdit}  />
 			</div>
 		)
 	} else {
