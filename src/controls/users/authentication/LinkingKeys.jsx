@@ -13,7 +13,7 @@ export default ({ keys, onUpdate }) => {
 				return (
 					<li key={i}>
 						<div>
-							{lk} 
+							{lk.slice(0,4) + '...' + lk.slice(-4)} 
 							{ onUpdate ? <Delete size={24} style={{cursor: 'pointer'}} onClick={() => deleteKey(i)} /> : null }
 						</div>
 					</li>) 

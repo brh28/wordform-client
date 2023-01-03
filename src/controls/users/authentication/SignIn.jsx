@@ -18,6 +18,7 @@ const userIdRegEx =  new RegExp(regExStr)
 const SignIn = ({ onSignIn, history }) => {
 	const [linkingKeys, setLinkingKeys] = useState([]);
 	const [associatedUsers, setAssociatedUsers] = useState([]);
+	const [createUser, setCreateUser] = useState(false);
 	const [minKeys, setMinKeys] = useState(1);
 	const [userId, setUserId] = useState('');
 	const [idValidation, setIdValidation] = useState({ isChecked: false, error: null });
@@ -29,8 +30,7 @@ const SignIn = ({ onSignIn, history }) => {
 		const signers = JSON.parse(updatedSignersStr);
 		setLinkingKeys(signers.linking_keys);
 		setAssociatedUsers(signers.associatedUsers);
-		// this.setState({ form: { 
-		// 	createUser: !signers.associatedUsers.length
+		setCreateUser(!signers.associatedUsers || signers.associatedUsers.length === 0)
 	}
 
 	const updateKeys = (updatedKeySet) => {
@@ -92,7 +92,7 @@ const SignIn = ({ onSignIn, history }) => {
 	  		.catch(err => console.log(err))
   	}
   	
-	const createUser = () => {
+	const postUser = () => {
 		setLoading(true);
 		server.postUser({ userId, linkingKeys, minKeys })
 		  .then(res => {
@@ -116,13 +116,37 @@ const SignIn = ({ onSignIn, history }) => {
                 <FormControl label={<p>Sign the Lnurl. Learn more <StyledLink href={'https://wordform.space/articles/6349d5c338bc7e719edb9162'} target="_blank">here</StyledLink></p>}>
 					<LnAuth onSignature={addSigner} />
 				</FormControl>
-				{(linkingKeys.length > 0) && !associatedUsers.length
+				{ !linkingKeys || linkingKeys.length === 0 
+					? <p>Waiting for keys...</p>
+					: <FormControl label="Session signed by:">
+			        	<LinkingKeys keys={linkingKeys} onUpdate={updateKeys} />
+				    </FormControl> 
+				}
+				{associatedUsers.length > 0 && !createUser ?
+					<div> 
+					    <FormControl label="Sign in as:">
+					    	<div>
+					    		{associatedUsers.map((u, uIdx) => {
+						    		return (
+										<Button 
+											kind={KIND.secondary}
+											shape={SHAPE.pill}
+											disabled={!u.authorized}
+											onClick={() => login(u._id)}>
+											{u._id}
+										</Button> 
+									)
+						    	})}
+							</div>
+						</FormControl>
+						<StyledLink style={{cursor: 'pointer'}} onClick={() => setCreateUser(true)}>Or create a new user</StyledLink>
+					</div>
+					: null
+				}
+				{(linkingKeys.length > 0) && createUser
 					? <div>
-						<FormControl label="Linked Keys:">
-			        		<LinkingKeys keys={linkingKeys} onUpdate={updateKeys} />
-				    	</FormControl>
 				    	<FormControl
-							label="New user? Create an ID"
+							label="Create a User ID"
 							caption="Must be unique"
 							positive={idValidation.isChecked && !idValidation.error ? "ID is available" : false}
 							error={idValidation.isChecked && idValidation.error}
@@ -131,30 +155,11 @@ const SignIn = ({ onSignIn, history }) => {
 								value={userId}
 								onChange={handleUserIdChange}
 								placeholder="Required"
-								clearOnEscape
-		                  />
+								clearOnEscape />
                 		</FormControl>
-                		<Button onClick={createUser} color='primary'>Create User</Button>
+                		<Button onClick={postUser} color='primary'>Create User</Button>
                 	</div>
 			    	: null
-				}
-				{associatedUsers.length > 0 ? 
-				    <FormControl label="Sign in as:">
-				    	<div>
-				    		{associatedUsers.map((u, uIdx) => {
-					    		return (
-									<Button 
-										kind={KIND.secondary}
-										shape={SHAPE.pill}
-										disabled={!u.authorized}
-										onClick={() => login(u._id)}>
-										{u._id}
-									</Button> 
-								)
-					    	})}
-						</div>
-					</FormControl>
-					: null
 				}
 			</Spinner>
 		</div>
