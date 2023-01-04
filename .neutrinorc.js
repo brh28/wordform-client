@@ -9,13 +9,9 @@ module.exports = {
   use: [
     // airbnb(),
     react({
-      // By default @neutrinojs/react assumes that your application will be deployed 
-      // at the root of a domain (eg: https://www.my-app.com/), 
-      // and so sets webpack's output.publicPath to '/', 
-      // which means assets will be loaded from the site root using absolute paths.
       publicPath: '/',
       html: {
-        title: 'internal title',
+        title: 'WordForm',
         favicon: './favicon.ico'
       }
     }),
