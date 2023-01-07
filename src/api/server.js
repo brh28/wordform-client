@@ -78,6 +78,21 @@ export default {
         method: "POST",
         headers: {} 
       }),
+	getNotifications: userId => fetch('/api/users/notifications', {}).then(resp => resp.json()),
+	markAsRead: notificationIds => fetch(`/api/users/notifications`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify(notificationIds.map(id => ({ id: id, isRead: true })))
+      }).then(resp => resp.json()),
+	markAllAsRead: () => fetch(`/api/users/notifications`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }, 
+        body: JSON.stringify({ allRead: true })
+      }).then(resp => resp.json()),
 	getUserProfile: userId => fetch(`/api/users/${userId}`, {}).then(resp => resp.json()),
 	isUserAvailable: userId => fetch(`/api/users/${userId}/isAvailable`, {}).then(resp => resp.json()),
 	updateUserDescription: (userId, desc) => fetch(`/api/users/${userId}/description`, {

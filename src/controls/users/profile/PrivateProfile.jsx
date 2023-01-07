@@ -8,6 +8,7 @@ import { Logout, UpdateAuthentication } from '../authentication'
 import AuthorTag from '../../common/AuthorTag.jsx'
 import UserWallet from '../wallet/UserWallet'
 import PublicProfile from './PublicProfile'
+import UserNotifications from '../UserNotifications'
 
 import { withRouter, Switch, Route } from "react-router";
 
@@ -18,7 +19,7 @@ class PrivateProfile extends Component {
     const { url } = props.match;
     const path = pathname.replace(url, '')
     this.state = {
-      activeKey: ['/profile', '/wallet', '/authentication', '/logout'].find(el => path.includes(el)) || '/profile'
+      activeKey: ['/notifications', '/profile', '/wallet', '/authentication', '/logout'].find(el => path.includes(el)) || '/notifications'
     };
     this.setActiveKey = this.setActiveKey.bind(this);
   }
@@ -36,6 +37,9 @@ class PrivateProfile extends Component {
           this.setActiveKey(activeKey);
         }}
       >
+        <Tab key="/notifications" title="Notifications">
+          <UserNotifications user={this.props.id} />
+        </Tab>
         <Tab key="/profile" title="Profile">
           <PublicProfile id={this.props.id} editable />
         </Tab>
