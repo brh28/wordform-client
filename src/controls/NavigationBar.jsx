@@ -36,12 +36,26 @@ const tabStyle = ({$active, $disabled, $theme}) => ({
 })
 
 const NavigationBar = (props) => {
+  const { notificationCount } = props
   const [userId, setUserId] = React.useContext(User);
   const navItems = userId ? 
     [
-      {key: '0', text: 'Browse', href: Routes.root, exact: true },
-      {key: '1', text: 'Create Article', href: Routes.articles.create, exact: false},
-      {key: '2', text: userId, href: Routes.users.controller.go(userId), exact: false},
+      {
+        key: '0', 
+        text: 'Browse', 
+        href: Routes.root, 
+        exact: true },
+      {
+        key: '1', 
+        text: 'Create Article', 
+        href: Routes.articles.create, 
+        exact: false},
+      {
+        key: '2', 
+        text: notificationCount && notificationCount > 0 ? `${userId} (${notificationCount})` : userId, 
+        href: Routes.users.controller.go(userId), 
+        exact: false
+      },
     ] :
     [
       {key: '0', text: 'Browse', href: Routes.root, exact: true },

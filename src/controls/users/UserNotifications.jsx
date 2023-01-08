@@ -9,7 +9,7 @@ import {
 } from 'baseui/table-semantic';
 import { StyledLink } from "baseui/link";
 
-const UserNotifications = ({ user, history }) => {
+const UserNotifications = ({ user, history, notificationCount, setNotificationCount }) => {
 	const [isLoading, setLoading] = useState(false);
 	const [notifications, setNotifications] = useState(null);
 	const [error, setError] = useState(null);
@@ -34,7 +34,7 @@ const UserNotifications = ({ user, history }) => {
 
 	const onNotificationClick = notification => {
 		history.push(notification.ref);
-	    server.markAsRead([notification._id]);
+	    server.markAsRead([notification._id]).then(() => setNotificationCount(notificationCount - 1));
 	}
 
 	const handleMarkAllAsRead = () => {
@@ -45,6 +45,7 @@ const UserNotifications = ({ user, history }) => {
 					setError(r.error);
 					setLoading(false);
 				} else {
+					setNotificationCount(0);
 					fetchNotifications(); // Optimize by returning Notifications in 1st response
 				}
 			})

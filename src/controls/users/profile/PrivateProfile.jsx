@@ -37,8 +37,10 @@ class PrivateProfile extends Component {
           this.setActiveKey(activeKey);
         }}
       >
-        <Tab key="/notifications" title="Notifications">
-          <UserNotifications user={this.props.id} />
+        <Tab key="/notifications" title={this.props.notificationCount && this.props.notificationCount > 0 ? `Notifications (${this.props.notificationCount })` : "Notifications"}>
+          <UserNotifications user={this.props.id} 
+                    notificationCount={this.props.notificationCount} 
+                    setNotificationCount={this.props.setNotificationCount} />
         </Tab>
         <Tab key="/profile" title="Profile">
           <PublicProfile id={this.props.id} editable />

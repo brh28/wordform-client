@@ -13,6 +13,9 @@ import Routes from './routes'
 const App = (props) => {
   const [userId, setUserId] = React.useState(localStorage.getUserId());
   const [userChecked, setUserChecked] = React.useState(false);
+  const [notificationCount, setNotificationCount] = useState(null);
+  const [notificationsCheck, setNotificationsCheck] = useState(false);
+
   React.useEffect(() => {
     if (!userChecked) {
       server.getUserSession()
@@ -24,9 +27,19 @@ const App = (props) => {
     }
   });
   React.useEffect(() => localStorage.setUserId(userId), [userId]);
+  React.useEffect(() => {
+    if (userId && !notificationsCheck) {
+      server.getUnreadNotificationsCount()
+        .then(r => {
+          setNotificationsCheck(true)
+          setNotificationCount(r.unreadCount)
+        })
+    }    
+  });
+
   return (
     <User.Provider value={ [userId, setUserId] }>
-          <NavigationBar userId={userId} />
+          <NavigationBar userId={userId} notificationCount={notificationCount} />
           <Switch>
             <Route exact path={Routes.root}>
               <Home userId={userId} />
@@ -38,7 +51,7 @@ const App = (props) => {
               <ArticleController user={userId} />
             </Route>
             <Route path={Routes.users.controller.match}>
-              <UserController viewerId={userId} />
+              <UserController viewerId={userId} notificationCount={notificationCount} setNotificationCount={setNotificationCount} />
             </Route>
             <Route path={Routes.users.login}>
               <SignIn onSignIn={u => setUserId(u)} />

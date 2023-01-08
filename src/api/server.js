@@ -79,6 +79,7 @@ export default {
         headers: {} 
       }),
 	getNotifications: userId => fetch('/api/users/notifications', {}).then(resp => resp.json()),
+	getUnreadNotificationsCount: () => fetch('/api/users/notifications/unreadCount', {}).then(resp => resp.json()),
 	markAsRead: notificationIds => fetch(`/api/users/notifications`, {
         method: "POST",
         headers: {
