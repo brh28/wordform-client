@@ -46,7 +46,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 				<FormattedContent content={sanitizedHtml} />
 				<hr />
 				{ user ? <RateContent articleId={_id} /> : null }
-				<Comments articleId={_id} data={comments} onEdit={onEdit} />
+				<Comments articleId={_id} data={comments} onEdit={user ? onEdit : null} />
 			</div>
 		)
 	}

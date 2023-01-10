@@ -70,10 +70,10 @@ const PostComment = ({ articleId, then }) => { // onEdit
 function Comments({ articleId, data, onEdit }) {
   return (
     <Comment.Group>
-      <Header as='h2' dividing>
+      {data && data.length > 0 ? <Header as='h2' dividing>
         Comments
-      </Header>
-      <PostComment articleId={articleId} then={onEdit} />
+      </Header> : null }
+      {onEdit ? <PostComment articleId={articleId} then={onEdit} /> : null }
       {data && data.map((c, idx) => (
         <Comment key={idx}>
           <Comment.Content>
