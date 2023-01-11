@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Comment, Header } from 'semantic-ui-react'
 import AuthorTag from '../common/AuthorTag'
 import 'semantic-ui-css/components/comment.min.css'
@@ -11,6 +11,8 @@ import { Textarea } from "baseui/textarea";
 import { FormControl } from "baseui/form-control"
 import { StyledLink } from "baseui/link";
 import { server } from '../../api'
+import { withRouter } from "react-router";
+import { Info, Error } from '../common/Notifications';
 
 const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };  
 const validateCharacterLength = (str, maxLength) => {
@@ -19,7 +21,7 @@ const validateCharacterLength = (str, maxLength) => {
   return errorMsg
 }
 
-const PostComment = ({ articleId, then }) => { // onEdit
+const PostComment = ({ articleId, then }) => {
   const [comment, setComment] = useState('');
   const [isEditting, setEditting] = useState(false);
   const [error, setError] = useState(null);
@@ -67,19 +69,45 @@ const PostComment = ({ articleId, then }) => { // onEdit
 
 }
 
-function Comments({ articleId, data, onEdit }) {
+function Comments({ articleId, user, history }) {
+  const [comments, setComments] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const fetchComments = () => {
+    setLoading(true);
+    server.getComments(articleId, null)
+      .then(r => {
+        if (r.error) {
+          setError(r.error);
+        } else {
+          setComments(r.comments);
+        }
+        setLoading(false);
+      })
+      .catch(e => {
+        setError('Failed to fetch comments');
+        setLoading(false);
+      })
+  }
+  useEffect(() => {
+    if (!comments && !error && !isLoading) fetchComments()
+  });
+
   return (
     <Comment.Group>
-      {data && data.length > 0 ? <Header as='h2' dividing>
+      <Header as='h2' dividing>
         Comments
-      </Header> : null }
-      {onEdit ? <PostComment articleId={articleId} then={onEdit} /> : null }
-      {data && data.map((c, idx) => (
+      </Header>
+      {user 
+        ? (<PostComment articleId={articleId} then={fetchComments} />) 
+        : <p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to leave a comment</p>}
+      {comments && comments.map((c, idx) => (
         <Comment key={idx}>
           <Comment.Content>
             <Comment.Author><AuthorTag authorId={c.user_id} /></Comment.Author>
             <Comment.Metadata>
-              {new Date(c.timestamp).toLocaleDateString('en-US', dateOptions)}
+              {new Date(c.created_at).toLocaleDateString('en-US', dateOptions)}
             </Comment.Metadata>
             <Comment.Text>{c.value}</Comment.Text>
           </Comment.Content>
@@ -94,4 +122,4 @@ function Comments({ articleId, data, onEdit }) {
             //   <Comment.Action onClick={() => }>Reply</Comment.Action>
             // </Comment.Actions>
 
-export default Comments
+export default withRouter(Comments)

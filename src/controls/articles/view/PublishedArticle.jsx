@@ -11,7 +11,7 @@ import ArticleSummary from './ArticleSummary'
 import Comments from '../Comments'
 
 const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
-	const { _id, title, author, publish_date, sanitizedHtml, summary, comments } = article
+	const { _id, title, author, publish_date, sanitizedHtml, summary } = article
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [errorMsg, setErrorMsg] = React.useState(null);
 	
@@ -32,7 +32,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 		          		Delete
 		        	</Button>
 		        </ButtonGroup>
-		        <Comments articleId={_id} data={comments} onEdit={onEdit}  />
+		        <Comments articleId={_id} user={user} />
 			</div>
 		)
 	} else {
@@ -46,7 +46,7 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 				<FormattedContent content={sanitizedHtml} />
 				<hr />
 				{ user ? <RateContent articleId={_id} /> : null }
-				<Comments articleId={_id} data={comments} onEdit={user ? onEdit : null} />
+				<Comments articleId={_id} user={user} />
 			</div>
 		)
 	}

@@ -67,6 +67,7 @@ export default {
       }, 
       body: JSON.stringify({ review: newReview })
     }).then(resp => resp.json()),
+    getComments: (articleId, parentId) => fetch(`/api/articles/${articleId}/comments`, {}).then(resp => resp.json()),
 	saveComment: (articleId, comment) => fetch(`/api/articles/${articleId}/comment`, {
       method: "POST",
       headers: {
