@@ -38,7 +38,7 @@ class PublishArticle extends Component {
 				} else {
 					res.json().then(r => {
 						if (r.articleDetails.isPublished) {
-							this.props.history.push(`/users/${r.articleDetails.author}`)
+							this.props.history.push(`/users/${r.articleDetails.author}/profile`)
 						} else {
 							this.setState({ isLoading: false, ...r })
 						}
