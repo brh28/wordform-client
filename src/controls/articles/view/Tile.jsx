@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { StyledLink } from "baseui/link";
 import PropTypes from 'prop-types';
-import Ratings from '../Ratings'
+import { ReadRatings } from '../Ratings'
 import AuthorTag from '../../common/AuthorTag.jsx'
 import {
   Card,
@@ -66,7 +66,7 @@ const Published = (props) => {
         {props.title}
       </StyledTitle>
       <StyledBody>
-        <Ratings style={{ float: 'right' }} {...props.ratings} />
+        <ReadRatings style={{ float: 'right' }} {...props.ratings} />
         <AuthorTag authorId={props.author} />
         <LocalDate date={props.publish_date} />
         <Price {...props.price} />
