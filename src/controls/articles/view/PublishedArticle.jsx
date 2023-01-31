@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { withRouter } from 'react-router';
 import TitleBar from './TitleBar'
 import RateContent from "./RateContent"
 import { server } from "../../../api"
@@ -11,7 +12,7 @@ import FormattedContent from './FormattedContent'
 import ArticleSummary from './ArticleSummary'
 import Comments from '../Comments'
 
-const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
+const PublishedArticle = ({ user, article, onEdit, onDelete, history }) => {
 	const { _id, title, author, publish_date, sanitizedHtml, summary } = article
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [errorMsg, setErrorMsg] = React.useState(null);
@@ -61,4 +62,4 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 	}
 }
 
-export default PublishedArticle
+export default withRouter(PublishedArticle)
