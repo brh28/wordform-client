@@ -3,9 +3,10 @@ import TitleBar from './TitleBar'
 import RateContent from "./RateContent"
 import { server } from "../../../api"
 import Spinner from "../../common/Spinner";
-import { Error } from '../../common/Notifications.jsx'
+import { Warning, Error } from '../../common/Notifications.jsx'
 import { Button } from "baseui/button";
 import { ButtonGroup } from "baseui/button-group";
+import { StyledLink } from "baseui/link";
 import FormattedContent from './FormattedContent'
 import ArticleSummary from './ArticleSummary'
 import Comments from '../Comments'
@@ -38,6 +39,9 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 	} else {
 		return (
 			<div style={{ margin: '4px'}}>
+				{ !user 
+					? <Warning message={(<p>You are not signed in. <StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to revisit purchased content</p>)} /> 
+					: null } 
 				<TitleBar title={title} 
 						author={author} 
 						publish_date={publish_date} />
@@ -45,8 +49,13 @@ const PublishedArticle = ({ user, article, onEdit, onDelete }) => {
 				<ArticleSummary articleId={_id} summary={summary} />
 				<FormattedContent content={sanitizedHtml} />
 				<hr />
-				{ user ? <RateContent articleId={_id} /> : null }
-				<Comments articleId={_id} user={user} />
+				{ user 
+					? <div>
+						<RateContent articleId={_id} />
+						<Comments articleId={_id} user={user} />
+					</div>
+					: <Error message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to leave a rating, review, or comment</p>)} /> }
+				
 			</div>
 		)
 	}
