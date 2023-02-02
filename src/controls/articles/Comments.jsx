@@ -94,27 +94,40 @@ function Comments({ articleId, user, history }) {
     if (!comments && !error && !isLoading) fetchComments()
   });
 
-  return (
-    <Comment.Group>
+  if (comments && comments.length > 0) {
+    return (
+      <Comment.Group>
+        <Header as='h2' dividing>
+          Comments
+        </Header>
+        {user 
+          ? (<PostComment articleId={articleId} then={fetchComments} />) 
+          : null
+        }
+        {comments && comments.map((c, idx) => (
+          <Comment key={idx}>
+            <Comment.Content>
+              <Comment.Author><AuthorTag authorId={c.user_id} /></Comment.Author>
+              <Comment.Metadata>
+                {new Date(c.created_at).toLocaleDateString('en-US', dateOptions)}
+              </Comment.Metadata>
+              <Comment.Text>{c.value}</Comment.Text>
+            </Comment.Content>
+          </Comment>
+        ))}
+      </Comment.Group>
+    )
+  } else if (user) {
+    return <Comment.Group>
       <Header as='h2' dividing>
         Comments
       </Header>
-      {user 
-        ? (<PostComment articleId={articleId} then={fetchComments} />) 
-        : <p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to leave a comment</p>}
-      {comments && comments.map((c, idx) => (
-        <Comment key={idx}>
-          <Comment.Content>
-            <Comment.Author><AuthorTag authorId={c.user_id} /></Comment.Author>
-            <Comment.Metadata>
-              {new Date(c.created_at).toLocaleDateString('en-US', dateOptions)}
-            </Comment.Metadata>
-            <Comment.Text>{c.value}</Comment.Text>
-          </Comment.Content>
-        </Comment>
-      ))}
+      <PostComment articleId={articleId} then={fetchComments} />
     </Comment.Group>
-  )
+  } else {
+    return null;
+  }
+  
 }
 
 //TODO: add <Comment.Avatar src='/images/avatar/small/matt.jpg' />

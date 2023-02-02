@@ -40,9 +40,10 @@ const PublishedArticle = ({ user, article, onEdit, onDelete, history }) => {
 	} else {
 		return (
 			<div style={{ margin: '4px'}}>
-				{ !user 
-					? <Warning message={(<p>You are not signed in. <StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to revisit purchased content</p>)} /> 
-					: null } 
+				{ user 
+					? null 
+					: <Warning message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to rate, review, comment, and revisit from another session</p>)} /> 
+				} 
 				<TitleBar title={title} 
 						author={author} 
 						publish_date={publish_date} />
@@ -51,12 +52,10 @@ const PublishedArticle = ({ user, article, onEdit, onDelete, history }) => {
 				<FormattedContent content={sanitizedHtml} />
 				<hr />
 				{ user 
-					? <div>
-						<RateContent articleId={_id} />
-						<Comments articleId={_id} user={user} />
-					</div>
-					: <Error message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to leave a rating, review, or comment</p>)} /> }
-				
+					? <RateContent articleId={_id} />
+					: <Warning message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to rate, review, comment, and revisit from another session</p>)} /> 
+				}
+				<Comments articleId={_id} user={user} />
 			</div>
 		)
 	}

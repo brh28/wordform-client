@@ -11,7 +11,7 @@ import { Info, Warning, Error } from '../../common/Notifications'
 const ReadPaywall = ({ user, title, author, summary, ratings, reviews, publish_date, price, paymentRequest, history }) => {
 	return <div>
 		{!user 
-			? <Warning message={(<p>You are not signed in. <StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to revisit purchased content</p>)} />
+			? <Warning message={(<p><StyledLink style={{cursor: 'pointer'}} onClick={() => history.push('/login', { returnUrl: history.location.pathname })}>Sign in</StyledLink> to rate, review, comment, and revisit from another session</p>)} />
 			: null
 		}
 		<TitleBar title={title} author={author} publish_date={publish_date} price={price} />
