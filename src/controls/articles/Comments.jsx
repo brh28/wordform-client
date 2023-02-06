@@ -66,7 +66,7 @@ const PostComment = ({ articleId, parentId, onSave, cancel }) => {
   )
 }
 
-const StatefulComment = ({ articleId, _id, user_id, created_at, value, reply_count, onReply }) => {
+const StatefulComment = withRouter(({ articleId, _id, user_id, created_at, value, reply_count, onReply, history }) => {
   const [postReply, setPostReply] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
   return (
@@ -76,7 +76,7 @@ const StatefulComment = ({ articleId, _id, user_id, created_at, value, reply_cou
       boxShadow: '-3px 0px 4px rgb(34 36 38 / 15%)'
     }}>
       <Comment.Content style={{ marginLeft: '10px' }}>
-        <Comment.Author as='a'>{user_id}</Comment.Author>
+        <Comment.Author as='a' onClick={() => history.push(`/users/${user_id}`)}>{user_id}</Comment.Author>
         <Comment.Metadata>{new Date(created_at).toLocaleDateString('en-US', dateOptions)}</Comment.Metadata>
         <Comment.Text>{value}</Comment.Text>
         <Comment.Actions>
@@ -111,7 +111,7 @@ const StatefulComment = ({ articleId, _id, user_id, created_at, value, reply_cou
       }
     </Comment>
   )
-}
+})
 
 function Replies({ articleId, parentId }) {
   const [comments, setComments] = useState(null);
@@ -205,4 +205,4 @@ function Comments({ articleId, user, history }) {
   )
 }
 
-export default withRouter(Comments)
+export default Comments
