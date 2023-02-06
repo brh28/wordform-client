@@ -67,13 +67,17 @@ export default {
       }, 
       body: JSON.stringify({ review: newReview })
     }).then(resp => resp.json()),
-    getComments: (articleId, parentId) => fetch(`/api/articles/${articleId}/comments`, {}).then(resp => resp.json()),
-	saveComment: (articleId, comment) => fetch(`/api/articles/${articleId}/comment`, {
+    getComments: (articleId, parentId) => {
+		let url = `/api/articles/${articleId}/comments`
+		if (parentId) url = url + `?parent=${parentId}`
+		return fetch(url, {}).then(resp => resp.json())
+	},
+	postComment: (articleId, parent, comment) => fetch(`/api/articles/${articleId}/comment`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       }, 
-      body: JSON.stringify({ comment: comment })
+      body: JSON.stringify({ parent: parent, comment: comment })
     }).then(resp => resp.json()),
 	publishArticle: (articleId) => fetch(`/api/articles/${articleId}/publish`, {
         method: "POST",

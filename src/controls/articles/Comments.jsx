@@ -1,7 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { Comment, Header } from 'semantic-ui-react'
-import AuthorTag from '../common/AuthorTag'
 import 'semantic-ui-css/components/comment.min.css'
+import { Comment, Header } from 'semantic-ui-react'
+
+import Spinner from '../common/Spinner'
+// import AuthorTag from '../common/AuthorTag';
+// import { Textarea } from "baseui/textarea";
+
 // import TextUpload, {validateCharacterLength} from '../common/TextUpload'
 
 // PostComment dependencies
@@ -20,59 +24,135 @@ const validateCharacterLength = (str, maxLength) => {
   if (str.length > maxLength) errorMsg = `-${str.length - maxLength}`
   return errorMsg
 }
-
-const PostComment = ({ articleId, then }) => {
-  const [comment, setComment] = useState('');
-  const [isEditting, setEditting] = useState(false);
+const PostComment = ({ articleId, parentId, onSave, cancel }) => {
+  const [value, setValue] = useState('');
   const [error, setError] = useState(null);
-  const save = () => {
-    server.saveComment(articleId, comment)
+
+  const postComment = () => {
+    server.postComment(articleId, parentId, value)
       .then(r => {
         if (r.error) {
           setError(r.error)
         } else {
-          reset()
-          then()
+          onSave();
         }
       })
-      .catch(e => setError('Failed to update (request failed)'))
-  }
-  const reset = () => {
-    setComment('');
-    setEditting(false);
-    setError(null);
+      .catch(e => {
+        console.log(e); 
+        setError('Request failed')
+      })
   }
 
-  if (isEditting) return (
-    <FormControl error={isEditting && error}> 
+  return (
+    <FormControl error={error}> 
       <div>
         <div style={{marginTop: '5px', marginBottom: '5px'}}>
           <Textarea
                   autoFocus 
-                  value={comment}
+                  value={value}
                   error={error}
                   onChange={e => {
-                    const { value } = e.target
-                    setComment(value);
-                    setError(validateCharacterLength(value, 1000))
+                    const newVal = e.target.value
+                    setValue(newVal);
+                    setError(validateCharacterLength(newVal, 1000))
                   }} />
         </div>
         <div>
-          <Button kind={KIND.primary} onClick={save}>Save</Button>
-          <Button kind={KIND.secondary} onClick={reset}>Cancel</Button>
+          <Button kind={KIND.primary} onClick={postComment}>Save</Button>
+          <Button kind={KIND.secondary} onClick={cancel}>Cancel</Button>
         </div>
       </div>  
-    </FormControl>)
-  else return (
-    <StyledLink style={{cursor: 'pointer'}} onClick={()=> setEditting(true)}>Add a comment</StyledLink>
+    </FormControl>
   )
-
 }
 
-function Comments({ articleId, user, history }) {
+const StatefulComment = ({ articleId, _id, user_id, created_at, value, reply_count, onReply }) => {
+  const [postReply, setPostReply] = useState(false);
+  const [showReplies, setShowReplies] = useState(false);
+  return (
+    <Comment style={{ 
+      borderLeft: 'solid',
+      borderWidth: '2px', 
+      boxShadow: '-3px 0px 4px rgb(34 36 38 / 15%)'
+    }}>
+      <Comment.Content style={{ marginLeft: '10px' }}>
+        <Comment.Author as='a'>{user_id}</Comment.Author>
+        <Comment.Metadata>{new Date(created_at).toLocaleDateString('en-US', dateOptions)}</Comment.Metadata>
+        <Comment.Text>{value}</Comment.Text>
+        <Comment.Actions>
+          { reply_count && reply_count > 0
+            ? (!showReplies 
+              ? <Comment.Action onClick={() => setShowReplies(true)}>▼ ({reply_count})</Comment.Action> 
+              : <Comment.Action onClick={() => setShowReplies(false)}>▲</Comment.Action>)
+            : null
+          }
+          <Comment.Action onClick={() => setPostReply(true)}>Reply</Comment.Action>
+        </Comment.Actions>
+      </Comment.Content>
+      { postReply || showReplies 
+        ? <Comment.Group>
+          { postReply 
+            ? <PostComment  
+                articleId={articleId}
+                parentId={_id} 
+                onSave={() => {
+                  setPostReply(false);
+                  onReply();
+                }} 
+                cancel={() => setPostReply(false)} /> 
+            : null 
+          }
+          { showReplies
+            ? <Replies articleId={articleId} parentId={_id} />
+            : null
+          }
+        </Comment.Group>
+        : null
+      }
+    </Comment>
+  )
+}
+
+function Replies({ articleId, parentId }) {
   const [comments, setComments] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+
+  const fetchComments = () => {
+    setLoading(true);
+    server.getComments(articleId, parentId)
+      .then(r => {
+        if (r.error) {
+          setError(r.error);
+        } else {
+          setComments(r.comments);
+        }
+        setLoading(false);
+      })
+      .catch(e => {
+        setError('Failed to fetch comments');
+        setLoading(false);
+      })
+  }
+  useEffect(() => {
+    if (!comments && !error && !isLoading) fetchComments()
+  });
+  
+
+  if (isLoading) return <Spinner isActive={true} /> 
+  if (!comments || comments.length === 0) return 'No replies' 
+  else return (
+    comments?.map((c, idx) => <StatefulComment key={idx} articleId={articleId} {...c} onReply={fetchComments} />)
+  )
+    
+}
+
+function Comments({ articleId, user, history }) {
+  const writePermissions = user; // any authenticated user can post a comment
+  const [comments, setComments] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [editComment, setEditComment] = useState(false);
 
   const fetchComments = () => {
     setLoading(true);
@@ -93,46 +173,36 @@ function Comments({ articleId, user, history }) {
   useEffect(() => {
     if (!comments && !error && !isLoading) fetchComments()
   });
-
-  if (comments && comments.length > 0) {
-    return (
-      <Comment.Group>
-        <Header as='h2' dividing>
-          Comments
-        </Header>
-        {user 
-          ? (<PostComment articleId={articleId} then={fetchComments} />) 
-          : null
-        }
-        {comments && comments.map((c, idx) => (
-          <Comment key={idx}>
-            <Comment.Content>
-              <Comment.Author><AuthorTag authorId={c.user_id} /></Comment.Author>
-              <Comment.Metadata>
-                {new Date(c.created_at).toLocaleDateString('en-US', dateOptions)}
-              </Comment.Metadata>
-              <Comment.Text>{c.value}</Comment.Text>
-            </Comment.Content>
-          </Comment>
-        ))}
-      </Comment.Group>
-    )
-  } else if (user) {
-    return <Comment.Group>
-      <Header as='h2' dividing>
-        Comments
-      </Header>
-      <PostComment articleId={articleId} then={fetchComments} />
-    </Comment.Group>
-  } else {
-    return null;
-  }
   
-}
 
-//TODO: add <Comment.Avatar src='/images/avatar/small/matt.jpg' />
-//Todo: add replies <Comment.Actions>
-            //   <Comment.Action onClick={() => }>Reply</Comment.Action>
-            // </Comment.Actions>
+  if (!writePermissions && (!comments || comments.length === 0)) return null 
+  else return (
+    <Comment.Group>
+      <Header as='h2' dividing>
+        Comments ({comments ? comments.length : 0})
+      </Header>
+
+      { editComment 
+        ? <PostComment  
+            articleId={articleId} 
+            onSave={() => {
+              setEditComment(false);
+              fetchComments();
+            }} 
+            cancel={() => setEditComment(false)} /> 
+        : null 
+      }
+      { !editComment && writePermissions 
+        ? <div style={{ marginBottom: '20px'}}>
+            <StyledLink style={{cursor: 'pointer' }} onClick={()=> setEditComment(true)}>Add a comment</StyledLink>
+          </div> 
+        : null 
+      }
+      
+      <Spinner isActive={isLoading} />
+      {comments?.map((c, idx) => <StatefulComment key={idx} articleId={articleId} {...c} />)}
+    </Comment.Group>
+  )
+}
 
 export default withRouter(Comments)
