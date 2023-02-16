@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { hot } from 'react-hot-loader';
 import { Router, Route, Switch } from "react-router";
 // import './css/App.css';
-import { NavigationBar, Home, ArticleController } from './controls'
+import { NavigationBar, Home, ArticleController, ErrorBoundary } from './controls'
 import ArticleEditor from './controls/articles/ArticleEditor'
 import UserController from './controls/users/index.jsx'
 import { withRouter } from "react-router";
@@ -38,26 +38,28 @@ const App = (props) => {
   });
 
   return (
-    <User.Provider value={ [userId, setUserId] }>
-          <NavigationBar userId={userId} notificationCount={notificationCount} />
-          <Switch>
-            <Route exact path={Routes.root}>
-              <Home userId={userId} />
-            </Route>
-            <Route exact path='/articles/new'>
-              <ArticleEditor />
-            </Route>
-            <Route path='/articles/:id'>
-              <ArticleController user={userId} />
-            </Route>
-            <Route path={Routes.users.controller.match}>
-              <UserController viewerId={userId} notificationCount={notificationCount} setNotificationCount={setNotificationCount} />
-            </Route>
-            <Route path={Routes.users.login}>
-              <SignIn onSignIn={u => setUserId(u)} />
-            </Route>
-          </Switch>
-    </User.Provider>
+    <ErrorBoundary>
+      <User.Provider value={ [userId, setUserId] }>
+            <NavigationBar userId={userId} notificationCount={notificationCount} />
+            <Switch>
+              <Route exact path={Routes.root}>
+                <Home userId={userId} />
+              </Route>
+              <Route exact path='/articles/new'>
+                <ArticleEditor />
+              </Route>
+              <Route path='/articles/:id'>
+                <ArticleController user={userId} />
+              </Route>
+              <Route path={Routes.users.controller.match}>
+                <UserController viewerId={userId} notificationCount={notificationCount} setNotificationCount={setNotificationCount} />
+              </Route>
+              <Route path={Routes.users.login}>
+                <SignIn onSignIn={u => setUserId(u)} />
+              </Route>
+            </Switch>
+      </User.Provider>
+    </ErrorBoundary>
   );
 }
 
