@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, { useState } from 'react';
 import LnAuth from '../../common/LnAuth'
 import LinkingKeys from './LinkingKeys'
 import { withRouter } from "react-router";
@@ -7,13 +7,15 @@ import { Input } from "baseui/input";
 import { Button, SHAPE, KIND } from "baseui/button";
 import Spinner from '../../common/Spinner';
 import { Error } from '../../common/Notifications'
-import { localStorage, server, User } from '../../../api';
-import Routes from '../../../routes'
+import { server } from '../../../api';
+import { PATH as HOME_URL } from '../../Home'
 
 import { StyledLink } from "baseui/link";
 
 const regExStr = '^(?=[a-zA-Z])[a-zA-Z0-9]{3,20}$' // todo consolidate in backend
 const userIdRegEx =  new RegExp(regExStr)
+
+export const PATH = '/login'
 
 const SignIn = ({ onSignIn, history }) => {
 	const [linkingKeys, setLinkingKeys] = useState([]);
@@ -82,7 +84,7 @@ const SignIn = ({ onSignIn, history }) => {
 		    		resp.json().then(r => {
 		    			onSignIn(r.userId);
     					const returnUrl = history.location.state && history.location.state.returnUrl
-		        		history.push(returnUrl || Routes.root)
+		        		history.push(returnUrl || HOME_URL)
 		    		})
 		    	} else {
 		    		setLoading(false);
@@ -100,7 +102,7 @@ const SignIn = ({ onSignIn, history }) => {
 		      res.json().then(r => {
 		        onSignIn(r.userId);
 		        const returnUrl = history.location.state && history.location.state.returnUrl
-		        history.push(returnUrl || Routes.root)
+		        history.push(returnUrl || HOME_URL)
 		      })
 		    } else {
 		      setLoading(false);
@@ -166,6 +168,4 @@ const SignIn = ({ onSignIn, history }) => {
 	)
 }
 
-SignIn.contextType = User 
-
-export default withRouter(SignIn);
+export default Object.assign(withRouter(SignIn), { PATH: PATH });

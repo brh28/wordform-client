@@ -16,6 +16,7 @@ class ArticleView extends Component {
 		  readPaywall: null,
 		  article: null
 		};
+		this.articleId = props.match.params.id
 		this.reload = true
 		this.load = this.load.bind(this);
 		this.deleteArticle = this.deleteArticle.bind(this);
@@ -37,7 +38,7 @@ class ArticleView extends Component {
 
 	// called on pageload and on invoice completion
 	load() {
-	    server.get(this.props.id)
+	    server.get(this.articleId)
 	      .then(res => { 
 	      	this.setState({ isLoading: false, ...res})
 	      	this.reload = Boolean(res.readPaywall && res.readPaywall.paymentRequest) 
@@ -47,7 +48,7 @@ class ArticleView extends Component {
 
 	deleteArticle() {
 		server
-			.deleteArticle(this.props.id)
+			.deleteArticle(this.articleId)
 			.then(() => {
 				this.props.history.push(`/users/${this.props.user}`)
 			})

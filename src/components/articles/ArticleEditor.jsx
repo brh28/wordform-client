@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Button } from "baseui/button";
 import { withRouter } from "react-router";
 import { Textarea } from "baseui/textarea";
-import { Select } from "baseui/select";
 import { Input } from "baseui/input";
 import { FormControl } from "baseui/form-control"
 import Spinner from '../common/Spinner';
@@ -11,6 +10,7 @@ import { server } from "../../api"
 import MDEditor from '@uiw/react-md-editor';
 import rehypeSanitize from "rehype-sanitize";
 import { StatefulTooltip } from "baseui/tooltip";
+import { PATH } from './ArticleController'
 
 const validateCharacterLength = (str, maxLength) => {
   let errorMsg
@@ -35,6 +35,7 @@ class ArticleEditor extends Component {
         }
       }
     };
+    this.articleId = props.match.params.id
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleSummaryChange = this.handleSummaryChange.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
@@ -43,9 +44,9 @@ class ArticleEditor extends Component {
   }
 
   componentDidMount() {
-    if (this.props.articleId) { // edit article
+    if (this.articleId) { // edit article
       this.setState({ isLoading: true })
-        server.get(this.props.articleId)
+        server.get(this.articleId)
           .then(({ article }) => { this.setState({ isLoading: false, form: {
             title: article.title,
             summary: article.summary,
@@ -108,7 +109,7 @@ class ArticleEditor extends Component {
 
   submitForm() {
   	this.setState({ isLoading: true })
-    server.saveArticle(this.props.articleId, this.state.form)
+    server.saveArticle(this.articleId, this.state.form)
       .then(res => {
         if (res.status === 200) {
           res.json().then(r => this.props.history.push(`/articles/${r.articleId}`))
@@ -194,4 +195,5 @@ class ArticleEditor extends Component {
   }
 } 
 
-export default withRouter(ArticleEditor)
+export default withRouter(ArticleEditor);
+// export default Object.assign(withRouter(ArticleEditor), { CREATE_ARTICLE_PATH: `${PATH}/new` });
