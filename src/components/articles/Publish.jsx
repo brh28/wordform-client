@@ -16,6 +16,7 @@ class PublishArticle extends Component {
 		  articleDetails: null,
 		  isPurchased: undefined
 		};
+		this.articleId = props.match.params.id
 		// this.eventSource = new EventSource(`/api/articles/${this.props.match.params.id}/invoice`);
 		this.publishArticle = this.publishArticle.bind(this);
 	}
@@ -25,9 +26,8 @@ class PublishArticle extends Component {
 	}
 
 	publishArticle() {
-		const articleId = this.props.id
 		this.setState({ isLoading: true })
-		server.publishArticle(articleId)
+		server.publishArticle(this.articleId)
 			.then(res => {
 				if (res.status === 403) {
 					this.setState({ isLoading: false, error: "The author must be logged in."})
@@ -58,6 +58,6 @@ class PublishArticle extends Component {
   }
 }
 
-export default withRouter(PublishArticle)
+export default withRouter(PublishArticle);
 
       
